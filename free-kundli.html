@@ -99,30 +99,33 @@
 <script src="assets/js/core.js"></script>
 
 <script src="assets/js/forms.js"></script>
+<script src="assets/js/vedic.js"></script>
 <script src="assets/js/pickers.js"></script>
 <script src="assets/js/share.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('kundliBtn').addEventListener('click',()=>{
-    const d=RVForms.validDate('k');
-    const place=document.getElementById('kPlace');
-    if(!d){alert('कृपया सही जन्म तिथि दर्ज करें।');return}
-    if(!place.dataset.ok && !document.getElementById('kLat').value){
-      alert('कृपया सूची से सही जन्म स्थान चुनें।');return
-    }
-    const r=document.getElementById('kundliResult');
-    r.classList.remove('hidden');
-    const name=document.getElementById('kName').value.trim()||'आप';
-    const placeName=place.value;
-    r.innerHTML='<h2>आपकी कुंडली की मुख्य बातें</h2>'+
-    '<p><strong>'+name+'</strong> · '+d+' · '+RVForms.valueTime('k')+' · '+placeName+'</p>'+
-    '<div class="report-section"><h3>जन्म विवरण</h3><p>आपके द्वारा चुनी गई तिथि, समय और स्थान सुरक्षित रूप से browser में उपयोग किए जा रहे हैं।</p></div>'+
-    '<div class="report-section"><h3>D1, D9 और ग्रह स्थिति</h3><p>यह भाग तभी दिखाया जाएगा जब वास्तविक sidereal ephemeris engine से ग्रह स्थिति निकलेगी। गलत या अनुमानित ग्रह-स्थिति दिखाने के बजाय अभी इसे स्पष्ट रखा गया है।</p></div>'+
-    '<div class="report-section"><h3>दशा और वर्तमान समय</h3><p>विम्शोत्तरी महादशा/अंतर्दशा calculation के लिए Moon nakshatra की सटीक longitude चाहिए। Engine जुड़ने के बाद यही section detailed timing देगा।</p></div>'+
-    '<div class="report-section"><h3>करियर, धन और संबंध</h3><p>इन विषयों की व्याख्या D1, संबंधित भाव-स्वामी, कारक ग्रह, दशा और D9 support के संयुक्त आधार पर दी जाएगी।</p></div>'+
-    '<div class="share-row"><button class="btn ghost" onclick="rvShare(\'RashiVibe Kundli\',\''+name+' की Kundli report\')">शेयर करें</button><button class="btn ghost" onclick="window.print()">Print / PDF</button></div>'+
-    '<p class="notice">ज्योतिष पारंपरिक व्याख्यात्मक प्रणाली है; इसे निश्चित भविष्यवाणी या पेशेवर सलाह का विकल्प न मानें।</p>';
-  });
+ document.getElementById('kundliBtn').addEventListener('click',()=>{
+  const ds=RVForms.validDate('k'),place=document.getElementById('kPlace');
+  if(!ds){alert('कृपया सही जन्म तिथि दर्ज करें।');return}
+  const lat=+document.getElementById('kLat').value,lon=+document.getElementById('kLon').value;
+  if(!Number.isFinite(lat)||!Number.isFinite(lon)||(!lat&&!lon)){alert('कृपया सूची से जन्म स्थान चुनें।');return}
+  const [y,m,d]=ds.split('-'),date=RVVedic.birthDate(y,m,d,document.getElementById('kH').value,document.getElementById('kMin').value,document.getElementById('kAP').value,document.getElementById('kTz').value);
+  const c=RVVedic.chart(date,lat,lon),md=RVVedic.dasha(c,date),name=document.getElementById('kName').value.trim()||'आप';
+  const r=document.getElementById('kundliResult');r.classList.remove('hidden');
+  r.innerHTML=`<h2>आपकी कुंडली की मुख्य बातें</h2><p><strong>${name}</strong> · ${ds} · ${place.value}</p>
+  <div class="chart-grid">
+   <div class="planet-chip"><strong>लग्न</strong><br>${RVVedic.Z[c.ascSign]} · ${c.asc.toFixed(2)}°</div>
+   <div class="planet-chip"><strong>चंद्र राशि</strong><br>${RVVedic.Z[c.moonSign]} · ${c.moon.toFixed(2)}°</div>
+   <div class="planet-chip"><strong>सूर्य राशि</strong><br>${RVVedic.Z[c.sunSign]} · ${c.sun.toFixed(2)}°</div>
+   <div class="planet-chip"><strong>नक्षत्र</strong><br>${c.nak.name} · पद ${c.nak.pada}</div>
+   <div class="planet-chip"><strong>नक्षत्र स्वामी</strong><br>${c.nak.lord}</div>
+   <div class="planet-chip"><strong>वर्तमान महादशा</strong><br>${md.lord}</div>
+  </div>
+  <div class="report-section"><h3>कुंडली का आधार</h3><p>लग्न ${RVVedic.Z[c.ascSign]}, चंद्र ${RVVedic.Z[c.moonSign]} और ${c.nak.name} नक्षत्र के संयुक्त संकेतों से आगे के भाव, दशा और वर्ग-कुंडली विश्लेषण का आधार बनता है।</p></div>
+  <div class="report-section"><h3>दशा</h3><p>${md.lord} महादशा का अनुमानित काल ${md.start.toLocaleDateString('hi-IN')} से ${md.end.toLocaleDateString('hi-IN')} तक है। सूक्ष्म फल के लिए अंतर्दशा और गोचर को साथ देखना चाहिए।</p></div>
+  <div class="share-row"><button class="btn ghost" onclick="rvShare('RashiVibe Kundli','${name} की Kundli report')">शेयर करें</button><button class="btn ghost" onclick="window.print()">Print / PDF</button></div>
+  <p class="notice">ग्रह-गणना browser में की जाती है। इसे पारंपरिक ज्योतिषीय व्याख्या समझें, निश्चित भविष्यवाणी नहीं।</p>`;
+ });
 });
 </script>
 

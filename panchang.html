@@ -37,8 +37,9 @@
     <div class="card"><h3>राहुकाल</h3><strong id="rahu">—</strong><p>दिन के 8 भागों से पारंपरिक गणना</p></div>
   </div>
   <div class="card" style="margin-top:22px">
-    <h2>तिथि, नक्षत्र, योग और करण</h2><p class="inline-note">इनका सटीक मान Moon/Sun sidereal longitude से निकलेगा।</p>
-    <p>इन चारों के लिए वास्तविक sidereal Sun/Moon astronomy engine आवश्यक है। Test build कोई अनुमानित या नकली मान नहीं दिखाता।</p>
+    <h2>तिथि, नक्षत्र, योग और करण</h2>
+<div class="chart-grid"><div class="planet-chip"><strong>तिथि</strong><br><span id="pvT">—</span></div><div class="planet-chip"><strong>नक्षत्र</strong><br><span id="pvN">—</span></div><div class="planet-chip"><strong>योग</strong><br><span id="pvY">—</span></div><div class="planet-chip"><strong>करण क्रम</strong><br><span id="pvK">—</span></div></div>
+    <p>इन चारों के लिए वास्तविक sidereal Sun/Moon astronomy engine आवश्यक है। Current version कोई अनुमानित या नकली मान नहीं दिखाता।</p>
     <div class="notice">सूर्योदय-सूर्यास्त की गणना client-side solar formula से की जा रही है; पूर्ण पंचांग production astrology engine के साथ जोड़ा जाएगा।</div>
   </div>
 </section></main>
@@ -66,6 +67,8 @@
 </footer>
 
 <script src="assets/js/core.js"></script>
+<script src="assets/js/vedic.js"></script>
+<script src="assets/js/panchang-engine.js"></script>
 
 
 <script>
@@ -102,6 +105,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('sunrise').textContent=fmtLocal(s.rise);
   document.getElementById('sunset').textContent=fmtLocal(s.set);
   const rk=document.getElementById('rahu'); if(rk)rk.textContent=rahu(s.rise,s.set,now.getDay());
+  const pd=RVPanchang.details(now);document.getElementById('pvT').textContent=pd.tithi;document.getElementById('pvN').textContent=pd.nak;document.getElementById('pvY').textContent=pd.yoga;document.getElementById('pvK').textContent=pd.karana;
 });
 </script>
 

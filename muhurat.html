@@ -31,15 +31,11 @@
 
 <div class="page-hero"><div><div class="eyebrow">Shubh Muhurat</div><h1>शुभ मुहूर्त</h1><p>विवाह, वाहन, गृह प्रवेश और नामकरण के लिए प्रारंभिक पारंपरिक चयन।</p></div></div>
 <main><section>
-  <div class="tabs">
-    <button class="active">विवाह</button><button>वाहन खरीद</button><button>गृह प्रवेश</button><button>नामकरण</button>
-  </div>
-  <div class="grid">
-  <div class="card"><h3>विवाह</h3><p>तिथि, नक्षत्र, वार, गुरु/शुक्र स्थिति और अन्य परंपरागत निषेध देखकर shortlist बनाई जाएगी।</p></div>
-  <div class="card"><h3>वाहन खरीद</h3><p>उपयुक्त वार, तिथि और नक्षत्र को प्राथमिकता देकर प्रारंभिक समय चुना जाएगा।</p></div>
-  <div class="card"><h3>गृह प्रवेश</h3><p>तिथि, नक्षत्र, वार और मास के पारंपरिक नियमों का संयुक्त उपयोग होगा।</p></div>
-</div>
-<div class="notice" style="margin-top:18px">मुहूर्त की final suitability व्यक्तिगत परिस्थिति और स्थानीय पंचांग पर निर्भर करती है।</div>
+<div class="form-card"><div class="form-grid">
+<div class="field"><label>कार्य</label><select id="muType"><option value="marriage">विवाह</option><option value="vehicle">वाहन खरीद</option><option value="griha">गृह प्रवेश</option><option value="naming">नामकरण</option></select></div>
+<div class="field"><label>महीना</label><input id="muMonth" type="month"></div></div>
+<div class="cta"><button id="muBtn" class="btn primary">✨ शुभ तारीखें देखें</button></div><div id="muResult" class="result hidden"></div></div>
+<div class="report-section"><h3>चयन कैसे होता है?</h3><p>यह shortlist वार, तिथि और चुने हुए शुभ नक्षत्रों के पारंपरिक नियमों को मिलाकर बनती है। अंतिम व्यक्तिगत मुहूर्त के लिए जन्म कुंडली और स्थानीय पंचांग भी देखे जाते हैं।</p></div>
 </section></main>
 
 
@@ -65,6 +61,14 @@
 </footer>
 
 <script src="assets/js/core.js"></script>
+<script src="assets/js/vedic.js"></script>
+<script src="assets/js/panchang-engine.js"></script>
 
-</body>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+ const m=document.getElementById('muMonth'),now=new Date();m.value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+ document.getElementById('muBtn').onclick=()=>{let [y,mo]=m.value.split('-').map(Number),type=document.getElementById('muType').value,rows=RVPanchang.muhurat(type,y,mo),r=document.getElementById('muResult');r.classList.remove('hidden');
+ r.innerHTML='<h2>प्रारंभिक शुभ तारीखें</h2>'+(rows.length?rows.map(x=>`<div class="good-date"><strong>${x.date.toLocaleDateString('hi-IN',{day:'numeric',month:'long',year:'numeric'})}</strong><div><span class="status-good">${x.nak}</span><br>${x.tithi} · ${x.yoga} योग</div></div>`).join(''):'<p>इस महीने चुने गए नियमों में उपयुक्त तारीख नहीं मिली। दूसरा महीना देखें।')+'<p class="notice">यह पारंपरिक preliminary shortlist है, व्यक्तिगत अंतिम मुहूर्त नहीं।</p>';};
+});
+</script></body>
 </html>

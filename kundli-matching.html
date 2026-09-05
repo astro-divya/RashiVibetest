@@ -136,30 +136,21 @@
 <script src="assets/js/core.js"></script>
 
 <script src="assets/js/forms.js"></script>
+<script src="assets/js/vedic.js"></script>
 <script src="assets/js/pickers.js"></script>
 <script src="assets/js/share.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('matchBtn').addEventListener('click',()=>{
-    const a=RVForms.validDate('b'), b=RVForms.validDate('g');
-    if(!a||!b){alert('दोनों की सही जन्म तिथि भरें।');return}
-    const r=document.getElementById('matchResult');
-    r.classList.remove('hidden');
-    r.innerHTML='<h2>कुंडली मिलान रिपोर्ट</h2>'+
-    '<div class="score-grid">'+
-    '<div class="score"><strong>वर्ण</strong><span>गणना हेतु Moon nakshatra आवश्यक</span></div>'+
-    '<div class="score"><strong>वश्य</strong><span>गणना हेतु zodiac relation आवश्यक</span></div>'+
-    '<div class="score"><strong>तारा</strong><span>नक्षत्र दूरी से निकलेगा</span></div>'+
-    '<div class="score"><strong>योनि</strong><span>नक्षत्र mapping से निकलेगा</span></div>'+
-    '<div class="score"><strong>ग्रह मैत्री</strong><span>Moon-sign lords से निकलेगा</span></div>'+
-    '<div class="score"><strong>गण</strong><span>Nakshatra gana से निकलेगा</span></div>'+
-    '<div class="score"><strong>भकूट</strong><span>Moon-sign relation से निकलेगा</span></div>'+
-    '<div class="score"><strong>नाड़ी</strong><span>Nakshatra nadi से निकलेगा</span></div></div>'+
-    '<div class="report-section"><h3>मंगल दोष तुलना</h3><p>दोनों charts के relevant houses और Mars placement से वास्तविक comparison किया जाएगा।</p></div>'+
-    '<div class="report-section"><h3>D1/D9 compatibility</h3><p>सिर्फ 36 गुण का score अंतिम निष्कर्ष नहीं होगा; सप्तम भाव, शुक्र/गुरु, D9 और दशा support को अलग से समझाया जाएगा।</p></div>'+
-    '<div class="share-row"><button class="btn ghost" onclick="rvShare(\'RashiVibe Kundli Matching\',\'कुंडली मिलान रिपोर्ट\')">शेयर करें</button></div>'+
-    '<p class="notice">यहाँ कोई fabricated score नहीं दिखाया गया है। पूर्ण score वास्तविक ephemeris engine जुड़ने पर ही निकलेगा।</p>';
-  });
+ document.getElementById('matchBtn').addEventListener('click',()=>{
+  const ad=RVForms.validDate('b'),bd=RVForms.validDate('g');if(!ad||!bd){alert('दोनों की सही जन्म तिथि भरें।');return}
+  function C(p,ds){let [y,m,d]=ds.split('-'),lat=+document.getElementById(p+'Lat').value,lon=+document.getElementById(p+'Lon').value;if(!Number.isFinite(lat)||!Number.isFinite(lon)||(!lat&&!lon))throw 0;let dt=RVVedic.birthDate(y,m,d,document.getElementById(p+'H').value,document.getElementById(p+'Min').value,document.getElementById(p+'AP').value,document.getElementById(p+'Tz').value);return RVVedic.chart(dt,lat,lon)}
+  let c1,c2;try{c1=C('b',ad);c2=C('g',bd)}catch(e){alert('दोनों के जन्म स्थान सूची से चुनें।');return}
+  let a=RVVedic.ashtakoota(c1,c2),r=document.getElementById('matchResult');r.classList.remove('hidden');
+  r.innerHTML=`<h2>कुंडली मिलान: ${a.total.toFixed(1)} / 36</h2><p>चंद्र राशि: ${RVVedic.Z[c1.moonSign]} + ${RVVedic.Z[c2.moonSign]} · नक्षत्र: ${c1.nak.name} + ${c2.nak.name}</p>
+  <div class="score-grid">${a.rows.map(x=>`<div class="score"><strong>${x[0]}</strong><span>${x[1].toFixed(1)} / ${x[2]}</span></div>`).join('')}</div>
+  <div class="report-section"><h3>इस score को कैसे समझें?</h3><p>36 गुण केवल पारंपरिक compatibility का एक हिस्सा हैं। वास्तविक संबंध के लिए स्वभाव, संवाद, परिस्थिति और व्यक्तिगत निर्णय अधिक महत्वपूर्ण हैं; ज्योतिष में भी D1/D9 और दशा को अलग से देखा जाता है।</p></div>
+  <p class="notice">यह browser-side पारंपरिक Ashtakoota implementation है; इसे संबंध का निश्चित निर्णय न मानें।</p>`;
+ });
 });
 </script>
 
