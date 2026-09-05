@@ -7,12 +7,12 @@
   <meta name="description" content="RashiVibe वैदिक ज्योतिष, कुंडली, राशिफल, पंचांग और अंक ज्योतिष।">
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
+<body><noscript><div class="notice" style="margin:12px">JavaScript बंद है; basic content दिखाई देगा, लेकिन calculations काम नहीं करेंगी।</div></noscript>
 
 <div class="topbar">✦ RashiVibe · Your Stars. Your Story.</div>
 <header>
   <div class="navwrap">
-    <a class="brand" href="index.html">Rashi<span>Vibe</span></a>
+    <a class="brand logo-wrap" href="index.html"><span class="logo-mark">RV</span><span>Rashi<span>Vibe</span></span></a>
     <button class="menu-btn" aria-label="Open menu">☰</button>
     <nav class="site-nav">
       <a href="index.html">Home</a>
@@ -136,6 +136,8 @@
 <script src="assets/js/core.js"></script>
 
 <script src="assets/js/forms.js"></script>
+<script src="assets/js/pickers.js"></script>
+<script src="assets/js/share.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('matchBtn').addEventListener('click',()=>{
@@ -143,7 +145,20 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(!a||!b){alert('दोनों की सही जन्म तिथि भरें।');return}
     const r=document.getElementById('matchResult');
     r.classList.remove('hidden');
-    r.innerHTML='<h3>दोनों जन्म विवरण सफलतापूर्वक लिए गए</h3><p>यह test build जानबूझकर कोई नकली 36-गुण स्कोर नहीं बनाता। Production engine जुड़ने पर अष्टकूट, नाड़ी, भकूट, गण, मैत्री और मंगल संकेत वास्तविक गणना से दिखेंगे।</p>';
+    r.innerHTML='<h2>कुंडली मिलान रिपोर्ट</h2>'+
+    '<div class="score-grid">'+
+    '<div class="score"><strong>वर्ण</strong><span>गणना हेतु Moon nakshatra आवश्यक</span></div>'+
+    '<div class="score"><strong>वश्य</strong><span>गणना हेतु zodiac relation आवश्यक</span></div>'+
+    '<div class="score"><strong>तारा</strong><span>नक्षत्र दूरी से निकलेगा</span></div>'+
+    '<div class="score"><strong>योनि</strong><span>नक्षत्र mapping से निकलेगा</span></div>'+
+    '<div class="score"><strong>ग्रह मैत्री</strong><span>Moon-sign lords से निकलेगा</span></div>'+
+    '<div class="score"><strong>गण</strong><span>Nakshatra gana से निकलेगा</span></div>'+
+    '<div class="score"><strong>भकूट</strong><span>Moon-sign relation से निकलेगा</span></div>'+
+    '<div class="score"><strong>नाड़ी</strong><span>Nakshatra nadi से निकलेगा</span></div></div>'+
+    '<div class="report-section"><h3>मंगल दोष तुलना</h3><p>दोनों charts के relevant houses और Mars placement से वास्तविक comparison किया जाएगा।</p></div>'+
+    '<div class="report-section"><h3>D1/D9 compatibility</h3><p>सिर्फ 36 गुण का score अंतिम निष्कर्ष नहीं होगा; सप्तम भाव, शुक्र/गुरु, D9 और दशा support को अलग से समझाया जाएगा।</p></div>'+
+    '<div class="share-row"><button class="btn ghost" onclick="rvShare(\'RashiVibe Kundli Matching\',\'कुंडली मिलान रिपोर्ट\')">शेयर करें</button></div>'+
+    '<p class="notice">यहाँ कोई fabricated score नहीं दिखाया गया है। पूर्ण score वास्तविक ephemeris engine जुड़ने पर ही निकलेगा।</p>';
   });
 });
 </script>

@@ -159,3 +159,36 @@ footer{background:#15132b;color:#d9d1df;padding:42px 20px;margin-top:60px}
 @media(prefers-reduced-motion:reduce){
   *{scroll-behavior:auto!important;transition:none!important}
 }
+
+/* ---- Production polish additions ---- */
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+ background:radial-gradient(circle at 35% 30%,#fff3af,#d0a14a 40%,#6f3d1e 78%);
+ color:#1a1730;font-family:Georgia,serif;font-weight:900;box-shadow:0 5px 16px rgba(201,154,69,.28)}
+.top-panchang{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.top-panchang span{opacity:.9}
+.calendar-pop{position:absolute;z-index:30;background:#fffdf8;border:1px solid #d6bf93;border-radius:16px;padding:14px;box-shadow:var(--shadow);width:280px}
+.picker-wrap{position:relative}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px}
+.calendar-grid button{border:0;border-radius:9px;padding:7px;background:#fff}
+.calendar-grid button:hover{background:#f5e5c8}
+.calendar-grid .selected{background:var(--aubergine);color:#fff}
+.time-display{display:flex;gap:8px;align-items:center;font-weight:800;color:var(--aubergine);margin-bottom:8px}
+.report-section{margin-top:24px;padding:22px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.76)}
+.report-section h3{margin-top:0}
+.score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.score{padding:14px;border:1px solid #dbc49c;border-radius:14px;background:#fffdf8}
+.score strong{display:block;color:var(--aubergine);font-size:1.15rem}
+.share-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.ad-gate{display:none;position:fixed;inset:0;background:rgba(14,12,30,.68);z-index:100;place-items:center;padding:20px}
+.ad-gate.open{display:grid}
+.ad-box{max-width:520px;background:#fffaf1;border-radius:24px;padding:24px;box-shadow:var(--shadow);text-align:center}
+.ad-slot{border:1px dashed #cfa558;border-radius:14px;padding:24px;margin:16px 0;color:var(--muted);background:#fff}
+.print-only{display:none}
+@media print{
+  header,.topbar,footer,.cta,.share-row,.no-print{display:none!important}
+  body{background:white}
+  .card,.report-section,.result{box-shadow:none}
+  .print-only{display:block}
+}
+@media(max-width:760px){.score-grid{grid-template-columns:1fr 1fr}}

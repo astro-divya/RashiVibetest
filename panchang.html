@@ -7,12 +7,12 @@
   <meta name="description" content="RashiVibe वैदिक ज्योतिष, कुंडली, राशिफल, पंचांग और अंक ज्योतिष।">
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
+<body><noscript><div class="notice" style="margin:12px">JavaScript बंद है; basic content दिखाई देगा, लेकिन calculations काम नहीं करेंगी।</div></noscript>
 
 <div class="topbar">✦ RashiVibe · Your Stars. Your Story.</div>
 <header>
   <div class="navwrap">
-    <a class="brand" href="index.html">Rashi<span>Vibe</span></a>
+    <a class="brand logo-wrap" href="index.html"><span class="logo-mark">RV</span><span>Rashi<span>Vibe</span></span></a>
     <button class="menu-btn" aria-label="Open menu">☰</button>
     <nav class="site-nav">
       <a href="index.html">Home</a>
@@ -34,10 +34,10 @@
   <div class="kpi">
     <div class="card"><h3>सूर्योदय</h3><strong id="sunrise">—</strong><p>Default location: New Delhi</p></div>
     <div class="card"><h3>सूर्यास्त</h3><strong id="sunset">—</strong><p>Default location: New Delhi</p></div>
-    <div class="card"><h3>स्थान</h3><strong>नई दिल्ली</strong><p>Test build default</p></div>
+    <div class="card"><h3>राहुकाल</h3><strong id="rahu">—</strong><p>दिन के 8 भागों से पारंपरिक गणना</p></div>
   </div>
   <div class="card" style="margin-top:22px">
-    <h2>तिथि, नक्षत्र, योग और करण</h2>
+    <h2>तिथि, नक्षत्र, योग और करण</h2><p class="inline-note">इनका सटीक मान Moon/Sun sidereal longitude से निकलेगा।</p>
     <p>इन चारों के लिए वास्तविक sidereal Sun/Moon astronomy engine आवश्यक है। Test build कोई अनुमानित या नकली मान नहीं दिखाता।</p>
     <div class="notice">सूर्योदय-सूर्यास्त की गणना client-side solar formula से की जा रही है; पूर्ण पंचांग production astrology engine के साथ जोड़ा जाएगा।</div>
   </div>
@@ -67,6 +67,7 @@
 
 <script src="assets/js/core.js"></script>
 
+
 <script>
 function solarTimes(date,lat,lon){
   const calc=(rise)=>{
@@ -84,16 +85,23 @@ function solarTimes(date,lat,lon){
   };
   return {rise:calc(true),set:calc(false)};
 }
-function fmt(ut){
-  if(ut==null)return '—';
-  const h=Math.floor(ut),m=Math.round((ut-h)*60);
-  const d=new Date(Date.UTC(2026,0,1,h,m));
-  return new Intl.DateTimeFormat('hi-IN',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:'Asia/Kolkata'}).format(d);
+function fmtLocal(hours){
+  if(hours==null)return '—';
+  const h=Math.floor(hours),m=Math.round((hours-h)*60);
+  const d=new Date();d.setHours(h,m,0,0);
+  return new Intl.DateTimeFormat('hi-IN',{hour:'numeric',minute:'2-digit',hour12:true}).format(d);
+}
+function rahu(rise,set,weekday){
+  if(rise==null||set==null)return '—';
+  const order=[8,2,7,5,6,4,3]; // Sun..Sat segment number
+  const seg=(set-rise)/8, n=order[weekday]-1;
+  return fmtLocal(rise+n*seg)+' – '+fmtLocal(rise+(n+1)*seg);
 }
 document.addEventListener('DOMContentLoaded',()=>{
-  const s=solarTimes(new Date(),28.6139,77.2090);
-  document.getElementById('sunrise').textContent=fmt(s.rise);
-  document.getElementById('sunset').textContent=fmt(s.set);
+  const lat=28.6139,lon=77.2090,now=new Date(),s=solarTimes(now,lat,lon);
+  document.getElementById('sunrise').textContent=fmtLocal(s.rise);
+  document.getElementById('sunset').textContent=fmtLocal(s.set);
+  const rk=document.getElementById('rahu'); if(rk)rk.textContent=rahu(s.rise,s.set,now.getDay());
 });
 </script>
 

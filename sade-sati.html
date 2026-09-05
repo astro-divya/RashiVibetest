@@ -7,12 +7,12 @@
   <meta name="description" content="RashiVibe वैदिक ज्योतिष, कुंडली, राशिफल, पंचांग और अंक ज्योतिष।">
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
+<body><noscript><div class="notice" style="margin:12px">JavaScript बंद है; basic content दिखाई देगा, लेकिन calculations काम नहीं करेंगी।</div></noscript>
 
 <div class="topbar">✦ RashiVibe · Your Stars. Your Story.</div>
 <header>
   <div class="navwrap">
-    <a class="brand" href="index.html">Rashi<span>Vibe</span></a>
+    <a class="brand logo-wrap" href="index.html"><span class="logo-mark">RV</span><span>Rashi<span>Vibe</span></span></a>
     <button class="menu-btn" aria-label="Open menu">☰</button>
     <nav class="site-nav">
       <a href="index.html">Home</a>
@@ -76,7 +76,12 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(!v){alert('अपनी चंद्र राशि चुनें।');return}
     const r=document.getElementById('satResult');
     r.classList.remove('hidden');
-    r.innerHTML='<h3>'+v+' चंद्र राशि</h3><p>सटीक वर्तमान साढ़े साती/ढैया स्थिति निकालने के लिए current sidereal Saturn position आवश्यक है। Test build कोई static या hard-coded परिणाम नहीं दिखाता।</p>';
+    r.innerHTML='<h2>'+v+' चंद्र राशि के लिए नियम</h2>'+
+    '<div class="score-grid"><div class="score"><strong>पहला चरण</strong><span>जब शनि जन्म राशि से 12वें स्थान में हो</span></div>'+
+    '<div class="score"><strong>मध्य चरण</strong><span>जब शनि जन्म चंद्र राशि पर हो</span></div>'+
+    '<div class="score"><strong>अंतिम चरण</strong><span>जब शनि जन्म राशि से दूसरे स्थान में हो</span></div>'+
+    '<div class="score"><strong>ढैया</strong><span>जब शनि चौथे या आठवें स्थान में हो</span></div></div>'+
+    '<p class="notice">Current status जानने के लिए live sidereal Saturn longitude चाहिए; बिना उस calculation के कोई hard-coded result नहीं दिखाया जा रहा।</p>';
   });
 });
 </script>

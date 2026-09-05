@@ -7,12 +7,12 @@
   <meta name="description" content="RashiVibe वैदिक ज्योतिष, कुंडली, राशिफल, पंचांग और अंक ज्योतिष।">
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
+<body><noscript><div class="notice" style="margin:12px">JavaScript बंद है; basic content दिखाई देगा, लेकिन calculations काम नहीं करेंगी।</div></noscript>
 
 <div class="topbar">✦ RashiVibe · Your Stars. Your Story.</div>
 <header>
   <div class="navwrap">
-    <a class="brand" href="index.html">Rashi<span>Vibe</span></a>
+    <a class="brand logo-wrap" href="index.html"><span class="logo-mark">RV</span><span>Rashi<span>Vibe</span></span></a>
     <button class="menu-btn" aria-label="Open menu">☰</button>
     <nav class="site-nav">
       <a href="index.html">Home</a>
@@ -60,16 +60,23 @@
 
 <script src="assets/js/core.js"></script>
 
+<script src="assets/js/astro-lite.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('numBtn').addEventListener('click',()=>{
     const v=document.getElementById('numDate').value.replace(/\D/g,'');
     if(!v){alert('जन्म तिथि भरें।');return}
-    let n=[...v].reduce((a,b)=>a+(+b),0);
-    while(n>9 && ![11,22,33].includes(n)) n=[...String(n)].reduce((a,b)=>a+(+b),0);
+    const date=document.getElementById('numDate').value;
+    const n=RVAstro.lifePath(date), b=RVAstro.birthNumber(date);
+    const text={
+      1:'स्वतंत्रता, पहल और नेतृत्व',2:'सहयोग, संवेदनशीलता और संतुलन',3:'अभिव्यक्ति, रचनात्मकता और संवाद',
+      4:'अनुशासन, संरचना और निरंतरता',5:'परिवर्तन, जिज्ञासा और स्वतंत्र सोच',6:'जिम्मेदारी, परिवार और देखभाल',
+      7:'विश्लेषण, अध्ययन और आंतरिक खोज',8:'व्यवस्था, लक्ष्य और प्रबंधन',9:'करुणा, व्यापक सोच और सेवा',
+      11:'प्रेरणा, अंतर्दृष्टि और संवेदनशीलता',22:'बड़े विचारों को व्यावहारिक रूप देने की क्षमता',33:'सेवा, मार्गदर्शन और जिम्मेदारी'
+    };
     const r=document.getElementById('numResult');
     r.classList.remove('hidden');
-    r.innerHTML='<h2>आपका Life Path Number: '+n+'</h2><p>यह अंक आपकी जन्म तिथि से निकाला गया है। इसे व्यक्तित्व का अंतिम निर्णय नहीं, बल्कि अंक ज्योतिष का एक पारंपरिक संकेत समझें।</p>';
+    r.innerHTML='<h2>आपके मुख्य अंक</h2><div class="kpi"><div class="card"><h3>Life Path</h3><strong>'+n+'</strong><p>'+text[n]+'</p></div><div class="card"><h3>Birth Number</h3><strong>'+b+'</strong><p>'+text[b]+'</p></div><div class="card"><h3>ध्यान रखें</h3><p>अंक संकेत देते हैं, व्यक्ति को तय नहीं करते।</p></div></div>';
   });
 });
 </script>

@@ -1,18 +1,23 @@
-# RashiVibe GitHub Test
+# RashiVibe GitHub Fixed Build
 
-Upload the **contents** of this folder to the repository root.
+Upload the **contents** of this folder directly into the `RashiVibetest` repository root.
 
-GitHub → Settings → Pages → Deploy from branch → `main` / root.
+This build keeps the successful no-`site.js` architecture.
 
-Expected test URL:
-https://astro-divya.github.io/RashiVibe/
+Included fixes:
+- modular JS only (`core.js`, `forms.js`, `pickers.js`, `share.js`, `astro-lite.js`)
+- premium date picker helper + strict 4-digit year input
+- improved Kundli report layout without fake planetary values
+- structured Kundli Matching report without fabricated 36-guna score
+- richer Numerology
+- improved long-period Rashifal pages
+- Panchang sunrise/sunset + Rahu Kaal calculation
+- improved Sade Sati explanation
+- improved Muhurat content
+- share + print/PDF hooks
+- no-JS graceful fallback
+- 404 path updated for `/RashiVibetest/`
+- sitemap/robots updated for test repository
 
-## Important
-- There is **no `site.js` file**.
-- Shared scripts are split into:
-  - `assets/js/core.js`
-  - `assets/js/forms.js`
-  - `assets/js/share.js`
-- Main content remains visible even if JavaScript fails.
-- 12 zodiac icons are static SVG medallions, so no heavy 3D engine is required.
-- Full D1/D9/dasha, Ashtakoota, exact Panchang and current Saturn calculations are intentionally not faked in this test build. They need a real astronomy/astrology engine in the production pass.
+Important:
+Exact D1/D9/dasha, full Ashtakoota, exact Tithi/Nakshatra/Yoga/Karana and live Saturn status still require a real sidereal ephemeris engine. This build intentionally does not fabricate those astronomical results.

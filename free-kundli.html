@@ -7,12 +7,12 @@
   <meta name="description" content="RashiVibe वैदिक ज्योतिष, कुंडली, राशिफल, पंचांग और अंक ज्योतिष।">
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
+<body><noscript><div class="notice" style="margin:12px">JavaScript बंद है; basic content दिखाई देगा, लेकिन calculations काम नहीं करेंगी।</div></noscript>
 
 <div class="topbar">✦ RashiVibe · Your Stars. Your Story.</div>
 <header>
   <div class="navwrap">
-    <a class="brand" href="index.html">Rashi<span>Vibe</span></a>
+    <a class="brand logo-wrap" href="index.html"><span class="logo-mark">RV</span><span>Rashi<span>Vibe</span></span></a>
     <button class="menu-btn" aria-label="Open menu">☰</button>
     <nav class="site-nav">
       <a href="index.html">Home</a>
@@ -99,6 +99,8 @@
 <script src="assets/js/core.js"></script>
 
 <script src="assets/js/forms.js"></script>
+<script src="assets/js/pickers.js"></script>
+<script src="assets/js/share.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('kundliBtn').addEventListener('click',()=>{
@@ -110,7 +112,16 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
     const r=document.getElementById('kundliResult');
     r.classList.remove('hidden');
-    r.innerHTML='<h3>जन्म विवरण तैयार है</h3><p>तिथि: '+d+' · समय: '+RVForms.valueTime('k')+'</p><p><strong>Test build:</strong> form, 4-digit year validation, location autocomplete और responsive UI सक्रिय हैं। वास्तविक D1/D9/दशा परिणामों के लिए production astrology engine अभी जोड़ा नहीं गया है, इसलिए यहाँ कोई नकली ग्रह-स्थिति नहीं दिखाई जा रही।</p>';
+    const name=document.getElementById('kName').value.trim()||'आप';
+    const placeName=place.value;
+    r.innerHTML='<h2>आपकी कुंडली की मुख्य बातें</h2>'+
+    '<p><strong>'+name+'</strong> · '+d+' · '+RVForms.valueTime('k')+' · '+placeName+'</p>'+
+    '<div class="report-section"><h3>जन्म विवरण</h3><p>आपके द्वारा चुनी गई तिथि, समय और स्थान सुरक्षित रूप से browser में उपयोग किए जा रहे हैं।</p></div>'+
+    '<div class="report-section"><h3>D1, D9 और ग्रह स्थिति</h3><p>यह भाग तभी दिखाया जाएगा जब वास्तविक sidereal ephemeris engine से ग्रह स्थिति निकलेगी। गलत या अनुमानित ग्रह-स्थिति दिखाने के बजाय अभी इसे स्पष्ट रखा गया है।</p></div>'+
+    '<div class="report-section"><h3>दशा और वर्तमान समय</h3><p>विम्शोत्तरी महादशा/अंतर्दशा calculation के लिए Moon nakshatra की सटीक longitude चाहिए। Engine जुड़ने के बाद यही section detailed timing देगा।</p></div>'+
+    '<div class="report-section"><h3>करियर, धन और संबंध</h3><p>इन विषयों की व्याख्या D1, संबंधित भाव-स्वामी, कारक ग्रह, दशा और D9 support के संयुक्त आधार पर दी जाएगी।</p></div>'+
+    '<div class="share-row"><button class="btn ghost" onclick="rvShare(\'RashiVibe Kundli\',\''+name+' की Kundli report\')">शेयर करें</button><button class="btn ghost" onclick="window.print()">Print / PDF</button></div>'+
+    '<p class="notice">ज्योतिष पारंपरिक व्याख्यात्मक प्रणाली है; इसे निश्चित भविष्यवाणी या पेशेवर सलाह का विकल्प न मानें।</p>';
   });
 });
 </script>
