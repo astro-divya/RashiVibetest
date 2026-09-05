@@ -1,133 +1,241 @@
 <!doctype html>
 <html lang="hi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Free Kundli | RashiVibe</title>
-  <meta name="description" content="RashiVibe वैदिक ज्योतिष, कुंडली, राशिफल, पंचांग और अंक ज्योतिष।">
-  <link rel="stylesheet" href="assets/site.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kundli | RashiVibe</title>
+<meta name="description" content="Free Vedic Kundli with ascendant, sidereal planetary positions, D9 Navamsa, Nakshatra and Vimshottari Dasha.">
+<meta name="theme-color" content="#0f1418">
+<link rel="icon" href="assets/rashivibe-icon.webp">
+<link rel="stylesheet" href="assets/rashivibe.css">
 </head>
-<body><noscript><div class="notice" style="margin:12px">JavaScript बंद है; basic content दिखाई देगा, लेकिन calculations काम नहीं करेंगी।</div></noscript>
+<body>
+<div class="topbar"><div class="container"><span class="brandline" data-hi="ॐ • RashiVibe • Your Stars. Your Story." data-en="ॐ • RashiVibe • Your Stars. Your Story.">ॐ • RashiVibe • Your Stars. Your Story.</span><span id="liveClock"></span></div></div>
+<header><div class="container nav">
+<a class="brand" href="index.html"><img src="assets/rashivibe-logo.webp" alt="RashiVibe"></a>
+<nav class="navlinks" id="navlinks"><a href="index.html" class="" data-hi="होम" data-en="Home">होम</a><a href="free-kundli.html" class="active" data-hi="कुंडली" data-en="Kundli">कुंडली</a><a href="kundli-matching.html" class="" data-hi="कुंडली मिलान" data-en="Kundli Matching">कुंडली मिलान</a><a href="daily-rashifal.html" class="" data-hi="राशिफल" data-en="Rashifal">राशिफल</a><a href="numerology.html" class="" data-hi="अंक ज्योतिष" data-en="Numerology">अंक ज्योतिष</a><a href="panchang.html" class="" data-hi="पंचांग" data-en="Panchang">पंचांग</a><a href="sade-sati.html" class="" data-hi="साढ़े साती" data-en="Sade Sati">साढ़े साती</a><a href="muhurat.html" class="" data-hi="मुहूर्त" data-en="Muhurat">मुहूर्त</a></nav>
+<button class="lang-btn" id="langBtn" type="button">ENG</button><button class="menu-btn" id="menuBtn" type="button">☰</button>
+</div></header>
 
-<div class="topbar">✦ RashiVibe · Your Stars. Your Story.</div>
-<header>
-  <div class="navwrap">
-    <a class="brand logo-wrap" href="index.html"><span class="logo-mark">RV</span><span>Rashi<span>Vibe</span></span></a>
-    <button class="menu-btn" aria-label="Open menu">☰</button>
-    <nav class="site-nav">
-      <a href="index.html">Home</a>
-      <a href="free-kundli.html">Kundli</a>
-      <a href="kundli-matching.html">कुंडली मिलान</a>
-      <a href="daily-rashifal.html">Rashifal</a>
-      <a href="numerology.html">Numerology</a>
-      <a href="panchang.html">Panchang</a>
-      <a href="sade-sati.html">Sade Sati</a>
-      <a href="muhurat.html">Muhurat</a>
-    </nav>
-    <div class="lang"><button data-lang="hi" class="on">हि</button><button data-lang="en">EN</button></div>
-  </div>
-</header>
+<main><section class="section"><div class="container">
+<div class="section-title"><span class="badge">D1 • D9 • Nakshatra • Dasha</span><h1 data-hi="अपनी जन्म कुंडली बनाएं" data-en="Create Your Birth Kundli">अपनी जन्म कुंडली बनाएं</h1><p data-hi="जन्म तिथि, समय और स्थान से वैदिक sidereal chart तैयार करें।" data-en="Create a Vedic sidereal chart using birth date, time and place.">जन्म तिथि, समय और स्थान से वैदिक sidereal chart तैयार करें।</p></div>
 
-
-<div class="page-hero"><div><div class="eyebrow">Free Kundli</div><h1>अपनी जन्म कुंडली देखें</h1><p>जन्म तिथि, समय और स्थान भरें।</p></div></div>
-<main><section>
-  <div class="form-card">
-    
-<div class="card">
-  <h3>जन्म विवरण</h3>
-  <div class="field"><label for="kName">नाम</label><input id="kName" placeholder="अपना नाम लिखें"></div>
-  <div class="field">
-    <label>जन्म तिथि</label>
-    <div class="date-row">
-      <input id="kD" data-day maxlength="2" inputmode="numeric" placeholder="DD">
-      <input id="kM" data-month maxlength="2" inputmode="numeric" placeholder="MM">
-      <input id="kY" data-year maxlength="4" inputmode="numeric" placeholder="YYYY">
-    </div>
-    <div class="hint">वर्ष केवल 4 अंकों में भरें।</div>
-  </div>
-  <div class="field">
-    <label>जन्म समय</label>
-    <div class="time-row">
-      <select id="kH"><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
-      <select id="kMin"><option>00</option><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option><option>32</option><option>33</option><option>34</option><option>35</option><option>36</option><option>37</option><option>38</option><option>39</option><option>40</option><option>41</option><option>42</option><option>43</option><option>44</option><option>45</option><option>46</option><option>47</option><option>48</option><option>49</option><option>50</option><option>51</option><option>52</option><option>53</option><option>54</option><option>55</option><option>56</option><option>57</option><option>58</option><option>59</option></select>
-      <select id="kAP"><option>AM</option><option>PM</option></select>
-    </div>
-  </div>
-  <div class="field">
-    <label for="kPlace">जन्म स्थान</label>
-    <input id="kPlace" data-place data-box="kBox" data-lat="kLat" data-lon="kLon" data-tz="kTz"
-           autocomplete="off" placeholder="शहर लिखें और सुझाव चुनें">
-    <div id="kBox" class="suggestions"></div>
-  </div>
-  <details>
-    <summary>Advanced coordinates</summary>
-    <div class="form-grid" style="margin-top:10px">
-      <input id="kLat" placeholder="Latitude">
-      <input id="kLon" placeholder="Longitude">
-      <input id="kTz" placeholder="Timezone">
-    </div>
-  </details>
+<div class="form-card">
+<h2 data-hi="आपका जन्म विवरण" data-en="Your Birth Details">आपका जन्म विवरण</h2>
+<div class="form-grid">
+<div class="field"><label data-hi="नाम" data-en="Name">नाम</label><input id="kName" data-hi="अपना नाम" data-en="Your name" placeholder="अपना नाम"></div>
+<div class="field"><label data-hi="जन्म स्थान" data-en="Birth place">जन्म स्थान</label><input id="kPlace" data-hi="शहर लिखें…" data-en="Type city…" placeholder="शहर लिखें…"><div id="kSuggest" class="suggestions"></div></div>
+<div class="field"><label data-hi="जन्म तिथि" data-en="Birth date">जन्म तिथि</label><div class="date-row"><input id="kD" type="number" min="1" max="31" placeholder="DD"><input id="kM" type="number" min="1" max="12" placeholder="MM"><input id="kY" type="number" min="1900" max="2026" placeholder="YYYY"></div></div>
+<div class="field"><label data-hi="जन्म समय" data-en="Birth time">जन्म समय</label><div class="time-row"><select id="kH"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select><select id="kMin"><option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option></select><select id="kAP"><option>AM</option><option>PM</option></select></div></div>
 </div>
+<details class="advanced"><summary data-hi="Advanced: Latitude / Longitude / Timezone" data-en="Advanced: Latitude / Longitude / Timezone">Advanced: Latitude / Longitude / Timezone</summary>
+<div class="form-grid three" style="margin-top:12px"><div class="field"><label>Latitude</label><input id="kLat" type="number" step="any"></div><div class="field"><label>Longitude</label><input id="kLon" type="number" step="any"></div><div class="field"><label>Timezone</label><input id="kTz" value="Asia/Kolkata"></div></div></details>
+</div>
+<div class="cta"><button class="btn primary" id="kundliBtn" data-hi="✨ कुंडली बनाएं" data-en="✨ Create Kundli">✨ कुंडली बनाएं</button></div>
+<div id="kundliResult" class="result hidden"></div>
+</div></section></main>
+<footer><div class="container footer-grid">
+<div><img src="assets/rashivibe-logo.webp" alt="RashiVibe" style="width:230px"><p data-hi="आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।" data-en="Traditional Vedic astrology with a modern experience.">आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।</p></div>
+<div><h3 data-hi="महत्वपूर्ण" data-en="Important">महत्वपूर्ण</h3><div class="footer-links"><a href="about.html" data-hi="हमारे बारे में" data-en="About">हमारे बारे में</a><a href="privacy.html" data-hi="गोपनीयता" data-en="Privacy">गोपनीयता</a><a href="disclaimer.html" data-hi="अस्वीकरण" data-en="Disclaimer">अस्वीकरण</a><a href="terms.html" data-hi="नियम" data-en="Terms">नियम</a><a href="contact.html" data-hi="संपर्क" data-en="Contact">संपर्क</a></div></div>
+<div><h3>RashiVibe</h3><p>© 2026 RashiVibe</p><span class="badge">Sanatan × Gen-Z</span></div>
+</div></footer>
 
-    <div class="cta"><button id="kundliBtn" class="btn primary">✨ कुंडली देखें</button></div>
-    <div id="kundliResult" class="result hidden"></div>
-  </div>
-</section></main>
-
-
-<footer>
-  <div class="foot">
-    <div>
-      <div class="brand" style="color:white">Rashi<span>Vibe</span></div>
-      <p>वैदिक ज्योतिष को सरल, सुंदर और समझने योग्य रूप में जानें।</p>
-    </div>
-    <div>
-      <strong>Tools</strong>
-      <a href="free-kundli.html">Kundli</a>
-      <a href="daily-rashifal.html">Rashifal</a>
-      <a href="panchang.html">Panchang</a>
-    </div>
-    <div>
-      <strong>जानकारी</strong>
-      <a href="about.html">About</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="disclaimer.html">Disclaimer</a>
-    </div>
-  </div>
-</footer>
-
-<script src="assets/js/core.js"></script>
-
-<script src="assets/js/forms.js"></script>
-<script src="assets/js/vedic.js"></script>
-<script src="assets/js/pickers.js"></script>
-<script src="assets/js/share.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded',()=>{
- document.getElementById('kundliBtn').addEventListener('click',()=>{
-  const ds=RVForms.validDate('k'),place=document.getElementById('kPlace');
-  if(!ds){alert('कृपया सही जन्म तिथि दर्ज करें।');return}
-  const lat=+document.getElementById('kLat').value,lon=+document.getElementById('kLon').value;
-  if(!Number.isFinite(lat)||!Number.isFinite(lon)||(!lat&&!lon)){alert('कृपया सूची से जन्म स्थान चुनें।');return}
-  const [y,m,d]=ds.split('-'),date=RVVedic.birthDate(y,m,d,document.getElementById('kH').value,document.getElementById('kMin').value,document.getElementById('kAP').value,document.getElementById('kTz').value);
-  const c=RVVedic.chart(date,lat,lon),md=RVVedic.dasha(c,date),name=document.getElementById('kName').value.trim()||'आप';
-  const r=document.getElementById('kundliResult');r.classList.remove('hidden');
-  r.innerHTML=`<h2>आपकी कुंडली की मुख्य बातें</h2><p><strong>${name}</strong> · ${ds} · ${place.value}</p>
-  <div class="chart-grid">
-   <div class="planet-chip"><strong>लग्न</strong><br>${RVVedic.Z[c.ascSign]} · ${c.asc.toFixed(2)}°</div>
-   <div class="planet-chip"><strong>चंद्र राशि</strong><br>${RVVedic.Z[c.moonSign]} · ${c.moon.toFixed(2)}°</div>
-   <div class="planet-chip"><strong>सूर्य राशि</strong><br>${RVVedic.Z[c.sunSign]} · ${c.sun.toFixed(2)}°</div>
-   <div class="planet-chip"><strong>नक्षत्र</strong><br>${c.nak.name} · पद ${c.nak.pada}</div>
-   <div class="planet-chip"><strong>नक्षत्र स्वामी</strong><br>${c.nak.lord}</div>
-   <div class="planet-chip"><strong>वर्तमान महादशा</strong><br>${md.lord}</div>
-  </div>
-  <div class="report-section"><h3>कुंडली का आधार</h3><p>लग्न ${RVVedic.Z[c.ascSign]}, चंद्र ${RVVedic.Z[c.moonSign]} और ${c.nak.name} नक्षत्र के संयुक्त संकेतों से आगे के भाव, दशा और वर्ग-कुंडली विश्लेषण का आधार बनता है।</p></div>
-  <div class="report-section"><h3>दशा</h3><p>${md.lord} महादशा का अनुमानित काल ${md.start.toLocaleDateString('hi-IN')} से ${md.end.toLocaleDateString('hi-IN')} तक है। सूक्ष्म फल के लिए अंतर्दशा और गोचर को साथ देखना चाहिए।</p></div>
-  <div class="share-row"><button class="btn ghost" onclick="rvShare('RashiVibe Kundli','${name} की Kundli report')">शेयर करें</button><button class="btn ghost" onclick="window.print()">Print / PDF</button></div>
-  <p class="notice">ग्रह-गणना browser में की जाती है। इसे पारंपरिक ज्योतिषीय व्याख्या समझें, निश्चित भविष्यवाणी नहीं।</p>`;
- });
-});
+(()=> {
+  const root=document.documentElement;
+  let lang=localStorage.getItem('rvLang')||'hi';
+  function applyLang(){
+    root.lang=lang;
+    document.querySelectorAll('[data-hi][data-en]').forEach(el=>{
+      const val=el.getAttribute('data-'+lang);
+      if(el.matches('input[placeholder]')) el.placeholder=val;
+      else if(val && val.includes('<')) el.innerHTML=val;
+      else el.textContent=val;
+    });
+    document.querySelectorAll('[data-title-hi][data-title-en]').forEach(el=>el.title=el.getAttribute('data-title-'+lang));
+    const b=document.getElementById('langBtn'); if(b)b.textContent=lang==='hi'?'ENG':'हिंदी';
+    document.dispatchEvent(new CustomEvent('rv-language',{detail:{lang}}));
+  }
+  window.RVLang=()=>lang;
+  window.RVT=(hi,en)=>lang==='hi'?hi:en;
+  window.RVSetLang=()=>{lang=lang==='hi'?'en':'hi';localStorage.setItem('rvLang',lang);applyLang()};
+  document.addEventListener('DOMContentLoaded',()=>{
+    applyLang();
+    const lb=document.getElementById('langBtn');if(lb)lb.onclick=RVSetLang;
+    const mb=document.getElementById('menuBtn'),nl=document.getElementById('navlinks');if(mb&&nl)mb.onclick=()=>nl.classList.toggle('open');
+    const clock=document.getElementById('liveClock');
+    function tick(){
+      if(!clock)return;
+      const now=new Date(),loc=lang==='hi'?'hi-IN':'en-IN';
+      clock.textContent=new Intl.DateTimeFormat(loc,{weekday:'short',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).format(now);
+    }
+    tick();setInterval(tick,1000);
+  });
+})();
 </script>
 
-</body>
-</html>
+<script>
+const RVAstro=(()=>{
+const Z_HI=['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
+const Z_EN=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+const NAK_HI=['अश्विनी','भरणी','कृत्तिका','रोहिणी','मृगशिरा','आर्द्रा','पुनर्वसु','पुष्य','आश्लेषा','मघा','पूर्व फाल्गुनी','उत्तर फाल्गुनी','हस्त','चित्रा','स्वाती','विशाखा','अनुराधा','ज्येष्ठा','मूल','पूर्वाषाढ़ा','उत्तराषाढ़ा','श्रवण','धनिष्ठा','शतभिषा','पूर्व भाद्रपद','उत्तर भाद्रपद','रेवती'];
+const NAK_EN=['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
+const LORD_HI=['केतु','शुक्र','सूर्य','चंद्र','मंगल','राहु','गुरु','शनि','बुध'];
+const LORD_EN=['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
+const DURATION=[7,20,6,10,7,18,16,19,17];
+const P_EN=['Sun','Moon','Mercury','Venus','Mars','Jupiter','Saturn','Rahu','Ketu'];
+const P_HI=['सूर्य','चंद्र','बुध','शुक्र','मंगल','गुरु','शनि','राहु','केतु'];
+const mod=(x,n=360)=>((x%n)+n)%n, rad=x=>x*Math.PI/180, deg=x=>x*180/Math.PI;
+const jd=d=>d.getTime()/86400000+2440587.5;
+const ayan=j=>23.85675+0.013968*((j-2451545.0)/365.2425);
+function solveE(M,e){let E=rad(M)+e*Math.sin(rad(M))*(1+e*Math.cos(rad(M)));for(let i=0;i<6;i++)E=E-(E-e*Math.sin(E)-rad(M))/(1-e*Math.cos(E));return E}
+function sunData(d){
+ let w=282.9404+4.70935E-5*d,e=.016709-1.151E-9*d,M=mod(356.0470+.9856002585*d),E=solveE(M,e);
+ let x=Math.cos(E)-e,y=Math.sin(E)*Math.sqrt(1-e*e),r=Math.sqrt(x*x+y*y),v=deg(Math.atan2(y,x)),lon=mod(v+w);
+ return {lon,r,x:r*Math.cos(rad(lon)),y:r*Math.sin(rad(lon))};
+}
+const ELEMENTS={
+ Mercury:d=>[48.3313+3.24587E-5*d,7.0047+5E-8*d,29.1241+1.01444E-5*d,.387098,.205635+5.59E-10*d,168.6562+4.0923344368*d],
+ Venus:d=>[76.6799+2.46590E-5*d,3.3946+2.75E-8*d,54.8910+1.38374E-5*d,.723330,.006773-1.302E-9*d,48.0052+1.6021302244*d],
+ Mars:d=>[49.5574+2.11081E-5*d,1.8497-1.78E-8*d,286.5016+2.92961E-5*d,1.523688,.093405+2.516E-9*d,18.6021+.5240207766*d],
+ Jupiter:d=>[100.4542+2.76854E-5*d,1.3030-1.557E-7*d,273.8777+1.64505E-5*d,5.20256,.048498+4.469E-9*d,19.8950+.0830853001*d],
+ Saturn:d=>[113.6634+2.38980E-5*d,2.4886-1.081E-7*d,339.3939+2.97661E-5*d,9.55475,.055546-9.499E-9*d,316.9670+.0334442282*d]
+};
+function planetHelio(name,d){
+ let [N,i,w,a,e,M]=ELEMENTS[name](d);N=rad(N);i=rad(i);w=rad(w);M=mod(M);
+ let E=solveE(M,e),xv=a*(Math.cos(E)-e),yv=a*Math.sqrt(1-e*e)*Math.sin(E),v=Math.atan2(yv,xv),r=Math.sqrt(xv*xv+yv*yv);
+ let xh=r*(Math.cos(N)*Math.cos(v+w)-Math.sin(N)*Math.sin(v+w)*Math.cos(i));
+ let yh=r*(Math.sin(N)*Math.cos(v+w)+Math.cos(N)*Math.sin(v+w)*Math.cos(i));
+ let zh=r*(Math.sin(v+w)*Math.sin(i));
+ return {x:xh,y:yh,z:zh,lon:mod(deg(Math.atan2(yh,xh)))};
+}
+function moonTropical(j){
+ let n=j-2451545;
+ let L=mod(218.316+13.176396*n),M=mod(134.963+13.064993*n),D=mod(297.850+12.190749*n),F=mod(93.272+13.229350*n),Ms=mod(357.529+.9856003*n);
+ return mod(L+6.289*Math.sin(rad(M))+1.274*Math.sin(rad(2*D-M))+.658*Math.sin(rad(2*D))+.214*Math.sin(rad(2*M))-.186*Math.sin(rad(Ms))-.114*Math.sin(rad(2*F)));
+}
+function positions(date){
+ let j=jd(date),d=j-2451543.5,s=sunData(d),out={};
+ out.Sun=mod(s.lon-ayan(j));out.Moon=mod(moonTropical(j)-ayan(j));
+ for(const p of ['Mercury','Venus','Mars','Jupiter','Saturn']){
+   let h=planetHelio(p,d),x=h.x+s.x,y=h.y+s.y;
+   out[p]=mod(deg(Math.atan2(y,x))-ayan(j));
+ }
+ let rahu=mod(125.1228-.0529538083*d-ayan(j));out.Rahu=rahu;out.Ketu=mod(rahu+180);
+ return out;
+}
+function gmst(j){let T=(j-2451545)/36525;return mod(280.46061837+360.98564736629*(j-2451545)+.000387933*T*T-T*T*T/38710000)}
+function asc(date,lat,lon){
+ let j=jd(date),theta=rad(mod(gmst(j)+lon)),eps=rad(23.439291),phi=rad(lat);
+ let lam=deg(Math.atan2(-Math.cos(theta),Math.sin(theta)*Math.cos(eps)+Math.tan(phi)*Math.sin(eps)));
+ return mod(lam+180-ayan(j));
+}
+function nak(lon){let u=mod(lon)/(360/27),i=Math.floor(u),frac=u-i;return {i,frac,pada:Math.floor(frac*4)+1,lordIndex:i%9}}
+function signIndex(lon){return Math.floor(mod(lon)/30)}
+function navamsa(lon){
+ let s=signIndex(lon),part=Math.floor((mod(lon)%30)/(30/9)),start;
+ if([0,3,6,9].includes(s))start=s;
+ else if([1,4,7,10].includes(s))start=mod(s+8,12);
+ else start=mod(s+4,12);
+ return mod(start+part,12);
+}
+function toDate(y,m,d,h,min,ap,tz){
+ let hh=+h;if(ap==='PM'&&hh<12)hh+=12;if(ap==='AM'&&hh===12)hh=0;
+ let local=new Date(+y,+m-1,+d,hh,+min,0);
+ let offset=local.getTimezoneOffset();
+ if(tz==='Asia/Kolkata')offset=-330;
+ return new Date(Date.UTC(+y,+m-1,+d,hh,+min)-(-offset)*60000);
+}
+function chart(date,lat,lon){
+ let pos=positions(date),a=asc(date,+lat,+lon),mn=nak(pos.Moon);
+ return {date,pos,asc:a,ascSign:signIndex(a),moonSign:signIndex(pos.Moon),sunSign:signIndex(pos.Sun),moonNak:mn,nav:Object.fromEntries(Object.entries(pos).map(([p,l])=>[p,navamsa(l)])),ascNav:navamsa(a)};
+}
+function vimshottari(c,birth,at=new Date()){
+ let n=c.moonNak,startLord=n.lordIndex,elapsed=n.frac*DURATION[startLord],start=new Date(birth.getTime()-elapsed*365.2425*86400000),rows=[],cur=start;
+ for(let k=0;k<18;k++){let idx=(startLord+k)%9,end=new Date(cur.getTime()+DURATION[idx]*365.2425*86400000);rows.push({idx,start:new Date(cur),end});cur=end}
+ let md=rows.find(x=>at>=x.start&&at<x.end)||rows[0];
+ if(!md)return {md:null,ad:null};
+ let mdYears=DURATION[md.idx],mdMs=mdYears*365.2425*86400000,adStart=md.start,ad=null;
+ for(let k=0;k<9;k++){
+  let ai=(md.idx+k)%9,dur=mdMs*(DURATION[ai]/120),end=new Date(adStart.getTime()+dur);
+  if(at>=adStart&&at<end){ad={idx:ai,start:new Date(adStart),end};break}
+  adStart=end;
+ }
+ return {md,ad};
+}
+function tithi(date){let p=positions(date),diff=mod(p.Moon-p.Sun),n=Math.floor(diff/12)+1;return {n,index:(n-1)%15,paksha:n<=15?0:1}}
+function yoga(date){let p=positions(date);return Math.floor(mod(p.Sun+p.Moon)/(360/27))}
+function karana(date){let p=positions(date);return Math.floor(mod(p.Moon-p.Sun)/6)}
+function houseFrom(lon,ascSign){return mod(signIndex(lon)-ascSign,12)+1}
+function yogas(c){
+ let h={};for(const [p,l] of Object.entries(c.pos))h[p]=houseFrom(l,c.ascSign);
+ const ys=[];
+ if(signIndex(c.pos.Sun)===signIndex(c.pos.Mercury))ys.push(['Budha-Aditya','बुध-आदित्य']);
+ if([1,4,7,10].includes(mod(signIndex(c.pos.Jupiter)-c.moonSign,12)+1))ys.push(['Gaja Kesari','गज केसरी']);
+ if(signIndex(c.pos.Moon)===signIndex(c.pos.Mars))ys.push(['Chandra-Mangal','चंद्र-मंगल']);
+ const manglik=[1,2,4,7,8,12].includes(h.Mars);
+ return {ys,manglik,houses:h};
+}
+function sadeSati(moonSign,date=new Date()){
+ let sat=signIndex(positions(date).Saturn),rel=mod(sat-moonSign,12);
+ let code=rel===11?'phase1':rel===0?'phase2':rel===1?'phase3':(rel===3||rel===7?'dhaiya':'none');
+ return {sat,rel,code};
+}
+return {Z_HI,Z_EN,NAK_HI,NAK_EN,LORD_HI,LORD_EN,DURATION,P_EN,P_HI,mod,jd,ayan,positions,asc,nak,signIndex,navamsa,toDate,chart,vimshottari,tithi,yoga,karana,houseFrom,yogas,sadeSati};
+})();
+</script>
+
+<script>
+function setupLocation(prefix){
+ const input=document.getElementById(prefix+'Place'),box=document.getElementById(prefix+'Suggest');
+ if(!input||!box)return;let timer;
+ input.addEventListener('input',()=>{clearTimeout(timer);const q=input.value.trim();if(q.length<3){box.innerHTML='';return}
+  timer=setTimeout(async()=>{try{
+   const res=await fetch('https://photon.komoot.io/api/?limit=6&q='+encodeURIComponent(q));const data=await res.json();
+   box.innerHTML=(data.features||[]).map((f,i)=>{
+    const p=f.properties||{},name=[p.name,p.city,p.state,p.country].filter(Boolean).filter((x,j,a)=>a.indexOf(x)===j).join(', ');
+    return `<button type="button" data-i="${i}">${name}</button>`}).join('');
+   [...box.querySelectorAll('button')].forEach((b,i)=>b.onclick=async()=>{
+    const f=data.features[i],p=f.properties||{},name=[p.name,p.city,p.state,p.country].filter(Boolean).filter((x,j,a)=>a.indexOf(x)===j).join(', ');
+    input.value=name;document.getElementById(prefix+'Lat').value=f.geometry.coordinates[1].toFixed(6);document.getElementById(prefix+'Lon').value=f.geometry.coordinates[0].toFixed(6);box.innerHTML='';
+    const tz=document.getElementById(prefix+'Tz');
+    try{const tr=await fetch(`https://timeapi.io/api/timezone/coordinate?latitude=${f.geometry.coordinates[1]}&longitude=${f.geometry.coordinates[0]}`);if(tr.ok){const td=await tr.json();tz.value=td.timeZone||td.timezone||Intl.DateTimeFormat().resolvedOptions().timeZone}}
+    catch(e){tz.value=Intl.DateTimeFormat().resolvedOptions().timeZone}
+   });
+  }catch(e){box.innerHTML='<div class="notice">'+RVT('स्थान खोज उपलब्ध नहीं है। Latitude/Longitude नीचे भर सकते हैं।','Place search is unavailable. You can enter latitude/longitude below.')+'</div>'}},350)
+ })
+}
+function validBirth(prefix){
+ const d=+document.getElementById(prefix+'D').value,m=+document.getElementById(prefix+'M').value,y=+document.getElementById(prefix+'Y').value;
+ if(!/^\d{4}$/.test(String(document.getElementById(prefix+'Y').value))||y<1900||y>new Date().getFullYear()||m<1||m>12||d<1||d>31)return null;
+ const test=new Date(y,m-1,d);if(test.getFullYear()!=y||test.getMonth()!=m-1||test.getDate()!=d)return null;
+ return {d,m,y};
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>setupLocation('k'));
+function fmtDeg(x){return `${Math.floor(x/30)*0+RVAstro.mod(x,30).toFixed(2)}°`}
+function makeKundli(){
+ const b=validBirth('k');if(!b){alert(RVT('सही 4-अंकों वाले वर्ष के साथ जन्म तिथि भरें।','Enter a valid birth date with a 4-digit year.'));return}
+ const lat=+kLat.value,lon=+kLon.value;if(!Number.isFinite(lat)||!Number.isFinite(lon)||(!lat&&!lon)){alert(RVT('सूची से जन्म स्थान चुनें या Latitude/Longitude भरें।','Select a birth place from the list or enter latitude/longitude.'));return}
+ const date=RVAstro.toDate(b.y,b.m,b.d,kH.value,kMin.value,kAP.value,kTz.value),c=RVAstro.chart(date,lat,lon),d=RVAstro.vimshottari(c,date),y=RVAstro.yogas(c),L=RVLang();
+ const Z=L==='hi'?RVAstro.Z_HI:RVAstro.Z_EN,N=L==='hi'?RVAstro.NAK_HI:RVAstro.NAK_EN,PL=L==='hi'?RVAstro.P_HI:RVAstro.P_EN,LORD=L==='hi'?RVAstro.LORD_HI:RVAstro.LORD_EN;
+ const rows=RVAstro.P_EN.map((p,i)=>`<tr><td>${PL[i]}</td><td>${Z[RVAstro.signIndex(c.pos[p])]}</td><td>${RVAstro.mod(c.pos[p],30).toFixed(2)}°</td><td>${RVAstro.houseFrom(c.pos[p],c.ascSign)}</td><td>${Z[c.nav[p]]}</td></tr>`).join('');
+ const yogText=y.ys.length?y.ys.map(v=>L==='hi'?v[1]:v[0]).join(', '):RVT('कोई प्रमुख सरल योग इस basic scan में नहीं मिला।','No major simple yoga was found in this basic scan.');
+ const md=d.md?LORD[d.md.idx]:'—',ad=d.ad?LORD[d.ad.idx]:'—';
+ kundliResult.classList.remove('hidden');
+ kundliResult.innerHTML=`
+ <h2>${RVT('आपकी कुंडली की मुख्य बातें','Key Highlights of Your Kundli')}</h2>
+ <div class="kpi"><div class="card"><h3>${RVT('लग्न','Ascendant')}</h3><strong>${Z[c.ascSign]} ${RVAstro.mod(c.asc,30).toFixed(2)}°</strong></div><div class="card"><h3>${RVT('चंद्र राशि','Moon Sign')}</h3><strong>${Z[c.moonSign]}</strong></div><div class="card"><h3>${RVT('नक्षत्र','Nakshatra')}</h3><strong>${N[c.moonNak.i]} · ${RVT('पद','Pada')} ${c.moonNak.pada}</strong></div></div>
+ <div class="report-section"><h3>D1 ${RVT('ग्रह स्थिति','Planetary Positions')}</h3><div style="overflow:auto"><table class="planet-table"><thead><tr><th>${RVT('ग्रह','Planet')}</th><th>${RVT('राशि','Sign')}</th><th>${RVT('अंश','Degree')}</th><th>${RVT('भाव','House')}</th><th>D9</th></tr></thead><tbody>${rows}</tbody></table></div></div>
+ <div class="report-section"><h3>${RVT('विम्शोत्तरी दशा','Vimshottari Dasha')}</h3><p>${RVT('वर्तमान महादशा','Current Mahadasha')}: <strong>${md}</strong> · ${RVT('अंतर्दशा','Antardasha')}: <strong>${ad}</strong></p></div>
+ <div class="report-section"><h3>${RVT('योग और मंगल संकेत','Yogas & Manglik Indicator')}</h3><p>${yogText}</p><p><strong>${RVT('मंगल संकेत','Manglik indicator')}:</strong> ${y.manglik?RVT('मंगल 1/2/4/7/8/12 भाव में है; इसे बाकी chart के साथ समझें।','Mars falls in a traditional Manglik house; interpret it with the full chart.'):RVT('इस सरल लग्न-आधारित scan में प्रमुख मंगल दोष संकेत नहीं मिला।','No major Lagna-based Manglik indication in this simple scan.')}</p></div>
+ <div class="report-section"><h3>${RVT('करियर, धन और संबंध','Career, Finance & Relationships')}</h3><p>${RVT('इन विषयों की गहरी व्याख्या में भाव-स्वामी, ग्रह बल, दशा, D9 और गोचर को साथ देखा जाता है। ऊपर की गणना उसी chart का आधार देती है।','Deeper interpretation combines house lords, planetary strength, Dasha, D9 and transits. The calculations above provide the chart foundation.')}</p></div>
+ <div class="cta"><button class="btn ghost" onclick="window.print()">${RVT('Print / PDF','Print / PDF')}</button></div>
+ <p class="notice">${RVT('यह browser-side वैदिक गणना है। ग्रह-स्थिति low-precision astronomical formulas पर आधारित है; बड़े जीवन निर्णय केवल ज्योतिष के आधार पर न लें।','This is a browser-side Vedic calculation using low-precision astronomical formulas. Do not make major life decisions based only on astrology.')}</p>`;
+}
+document.addEventListener('DOMContentLoaded',()=>kundliBtn.onclick=makeKundli);
+document.addEventListener('rv-language',()=>{if(!kundliResult.classList.contains('hidden'))makeKundli()});
+</script>
+
+</body></html>

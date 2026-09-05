@@ -1,85 +1,77 @@
 <!doctype html>
 <html lang="hi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Numerology | RashiVibe</title>
-  <meta name="description" content="RashiVibe वैदिक ज्योतिष, कुंडली, राशिफल, पंचांग और अंक ज्योतिष।">
-  <link rel="stylesheet" href="assets/site.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Numerology | RashiVibe</title>
+<meta name="description" content="Numerology calculator for Life Path, Birth Number and Name Number.">
+<meta name="theme-color" content="#0f1418">
+<link rel="icon" href="assets/rashivibe-icon.webp">
+<link rel="stylesheet" href="assets/rashivibe.css">
 </head>
-<body><noscript><div class="notice" style="margin:12px">JavaScript बंद है; basic content दिखाई देगा, लेकिन calculations काम नहीं करेंगी।</div></noscript>
-
-<div class="topbar">✦ RashiVibe · Your Stars. Your Story.</div>
-<header>
-  <div class="navwrap">
-    <a class="brand logo-wrap" href="index.html"><span class="logo-mark">RV</span><span>Rashi<span>Vibe</span></span></a>
-    <button class="menu-btn" aria-label="Open menu">☰</button>
-    <nav class="site-nav">
-      <a href="index.html">Home</a>
-      <a href="free-kundli.html">Kundli</a>
-      <a href="kundli-matching.html">कुंडली मिलान</a>
-      <a href="daily-rashifal.html">Rashifal</a>
-      <a href="numerology.html">Numerology</a>
-      <a href="panchang.html">Panchang</a>
-      <a href="sade-sati.html">Sade Sati</a>
-      <a href="muhurat.html">Muhurat</a>
-    </nav>
-    <div class="lang"><button data-lang="hi" class="on">हि</button><button data-lang="en">EN</button></div>
-  </div>
-</header>
-
-
-<div class="page-hero"><div><div class="eyebrow">Numerology</div><h1>अंक ज्योतिष</h1><p>अपनी जन्म तिथि से Life Path Number देखें।</p></div></div>
-<main><section><div class="form-card">
-  <div class="field"><label for="numDate">जन्म तिथि</label><input id="numDate" type="date"></div>
-  <div class="cta"><button id="numBtn" class="btn primary">अंक देखें</button></div>
-  <div id="numResult" class="result hidden"></div>
+<body>
+<div class="topbar"><div class="container"><span class="brandline" data-hi="ॐ • RashiVibe • Your Stars. Your Story." data-en="ॐ • RashiVibe • Your Stars. Your Story.">ॐ • RashiVibe • Your Stars. Your Story.</span><span id="liveClock"></span></div></div>
+<header><div class="container nav">
+<a class="brand" href="index.html"><img src="assets/rashivibe-logo.webp" alt="RashiVibe"></a>
+<nav class="navlinks" id="navlinks"><a href="index.html" class="" data-hi="होम" data-en="Home">होम</a><a href="free-kundli.html" class="" data-hi="कुंडली" data-en="Kundli">कुंडली</a><a href="kundli-matching.html" class="" data-hi="कुंडली मिलान" data-en="Kundli Matching">कुंडली मिलान</a><a href="daily-rashifal.html" class="" data-hi="राशिफल" data-en="Rashifal">राशिफल</a><a href="numerology.html" class="active" data-hi="अंक ज्योतिष" data-en="Numerology">अंक ज्योतिष</a><a href="panchang.html" class="" data-hi="पंचांग" data-en="Panchang">पंचांग</a><a href="sade-sati.html" class="" data-hi="साढ़े साती" data-en="Sade Sati">साढ़े साती</a><a href="muhurat.html" class="" data-hi="मुहूर्त" data-en="Muhurat">मुहूर्त</a></nav>
+<button class="lang-btn" id="langBtn" type="button">ENG</button><button class="menu-btn" id="menuBtn" type="button">☰</button>
+</div></header>
+<main><section class="section"><div class="container"><div class="section-title"><span class="badge">Birth • Life Path • Name</span><h1 data-hi="अंक ज्योतिष" data-en="Numerology">अंक ज्योतिष</h1><p data-hi="जन्म तिथि और नाम से मुख्य अंक देखें।" data-en="Calculate key numbers from your birth date and name.">जन्म तिथि और नाम से मुख्य अंक देखें।</p></div>
+<div class="form-card"><div class="form-grid"><div class="field"><label data-hi="नाम (English spelling)" data-en="Name (English spelling)">नाम (English spelling)</label><input id="numName" data-hi="अपना नाम" data-en="Your name" placeholder="अपना नाम"></div><div class="field"><label data-hi="जन्म तिथि" data-en="Birth date">जन्म तिथि</label><input id="numDate" type="date"></div></div><div class="cta"><button class="btn primary" id="numBtn" data-hi="✨ अंक निकालें" data-en="✨ Calculate Numbers">✨ अंक निकालें</button></div><div id="numResult" class="result hidden"></div></div>
 </div></section></main>
+<footer><div class="container footer-grid">
+<div><img src="assets/rashivibe-logo.webp" alt="RashiVibe" style="width:230px"><p data-hi="आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।" data-en="Traditional Vedic astrology with a modern experience.">आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।</p></div>
+<div><h3 data-hi="महत्वपूर्ण" data-en="Important">महत्वपूर्ण</h3><div class="footer-links"><a href="about.html" data-hi="हमारे बारे में" data-en="About">हमारे बारे में</a><a href="privacy.html" data-hi="गोपनीयता" data-en="Privacy">गोपनीयता</a><a href="disclaimer.html" data-hi="अस्वीकरण" data-en="Disclaimer">अस्वीकरण</a><a href="terms.html" data-hi="नियम" data-en="Terms">नियम</a><a href="contact.html" data-hi="संपर्क" data-en="Contact">संपर्क</a></div></div>
+<div><h3>RashiVibe</h3><p>© 2026 RashiVibe</p><span class="badge">Sanatan × Gen-Z</span></div>
+</div></footer>
 
-
-<footer>
-  <div class="foot">
-    <div>
-      <div class="brand" style="color:white">Rashi<span>Vibe</span></div>
-      <p>वैदिक ज्योतिष को सरल, सुंदर और समझने योग्य रूप में जानें।</p>
-    </div>
-    <div>
-      <strong>Tools</strong>
-      <a href="free-kundli.html">Kundli</a>
-      <a href="daily-rashifal.html">Rashifal</a>
-      <a href="panchang.html">Panchang</a>
-    </div>
-    <div>
-      <strong>जानकारी</strong>
-      <a href="about.html">About</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="disclaimer.html">Disclaimer</a>
-    </div>
-  </div>
-</footer>
-
-<script src="assets/js/core.js"></script>
-
-<script src="assets/js/astro-lite.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('numBtn').addEventListener('click',()=>{
-    const v=document.getElementById('numDate').value.replace(/\D/g,'');
-    if(!v){alert('जन्म तिथि भरें।');return}
-    const date=document.getElementById('numDate').value;
-    const n=RVAstro.lifePath(date), b=RVAstro.birthNumber(date);
-    const text={
-      1:'स्वतंत्रता, पहल और नेतृत्व',2:'सहयोग, संवेदनशीलता और संतुलन',3:'अभिव्यक्ति, रचनात्मकता और संवाद',
-      4:'अनुशासन, संरचना और निरंतरता',5:'परिवर्तन, जिज्ञासा और स्वतंत्र सोच',6:'जिम्मेदारी, परिवार और देखभाल',
-      7:'विश्लेषण, अध्ययन और आंतरिक खोज',8:'व्यवस्था, लक्ष्य और प्रबंधन',9:'करुणा, व्यापक सोच और सेवा',
-      11:'प्रेरणा, अंतर्दृष्टि और संवेदनशीलता',22:'बड़े विचारों को व्यावहारिक रूप देने की क्षमता',33:'सेवा, मार्गदर्शन और जिम्मेदारी'
-    };
-    const r=document.getElementById('numResult');
-    r.classList.remove('hidden');
-    r.innerHTML='<h2>आपके मुख्य अंक</h2><div class="kpi"><div class="card"><h3>Life Path</h3><strong>'+n+'</strong><p>'+text[n]+'</p></div><div class="card"><h3>Birth Number</h3><strong>'+b+'</strong><p>'+text[b]+'</p></div><div class="card"><h3>ध्यान रखें</h3><p>अंक संकेत देते हैं, व्यक्ति को तय नहीं करते।</p></div></div>';
+(()=> {
+  const root=document.documentElement;
+  let lang=localStorage.getItem('rvLang')||'hi';
+  function applyLang(){
+    root.lang=lang;
+    document.querySelectorAll('[data-hi][data-en]').forEach(el=>{
+      const val=el.getAttribute('data-'+lang);
+      if(el.matches('input[placeholder]')) el.placeholder=val;
+      else if(val && val.includes('<')) el.innerHTML=val;
+      else el.textContent=val;
+    });
+    document.querySelectorAll('[data-title-hi][data-title-en]').forEach(el=>el.title=el.getAttribute('data-title-'+lang));
+    const b=document.getElementById('langBtn'); if(b)b.textContent=lang==='hi'?'ENG':'हिंदी';
+    document.dispatchEvent(new CustomEvent('rv-language',{detail:{lang}}));
+  }
+  window.RVLang=()=>lang;
+  window.RVT=(hi,en)=>lang==='hi'?hi:en;
+  window.RVSetLang=()=>{lang=lang==='hi'?'en':'hi';localStorage.setItem('rvLang',lang);applyLang()};
+  document.addEventListener('DOMContentLoaded',()=>{
+    applyLang();
+    const lb=document.getElementById('langBtn');if(lb)lb.onclick=RVSetLang;
+    const mb=document.getElementById('menuBtn'),nl=document.getElementById('navlinks');if(mb&&nl)mb.onclick=()=>nl.classList.toggle('open');
+    const clock=document.getElementById('liveClock');
+    function tick(){
+      if(!clock)return;
+      const now=new Date(),loc=lang==='hi'?'hi-IN':'en-IN';
+      clock.textContent=new Intl.DateTimeFormat(loc,{weekday:'short',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).format(now);
+    }
+    tick();setInterval(tick,1000);
   });
-});
+})();
 </script>
 
-</body>
-</html>
+<script>
+function reduce(n){while(n>9&&![11,22,33].includes(n))n=String(n).split('').reduce((a,b)=>a+(+b),0);return n}
+function nameNum(s){const map={A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,S:1,T:2,U:3,V:4,W:5,X:6,Y:7,Z:8};let n=0;for(const c of s.toUpperCase())n+=map[c]||0;return reduce(n)}
+const meaning={
+ hi:{1:'स्वतंत्रता, पहल और नेतृत्व',2:'सहयोग, संवेदनशीलता और संतुलन',3:'अभिव्यक्ति, रचनात्मकता और संवाद',4:'अनुशासन, संरचना और निरंतरता',5:'परिवर्तन, जिज्ञासा और स्वतंत्रता',6:'जिम्मेदारी, परिवार और देखभाल',7:'विश्लेषण, अध्ययन और आंतरिक खोज',8:'प्रबंधन, लक्ष्य और उपलब्धि',9:'करुणा, व्यापक सोच और सेवा',11:'अंतर्दृष्टि और प्रेरणा',22:'बड़े विचारों को जमीन पर उतारना',33:'सेवा और मार्गदर्शन'},
+ en:{1:'Independence, initiative and leadership',2:'Cooperation, sensitivity and balance',3:'Expression, creativity and communication',4:'Discipline, structure and consistency',5:'Change, curiosity and freedom',6:'Responsibility, family and care',7:'Analysis, study and inner search',8:'Management, goals and achievement',9:'Compassion, broad thinking and service',11:'Insight and inspiration',22:'Turning big ideas into practical form',33:'Service and guidance'}
+};
+function renderNum(){
+ const date=numDate.value,name=numName.value.trim();if(!date){alert(RVT('जन्म तिथि चुनें।','Choose your birth date.'));return}
+ const [y,m,d]=date.split('-').map(Number);
+ let sum=[...(`${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}`)].reduce((a,b)=>a+(+b),0),lp=reduce(sum),bn=reduce(d),nn=name?nameNum(name):'—',L=RVLang();
+ const M=meaning[L];numResult.classList.remove('hidden');numResult.innerHTML=`<h2>${RVT('आपके मुख्य अंक','Your Key Numbers')}</h2><div class="grid three"><div class="card"><h3>Life Path</h3><strong>${lp}</strong><p>${M[lp]}</p></div><div class="card"><h3>${RVT('जन्मांक','Birth Number')}</h3><strong>${bn}</strong><p>${M[bn]}</p></div><div class="card"><h3>${RVT('नामांक','Name Number')}</h3><strong>${nn}</strong><p>${nn==='—'?RVT('नाम भरें तो यह भी निकलेगा।','Enter your name to calculate it.'):M[nn]}</p></div></div><p class="notice">${RVT('अंक ज्योतिष एक पारंपरिक व्याख्यात्मक प्रणाली है, व्यक्ति को तय करने वाला विज्ञान नहीं।','Numerology is a traditional interpretive system, not a science that defines a person.')}</p>`;
+}
+document.addEventListener('DOMContentLoaded',()=>numBtn.onclick=renderNum);document.addEventListener('rv-language',()=>{if(!numResult.classList.contains('hidden'))renderNum()});
+</script>
+
+</body></html>
