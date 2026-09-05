@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://astro-divya.github.io/RashiVibe/sitemap.xml

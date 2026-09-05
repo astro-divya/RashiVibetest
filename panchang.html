@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Daily Panchang | RashiVibe</title>
+  <meta name="description" content="RashiVibe वैदिक ज्योतिष, कुंडली, राशिफल, पंचांग और अंक ज्योतिष।">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<div class="topbar">✦ RashiVibe · Your Stars. Your Story.</div>
+<header>
+  <div class="navwrap">
+    <a class="brand" href="index.html">Rashi<span>Vibe</span></a>
+    <button class="menu-btn" aria-label="Open menu">☰</button>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="free-kundli.html">Kundli</a>
+      <a href="kundli-matching.html">कुंडली मिलान</a>
+      <a href="daily-rashifal.html">Rashifal</a>
+      <a href="numerology.html">Numerology</a>
+      <a href="panchang.html">Panchang</a>
+      <a href="sade-sati.html">Sade Sati</a>
+      <a href="muhurat.html">Muhurat</a>
+    </nav>
+    <div class="lang"><button data-lang="hi" class="on">हि</button><button data-lang="en">EN</button></div>
+  </div>
+</header>
+
+
+<div class="page-hero"><div><div class="eyebrow">Daily Panchang</div><h1>आज का पंचांग</h1><p>सूर्योदय-सूर्यास्त और पंचांग के प्रमुख पारंपरिक भाग।</p></div></div>
+<main><section>
+  <div class="kpi">
+    <div class="card"><h3>सूर्योदय</h3><strong id="sunrise">—</strong><p>Default location: New Delhi</p></div>
+    <div class="card"><h3>सूर्यास्त</h3><strong id="sunset">—</strong><p>Default location: New Delhi</p></div>
+    <div class="card"><h3>स्थान</h3><strong>नई दिल्ली</strong><p>Test build default</p></div>
+  </div>
+  <div class="card" style="margin-top:22px">
+    <h2>तिथि, नक्षत्र, योग और करण</h2>
+    <p>इन चारों के लिए वास्तविक sidereal Sun/Moon astronomy engine आवश्यक है। Test build कोई अनुमानित या नकली मान नहीं दिखाता।</p>
+    <div class="notice">सूर्योदय-सूर्यास्त की गणना client-side solar formula से की जा रही है; पूर्ण पंचांग production astrology engine के साथ जोड़ा जाएगा।</div>
+  </div>
+</section></main>
+
+
+<footer>
+  <div class="foot">
+    <div>
+      <div class="brand" style="color:white">Rashi<span>Vibe</span></div>
+      <p>वैदिक ज्योतिष को सरल, सुंदर और समझने योग्य रूप में जानें।</p>
+    </div>
+    <div>
+      <strong>Tools</strong>
+      <a href="free-kundli.html">Kundli</a>
+      <a href="daily-rashifal.html">Rashifal</a>
+      <a href="panchang.html">Panchang</a>
+    </div>
+    <div>
+      <strong>जानकारी</strong>
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/core.js"></script>
+
+<script>
+function solarTimes(date,lat,lon){
+  const calc=(rise)=>{
+    const R=Math.PI/180,D=180/Math.PI;
+    const N=Math.floor((date-Date.UTC(date.getUTCFullYear(),0,0))/86400000);
+    const lh=lon/15,t=N+((rise?6:18)-lh)/24;
+    const M=.9856*t-3.289;
+    let L=(M+1.916*Math.sin(M*R)+.020*Math.sin(2*M*R)+282.634)%360;if(L<0)L+=360;
+    let RA=Math.atan(.91764*Math.tan(L*R))*D;RA=(RA+360)%360;RA+=(Math.floor(L/90)*90-Math.floor(RA/90)*90);RA/=15;
+    const sd=.39782*Math.sin(L*R),cd=Math.cos(Math.asin(sd));
+    const ch=(Math.cos(90.833*R)-sd*Math.sin(lat*R))/(cd*Math.cos(lat*R));
+    if(Math.abs(ch)>1)return null;
+    const H=(rise?360-Math.acos(ch)*D:Math.acos(ch)*D)/15;
+    const T=H+RA-.06571*t-6.622;let u=(T-lh)%24;if(u<0)u+=24;return u;
+  };
+  return {rise:calc(true),set:calc(false)};
+}
+function fmt(ut){
+  if(ut==null)return '—';
+  const h=Math.floor(ut),m=Math.round((ut-h)*60);
+  const d=new Date(Date.UTC(2026,0,1,h,m));
+  return new Intl.DateTimeFormat('hi-IN',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:'Asia/Kolkata'}).format(d);
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const s=solarTimes(new Date(),28.6139,77.2090);
+  document.getElementById('sunrise').textContent=fmt(s.rise);
+  document.getElementById('sunset').textContent=fmt(s.set);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>आज का राशिफल | RashiVibe</title>
+  <meta name="description" content="RashiVibe वैदिक ज्योतिष, कुंडली, राशिफल, पंचांग और अंक ज्योतिष।">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<div class="topbar">✦ RashiVibe · Your Stars. Your Story.</div>
+<header>
+  <div class="navwrap">
+    <a class="brand" href="index.html">Rashi<span>Vibe</span></a>
+    <button class="menu-btn" aria-label="Open menu">☰</button>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="free-kundli.html">Kundli</a>
+      <a href="kundli-matching.html">कुंडली मिलान</a>
+      <a href="daily-rashifal.html">Rashifal</a>
+      <a href="numerology.html">Numerology</a>
+      <a href="panchang.html">Panchang</a>
+      <a href="sade-sati.html">Sade Sati</a>
+      <a href="muhurat.html">Muhurat</a>
+    </nav>
+    <div class="lang"><button data-lang="hi" class="on">हि</button><button data-lang="en">EN</button></div>
+  </div>
+</header>
+
+
+<div class="page-hero"><div><div class="eyebrow">Rashifal</div><h1>🌙 आपका राशिफल</h1><p>आज सितारे क्या कहते हैं? अपनी चंद्र राशि चुनें…</p></div></div>
+<main><section>
+  <div class="tabs">
+    <a class="active" href="daily-rashifal.html">आज</a>
+    <a href="tomorrow-rashifal.html">कल</a>
+    <a href="weekly-rashifal.html">साप्ताहिक</a>
+    <a href="monthly-rashifal.html">मासिक</a>
+    <a href="yearly-rashifal.html">वार्षिक</a>
+  </div>
+  <div class="zodiac-grid"><button class="zodiac" onclick="showSign('mesh')"><img src="assets/zodiac/mesh.svg" alt="मेष"><strong>मेष</strong></button><button class="zodiac" onclick="showSign('vrishabh')"><img src="assets/zodiac/vrishabh.svg" alt="वृषभ"><strong>वृषभ</strong></button><button class="zodiac" onclick="showSign('mithun')"><img src="assets/zodiac/mithun.svg" alt="मिथुन"><strong>मिथुन</strong></button><button class="zodiac" onclick="showSign('kark')"><img src="assets/zodiac/kark.svg" alt="कर्क"><strong>कर्क</strong></button><button class="zodiac" onclick="showSign('singh')"><img src="assets/zodiac/singh.svg" alt="सिंह"><strong>सिंह</strong></button><button class="zodiac" onclick="showSign('kanya')"><img src="assets/zodiac/kanya.svg" alt="कन्या"><strong>कन्या</strong></button><button class="zodiac" onclick="showSign('tula')"><img src="assets/zodiac/tula.svg" alt="तुला"><strong>तुला</strong></button><button class="zodiac" onclick="showSign('vrishchik')"><img src="assets/zodiac/vrishchik.svg" alt="वृश्चिक"><strong>वृश्चिक</strong></button><button class="zodiac" onclick="showSign('dhanu')"><img src="assets/zodiac/dhanu.svg" alt="धनु"><strong>धनु</strong></button><button class="zodiac" onclick="showSign('makar')"><img src="assets/zodiac/makar.svg" alt="मकर"><strong>मकर</strong></button><button class="zodiac" onclick="showSign('kumbh')"><img src="assets/zodiac/kumbh.svg" alt="कुंभ"><strong>कुंभ</strong></button><button class="zodiac" onclick="showSign('meen')"><img src="assets/zodiac/meen.svg" alt="मीन"><strong>मीन</strong></button></div>
+  <div id="rashiResult" style="margin-top:35px"></div>
+</section></main>
+
+
+<footer>
+  <div class="foot">
+    <div>
+      <div class="brand" style="color:white">Rashi<span>Vibe</span></div>
+      <p>वैदिक ज्योतिष को सरल, सुंदर और समझने योग्य रूप में जानें।</p>
+    </div>
+    <div>
+      <strong>Tools</strong>
+      <a href="free-kundli.html">Kundli</a>
+      <a href="daily-rashifal.html">Rashifal</a>
+      <a href="panchang.html">Panchang</a>
+    </div>
+    <div>
+      <strong>जानकारी</strong>
+      <a href="about.html">About</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/core.js"></script>
+
+<script src="assets/js/share.js"></script>
+<script>
+const RV_RASHI={"mesh": ["आज काम की गति अच्छी रख सकते हैं, लेकिन जल्दबाजी से बचना बेहतर रहेगा। लंबित कामों को क्रम से पूरा करें और किसी महत्वपूर्ण बातचीत में शब्दों का चुनाव सोच-समझकर करें।", "करियर में पहल उपयोगी रहेगी। धन से जुड़े बड़े निर्णय में पूरी जानकारी लें। परिवार के साथ समय संतुलन देगा।", "केसरिया", "3"], "vrishabh": ["आज स्थिरता आपकी सबसे बड़ी ताकत रहेगी। पहले से तय कामों पर ध्यान देने से दिन व्यवस्थित रहेगा और अनावश्यक दबाव कम होगा।", "काम में धैर्य रखें। खर्चों की समीक्षा करें और संबंधों में अपनी बात शांत ढंग से रखें।", "हरा", "6"], "mithun": ["आज बातचीत और नई जानकारी आपके काम आ सकती है। एक साथ बहुत कुछ पकड़ने के बजाय सबसे जरूरी काम पहले पूरा करें।", "सीखने, लिखने और संवाद वाले कामों में गति रहेगी। पैसे के मामले में आवेग से बचें।", "हल्का पीला", "5"], "kark": ["आज घर और काम के बीच संतुलन बनाए रखना महत्वपूर्ण रहेगा। भावनात्मक प्रतिक्रिया देने से पहले परिस्थिति को पूरा समझें।", "परिवार से सहयोग मिलेगा। कार्यस्थल पर शांत रहकर लिया गया निर्णय बेहतर रहेगा।", "सफेद", "2"], "singh": ["आज नेतृत्व और आत्मविश्वास का उपयोग सही दिशा में करें। दूसरों की राय सुनना आपके फैसले को और मजबूत बनाएगा।", "करियर में जिम्मेदारी बढ़ सकती है। खर्च में दिखावे के बजाय उपयोगिता देखें।", "सुनहरा", "1"], "kanya": ["आज व्यवस्था, योजना और छोटी बातों पर ध्यान देना आपके पक्ष में रहेगा। परफेक्शन के चक्कर में काम रोकने से बचें।", "काम में विवरण महत्वपूर्ण रहेंगे। बजट और पढ़ाई की योजना बनाने के लिए अच्छा दिन है।", "हरा", "5"], "tula": ["आज संतुलित बातचीत कई उलझनों को सरल कर सकती है। किसी निर्णय में केवल दूसरों को खुश करने के बजाय अपनी प्राथमिकता भी देखें।", "साझेदारी और संबंधों में स्पष्टता रखें। आर्थिक फैसला दस्तावेज देखकर करें।", "गुलाबी", "6"], "vrishchik": ["आज गहराई से सोचने की क्षमता मजबूत रहेगी। किसी पुरानी उलझन को शांत मन से देखने पर नया रास्ता मिल सकता है।", "गोपनीय या संवेदनशील काम सावधानी से करें। संबंधों में अनावश्यक शक से बचें।", "मरून", "9"], "dhanu": ["आज नई योजना, सीखने और आगे की दिशा तय करने के लिए उत्साह रहेगा। बड़े लक्ष्य को छोटे कदमों में बाँटना उपयोगी रहेगा।", "करियर में विस्तार की सोच बन सकती है। धन में आशावाद के साथ व्यावहारिकता रखें।", "पीला", "3"], "makar": ["आज अनुशासन और लगातार प्रयास आपके लिए सबसे उपयोगी रहेंगे। धीरे चल रहा काम भी सही दिशा में आगे बढ़ सकता है।", "काम में जिम्मेदारी निभाने से भरोसा बढ़ेगा। खर्च और बचत का संतुलन देखें।", "नीला", "8"], "kumbh": ["आज अलग तरीके से सोचने की क्षमता काम आएगी। नई सोच को लागू करने से पहले उसकी व्यावहारिकता जरूर जांचें।", "टीमवर्क में अपनी बात स्पष्ट रखें। तकनीक और सीखने से जुड़े काम अनुकूल रहेंगे।", "आसमानी", "4"], "meen": ["आज संवेदनशीलता के साथ व्यावहारिक सोच रखना जरूरी रहेगा। रचनात्मक कामों में मन लगेगा, लेकिन समय सीमा का ध्यान रखें।", "रिश्तों में सहज बातचीत मदद करेगी। खर्च भावनाओं में आकर न करें।", "हल्का पीला", "7"]};
+const RV_NAMES={"mesh": "मेष", "vrishabh": "वृषभ", "mithun": "मिथुन", "kark": "कर्क", "singh": "सिंह", "kanya": "कन्या", "tula": "तुला", "vrishchik": "वृश्चिक", "dhanu": "धनु", "makar": "मकर", "kumbh": "कुंभ", "meen": "मीन"};
+function showSign(s){
+  const x=RV_RASHI[s], r=document.getElementById('rashiResult');
+  r.innerHTML='<h2>'+RV_NAMES[s]+' राशिफल</h2><p>'+x[0]+'</p><p>'+x[1]+'</p>'+
+  '<div class="grid"><div class="card"><h3>शुभ रंग</h3><p>आज आपके लिए '+x[2]+' रंग शुभ संकेत देता है।</p></div>'+
+  '<div class="card"><h3>शुभ अंक</h3><p>आज आपका शुभ अंक '+x[3]+' रहेगा।</p></div>'+
+  '<div class="card"><h3>सरल उपाय</h3><p>दिन की शुरुआत शांत मन से करें और संभव हो तो किसी जरूरतमंद की सहायता करें।</p></div></div>'+
+  '<div class="cta"><button class="btn ghost" onclick="rvShare(RV_NAMES[s]+\' राशिफल\',x[0])">शेयर करें</button></div>'+
+  '<p class="notice">यह सामान्य राशि-आधारित पारंपरिक मार्गदर्शन है, व्यक्तिगत कुंडली की निश्चित भविष्यवाणी नहीं।</p>';
+}
+document.addEventListener('DOMContentLoaded',()=>showSign(new URLSearchParams(location.search).get('sign')||'mesh'));
+</script>
+
+</body>
+</html>
