@@ -10,6 +10,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="assets/account.js" defer></script>
 </head>
 <body>
 <div class="topbar"><div class="container"><span class="brandline" data-hi="ॐ • RashiVibe • Your Stars. Your Story." data-en="ॐ • RashiVibe • Your Stars. Your Story.">ॐ • RashiVibe • Your Stars. Your Story.</span><span id="liveClock"></span></div></div>
@@ -33,6 +34,7 @@
 <details class="advanced"><summary data-hi="Advanced: Latitude / Longitude / Timezone" data-en="Advanced: Latitude / Longitude / Timezone">Advanced: Latitude / Longitude / Timezone</summary>
 <div class="form-grid three" style="margin-top:12px"><div class="field"><label>Latitude</label><input id="kLat" type="number" step="any"></div><div class="field"><label>Longitude</label><input id="kLon" type="number" step="any"></div><div class="field"><label>Timezone</label><input id="kTz" value="Asia/Kolkata"></div></div></details>
 </div>
+<div class="profile-savebar"><strong data-hi="अपनी प्रोफाइल सेव करें" data-en="Save your profile">अपनी प्रोफाइल सेव करें</strong><small data-hi="जन्म विवरण इस डिवाइस पर सेव होंगे और अगली बार अपने आप भर जाएंगे।" data-en="Birth details are saved on this device and auto-filled next time.">जन्म विवरण इस डिवाइस पर सेव होंगे और अगली बार अपने आप भर जाएंगे।</small><button type="button" class="btn ghost" id="saveKundliProfile" data-hi="प्रोफाइल सेव करें" data-en="Save profile">प्रोफाइल सेव करें</button></div>
 <div class="cta"><button class="btn primary" id="kundliBtn" data-hi="✨ कुंडली बनाएं" data-en="✨ Create Kundli">✨ कुंडली बनाएं</button></div>
 <div id="kundliResult" class="result hidden"></div>
 </div></section></main>
@@ -146,6 +148,7 @@ function toDate(y,m,d,h,min,ap,tz){
  let local=new Date(+y,+m-1,+d,hh,+min,0);
  let offset=local.getTimezoneOffset();
  if(tz==='Asia/Kolkata')offset=-330;
+ else if(Number.isFinite(+tz))offset=-(+tz*60);
  return new Date(Date.UTC(+y,+m-1,+d,hh,+min)-(-offset)*60000);
 }
 function chart(date,lat,lon){
@@ -287,6 +290,29 @@ function longReport(c,d,y,L,name){
  yoga:`This scan found ${y.ys.length?y.ys.map(v=>v[0]).join(', '):'no major simple yoga clearly'}. A Yoga should not be treated as a large promise merely because its name appears. Its practical strength depends on degree, sign, house, aspects, conjunctions and the periods of the involved planets. Mars is in house ${h.Mars}, so the traditional Manglik indicator is ${y.manglik?'kept in consideration':'not treated as a major Lagna-based indication here'}. Even Manglik assessment is incomplete if judged from one house alone; Moon, Venus, the seventh house and the balance between two charts can matter in a full traditional comparison. The same caution applies to Raj Yoga, Dhan Yoga or Gaja Kesari style combinations: they become more relevant when the participating planets are actually supported and their timing becomes active. The purpose of this section is to identify areas worth closer study, not to create fear or guarantee outcomes. Strong patterns are best read as opportunities and pressured patterns as areas that benefit from preparation and awareness.`
  };
 }
+function nameRashiIndex(name){
+ const raw=(name||'').trim().toLowerCase();if(!raw)return null;
+ const n=raw.normalize('NFC');
+ const groups=[
+  ['chu','che','cho','la','li','lu','le','lo','a','चु','चे','चो','ला','ली','लू','ले','लो','अ'],
+  ['i','ee','u','oo','e','ai','o','va','vi','vu','ve','vo','ई','ऊ','ए','ऐ','ओ','वा','वी','वु','वे','वो'],
+  ['ka','ki','ku','gha','nga','chha','ke','ko','ha','का','की','कु','घ','ङ','छ','के','को','हा'],
+  ['hi','hu','he','ho','da','di','du','de','do','ही','हू','हे','हो','डा','डी','डू','डे','डो'],
+  ['ma','mi','mu','me','mo','ta','ti','tu','te','मा','मी','मू','मे','मो','टा','टी','टू','टे'],
+  ['to','pa','pi','pu','sha','na','tha','pe','po','टो','पा','पी','पु','ष','ण','ठ','पे','पो'],
+  ['ra','ri','ru','re','ro','taa','tii','tuu','tee','रा','री','रु','रे','रो','ता','ती','तू','ते'],
+  ['to','na','ni','nu','ne','no','ya','yi','yu','तो','ना','नी','नू','ने','नो','या','यी','यू'],
+  ['ye','yo','bha','bhi','bhu','dha','pha','dhaa','bhe','ये','यो','भा','भी','भू','धा','फा','ढा','भे'],
+  ['bho','ja','ji','khi','khu','khe','kho','ga','gi','भो','जा','जी','खी','खू','खे','खो','गा','गी'],
+  ['gu','ge','go','sa','si','su','se','so','da','गु','गे','गो','सा','सी','सू','से','सो','दा'],
+  ['di','du','tha','jha','nya','de','do','cha','chi','दी','दू','थ','झ','ञ','दे','दो','चा','ची']
+ ];
+ // longest-prefix first avoids short Latin prefixes stealing a match
+ for(let i=0;i<groups.length;i++)for(const x of [...groups[i]].sort((a,b)=>b.length-a.length))if(n.startsWith(x))return i;
+ return null;
+}
+function saveKundliLocal(){const o={name:kName.value,place:kPlace.value,d:kD.value,m:kM.value,y:kY.value,h:kH.value,min:kMin.value,ap:kAP.value,lat:kLat.value,lon:kLon.value,tz:kTz.value};localStorage.setItem('rvKundliProfile',JSON.stringify(o));if(window.RVAccount){const a=RVAccount.getActiveProfile();RVAccount.saveProfile({...a,...o,id:a?.id},true)}alert(RVT('प्रोफाइल सेव हो गई। अब यही विवरण दूसरे tools में भी उपयोग होंगे।','Profile saved. These details can now be reused across tools.'))}
+function loadKundliLocal(){try{const o=JSON.parse(localStorage.getItem('rvKundliProfile')||'null');if(!o)return;const map={name:kName,place:kPlace,d:kD,m:kM,y:kY,h:kH,min:kMin,ap:kAP,lat:kLat,lon:kLon,tz:kTz};for(const [k,el] of Object.entries(map))if(o[k]!==undefined&&el)el.value=o[k];kD.dispatchEvent(new Event('input'))}catch(e){}}
 async function downloadPDF(){
  const report=document.getElementById('kundliReportBody'); if(!report)return;
  const btn=document.getElementById('pdfBtn'); if(btn){btn.disabled=true;btn.textContent=RVT('PDF तैयार हो रही है…','Preparing PDF…')}
@@ -308,11 +334,12 @@ function makeKundli(){
  const Z=L==='hi'?RVAstro.Z_HI:RVAstro.Z_EN,N=L==='hi'?RVAstro.NAK_HI:RVAstro.NAK_EN,PL=L==='hi'?RVAstro.P_HI:RVAstro.P_EN,LORD=L==='hi'?RVAstro.LORD_HI:RVAstro.LORD_EN;
  const rows=RVAstro.P_EN.map((p,i)=>`<tr><td>${PL[i]}</td><td>${Z[RVAstro.signIndex(c.pos[p])]}</td><td>${RVAstro.mod(c.pos[p],30).toFixed(2)}°</td><td>${RVAstro.houseFrom(c.pos[p],c.ascSign)}</td><td>${Z[c.nav[p]]}</td></tr>`).join('');
  const houseRows=Array.from({length:12},(_,i)=>{const planets=RVAstro.P_EN.filter(p=>RVAstro.houseFrom(c.pos[p],c.ascSign)===i+1).map(p=>PL[RVAstro.P_EN.indexOf(p)]).join(', ')||'—';return `<tr><td>${i+1}</td><td>${Z[(c.ascSign+i)%12]}</td><td>${planets}</td></tr>`}).join('');
- const md=d.md?LORD[d.md.idx]:'—',ad=d.ad?LORD[d.ad.idx]:'—',R=longReport(c,d,y,L,kName.value.trim());
+ const md=d.md?LORD[d.md.idx]:'—',ad=d.ad?LORD[d.ad.idx]:'—',R=longReport(c,d,y,L,kName.value.trim()),nr=nameRashiIndex(kName.value.trim());
+ if(window.RVAccount){const a=RVAccount.getActiveProfile();if(a&&String(a.name||'').trim()===String(kName.value||'').trim()){RVAccount.saveProfile({...a,moonSign:c.moonSign,nakshatra:c.moonNak.i,ascSign:c.ascSign,nameRashi:nr},true)}}
  kundliResult.classList.remove('hidden');
  kundliResult.innerHTML=`<div id="kundliReportBody" class="kundli-report">
  <div class="report-cover"><span class="badge">RashiVibe • ${RVT('गहन वैदिक विश्लेषण','Detailed Vedic Analysis')}</span><h2>${RVT('आपकी विस्तृत जन्म कुंडली','Your Detailed Birth Kundli')}</h2><p>${esc(kName.value.trim()||RVT('जन्म कुंडली','Birth Kundli'))} · ${String(b.d).padStart(2,'0')}-${String(b.m).padStart(2,'0')}-${b.y} · ${kH.value}:${String(kMin.value).padStart(2,'0')} ${kAP.value} · ${esc(kPlace.value||`${lat}, ${lon}`)}</p></div>
- <div class="kpi"><div class="card"><h3>${RVT('लग्न','Ascendant')}</h3><strong>${Z[c.ascSign]} ${RVAstro.mod(c.asc,30).toFixed(2)}°</strong></div><div class="card"><h3>${RVT('जन्म राशि (चंद्र)','Birth Moon Sign')}</h3><strong>${Z[c.moonSign]}</strong><small>${RVT('यह नाम राशि नहीं है','Not the name-based Rashi')}</small></div><div class="card"><h3>${RVT('नक्षत्र','Nakshatra')}</h3><strong>${N[c.moonNak.i]} · ${RVT('पद','Pada')} ${c.moonNak.pada}</strong></div></div>
+ <div class="kpi"><div class="card"><h3>${RVT('लग्न','Ascendant')}</h3><strong>${Z[c.ascSign]} ${RVAstro.mod(c.asc,30).toFixed(2)}°</strong></div><div class="card"><h3>${RVT('जन्म राशि (चंद्र)','Birth Moon Sign')}</h3><strong>${Z[c.moonSign]}</strong><small>${RVT('जन्म समय पर चंद्रमा से','From the Moon at birth')}</small></div><div class="card"><h3>${RVT('नाम राशि','Name Rashi')}</h3><strong>${nr===null?RVT('नाम से स्पष्ट नहीं','Not clear from name'):Z[nr]}</strong><small>${RVT('नाम के शुरुआती उच्चारण से','From the opening sound of the name')}</small></div><div class="card"><h3>${RVT('नक्षत्र','Nakshatra')}</h3><strong>${N[c.moonNak.i]} · ${RVT('पद','Pada')} ${c.moonNak.pada}</strong></div></div>
  <div class="report-section feature"><h3>${RVT('आपकी कुंडली की मुख्य बातें','Key Highlights of Your Kundli')}</h3><p>${R.summary}</p></div>
 
  <div class="report-section"><h3>${RVT('12 भावों की स्थिति','12-House Overview')}</h3><div class="table-scroll"><table class="planet-table"><thead><tr><th>${RVT('भाव','House')}</th><th>${RVT('राशि','Sign')}</th><th>${RVT('ग्रह','Planets')}</th></tr></thead><tbody>${houseRows}</tbody></table></div></div>
@@ -327,7 +354,7 @@ function makeKundli(){
  <div class="report-actions"><button class="btn ghost" type="button" onclick="printReport()">${RVT('🖨️ रिपोर्ट प्रिंट करें','🖨️ Print Report')}</button><button class="btn primary" id="pdfBtn" type="button" onclick="downloadPDF()">${RVT('📄 PDF डाउनलोड करें','📄 Download PDF')}</button></div>`;
  kundliResult.scrollIntoView({behavior:'smooth',block:'start'});
 }
-document.addEventListener('DOMContentLoaded',()=>kundliBtn.onclick=makeKundli);
+document.addEventListener('DOMContentLoaded',()=>{loadKundliLocal();kundliBtn.onclick=makeKundli;document.getElementById('saveKundliProfile').onclick=saveKundliLocal});
 document.addEventListener('rv-language',()=>{if(!kundliResult.classList.contains('hidden'))makeKundli()});
 </script>
 
