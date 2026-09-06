@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Contact | RashiVibe</title>
-<meta name="description" content="Add your website contact details here for RashiVibe suggestions or technical feedback.">
-<meta name="theme-color" content="#0f1418">
+<meta name="description" content="Contact RashiVibe for suggestions, corrections or technical feedback.">
+<meta name="theme-color" content="#181d20">
 <link rel="icon" href="assets/rashivibe-icon.webp">
 <link rel="stylesheet" href="assets/rashivibe.css">
 </head>
 <body>
 <div class="topbar"><div class="container"><span class="brandline" data-hi="ॐ • RashiVibe • Your Stars. Your Story." data-en="ॐ • RashiVibe • Your Stars. Your Story.">ॐ • RashiVibe • Your Stars. Your Story.</span><span id="liveClock"></span></div></div>
 <header><div class="container nav">
-<a class="brand" href="index.html"><img src="assets/rashivibe-logo.webp" alt="RashiVibe"></a>
+<a class="brand" href="index.html" aria-label="RashiVibe home"><img src="assets/rashivibe-logo.webp" alt="RashiVibe"></a>
 <nav class="navlinks" id="navlinks"><a href="index.html" class="" data-hi="होम" data-en="Home">होम</a><a href="free-kundli.html" class="" data-hi="कुंडली" data-en="Kundli">कुंडली</a><a href="kundli-matching.html" class="" data-hi="कुंडली मिलान" data-en="Kundli Matching">कुंडली मिलान</a><a href="daily-rashifal.html" class="" data-hi="राशिफल" data-en="Rashifal">राशिफल</a><a href="numerology.html" class="" data-hi="अंक ज्योतिष" data-en="Numerology">अंक ज्योतिष</a><a href="panchang.html" class="" data-hi="पंचांग" data-en="Panchang">पंचांग</a><a href="sade-sati.html" class="" data-hi="साढ़े साती" data-en="Sade Sati">साढ़े साती</a><a href="muhurat.html" class="" data-hi="मुहूर्त" data-en="Muhurat">मुहूर्त</a></nav>
-<button class="lang-btn" id="langBtn" type="button">ENG</button><button class="menu-btn" id="menuBtn" type="button">☰</button>
+<button class="lang-btn" id="langBtn" type="button" aria-label="Switch language">ENG</button><button class="menu-btn" id="menuBtn" type="button" aria-label="Open navigation" aria-controls="navlinks" aria-expanded="false">☰</button>
 </div></header>
-<main><section class="section"><div class="container"><div class="section-title"><h1 data-hi="संपर्क" data-en="Contact">संपर्क</h1></div><div class="form-card"><p class="lead" data-hi="RashiVibe से जुड़े सुझाव या technical feedback के लिए अपनी website contact details यहाँ जोड़ें।" data-en="Add your website contact details here for RashiVibe suggestions or technical feedback.">RashiVibe से जुड़े सुझाव या technical feedback के लिए अपनी website contact details यहाँ जोड़ें।</p></div></div></section></main>
+<main><section class="section"><div class="container"><div class="section-title"><h1 data-hi="संपर्क" data-en="Contact">संपर्क</h1></div><div class="form-card"><p class="lead" data-hi="RashiVibe से जुड़े सुझाव, सुधार या technical feedback GitHub पर भेज सकते हैं।" data-en="Send RashiVibe suggestions, corrections or technical feedback through GitHub.">RashiVibe से जुड़े सुझाव, सुधार या technical feedback GitHub पर भेज सकते हैं।</p><div class="cta"><a class="btn primary" href="https://github.com/astro-divya/RashiVibetest/issues" target="_blank" rel="noopener noreferrer" data-hi="Feedback भेजें" data-en="Send feedback">Feedback भेजें</a></div></div></div></section></main>
 <footer><div class="container footer-grid">
 <div><img src="assets/rashivibe-logo.webp" alt="RashiVibe" style="width:230px"><p data-hi="आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।" data-en="Traditional Vedic astrology with a modern experience.">आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।</p></div>
 <div><h3 data-hi="महत्वपूर्ण" data-en="Important">महत्वपूर्ण</h3><div class="footer-links"><a href="about.html" data-hi="हमारे बारे में" data-en="About">हमारे बारे में</a><a href="privacy.html" data-hi="गोपनीयता" data-en="Privacy">गोपनीयता</a><a href="disclaimer.html" data-hi="अस्वीकरण" data-en="Disclaimer">अस्वीकरण</a><a href="terms.html" data-hi="नियम" data-en="Terms">नियम</a><a href="contact.html" data-hi="संपर्क" data-en="Contact">संपर्क</a></div></div>
@@ -44,7 +44,7 @@
   document.addEventListener('DOMContentLoaded',()=>{
     applyLang();
     const lb=document.getElementById('langBtn');if(lb)lb.onclick=RVSetLang;
-    const mb=document.getElementById('menuBtn'),nl=document.getElementById('navlinks');if(mb&&nl)mb.onclick=()=>nl.classList.toggle('open');
+    const mb=document.getElementById('menuBtn'),nl=document.getElementById('navlinks');if(mb&&nl){mb.onclick=()=>{const open=nl.classList.toggle('open');mb.setAttribute('aria-expanded',String(open));};nl.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nl.classList.remove('open');mb.setAttribute('aria-expanded','false');}));}
     const clock=document.getElementById('liveClock');
     function tick(){
       if(!clock)return;

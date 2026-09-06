@@ -4,19 +4,19 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Panchang | RashiVibe</title>
 <meta name="description" content="Daily Panchang with Tithi, Nakshatra, Yoga, Karana, sunrise, sunset, Rahu Kaal and Moon sign.">
-<meta name="theme-color" content="#0f1418">
+<meta name="theme-color" content="#181d20">
 <link rel="icon" href="assets/rashivibe-icon.webp">
 <link rel="stylesheet" href="assets/rashivibe.css">
 </head>
 <body>
 <div class="topbar"><div class="container"><span class="brandline" data-hi="ॐ • RashiVibe • Your Stars. Your Story." data-en="ॐ • RashiVibe • Your Stars. Your Story.">ॐ • RashiVibe • Your Stars. Your Story.</span><span id="liveClock"></span></div></div>
 <header><div class="container nav">
-<a class="brand" href="index.html"><img src="assets/rashivibe-logo.webp" alt="RashiVibe"></a>
+<a class="brand" href="index.html" aria-label="RashiVibe home"><img src="assets/rashivibe-logo.webp" alt="RashiVibe"></a>
 <nav class="navlinks" id="navlinks"><a href="index.html" class="" data-hi="होम" data-en="Home">होम</a><a href="free-kundli.html" class="" data-hi="कुंडली" data-en="Kundli">कुंडली</a><a href="kundli-matching.html" class="" data-hi="कुंडली मिलान" data-en="Kundli Matching">कुंडली मिलान</a><a href="daily-rashifal.html" class="" data-hi="राशिफल" data-en="Rashifal">राशिफल</a><a href="numerology.html" class="" data-hi="अंक ज्योतिष" data-en="Numerology">अंक ज्योतिष</a><a href="panchang.html" class="active" data-hi="पंचांग" data-en="Panchang">पंचांग</a><a href="sade-sati.html" class="" data-hi="साढ़े साती" data-en="Sade Sati">साढ़े साती</a><a href="muhurat.html" class="" data-hi="मुहूर्त" data-en="Muhurat">मुहूर्त</a></nav>
-<button class="lang-btn" id="langBtn" type="button">ENG</button><button class="menu-btn" id="menuBtn" type="button">☰</button>
+<button class="lang-btn" id="langBtn" type="button" aria-label="Switch language">ENG</button><button class="menu-btn" id="menuBtn" type="button" aria-label="Open navigation" aria-controls="navlinks" aria-expanded="false">☰</button>
 </div></header>
 <main><section class="section"><div class="container"><div class="section-title"><span class="badge">Tithi • Nakshatra • Yoga • Karana</span><h1 data-hi="आज का पंचांग" data-en="Today's Panchang">आज का पंचांग</h1><p data-hi="स्थान के अनुसार सूर्योदय, सूर्यास्त, राहुकाल और वैदिक पंचांग संकेत।" data-en="Sunrise, sunset, Rahu Kaal and Vedic Panchang factors for your location.">स्थान के अनुसार सूर्योदय, सूर्यास्त, राहुकाल और वैदिक पंचांग संकेत।</p></div>
-<div class="form-card"><div class="form-grid"><div class="field"><label data-hi="स्थान" data-en="Location">स्थान</label><input id="pPlace" value="New Delhi, India"><div id="pSuggest" class="suggestions"></div></div><div class="field"><label data-hi="तिथि" data-en="Date">तिथि</label><input id="pDate" type="date"></div></div><details class="advanced"><summary>Advanced</summary><div class="form-grid three"><div class="field"><label>Latitude</label><input id="pLat" value="28.6139"></div><div class="field"><label>Longitude</label><input id="pLon" value="77.2090"></div><div class="field"><label>Timezone</label><input id="pTz" value="Asia/Kolkata"></div></div></details><div class="cta"><button id="pBtn" class="btn primary" data-hi="☀ पंचांग देखें" data-en="☀ View Panchang">☀ पंचांग देखें</button></div><div id="pResult" class="result hidden"></div></div>
+<div class="form-card"><div class="form-grid"><div class="field"><label data-hi="स्थान" data-en="Location">स्थान</label><input id="pPlace" value="New Delhi, India"><div id="pSuggest" class="suggestions"></div></div><div class="field"><label data-hi="तिथि" data-en="Date">तिथि</label><div class="date-row"><input id="pD" type="number" inputmode="numeric" min="1" max="31" placeholder="DD" aria-label="Day"><input id="pM" type="number" inputmode="numeric" min="1" max="12" placeholder="MM" aria-label="Month"><input id="pY" type="number" inputmode="numeric" min="1900" max="2026" placeholder="YYYY" aria-label="Year"></div></div></div><details class="advanced"><summary>Advanced</summary><div class="form-grid three"><div class="field"><label>Latitude</label><input id="pLat" value="28.6139"></div><div class="field"><label>Longitude</label><input id="pLon" value="77.2090"></div><div class="field"><label>Timezone</label><input id="pTz" value="Asia/Kolkata"></div></div></details><div class="cta"><button id="pBtn" type="button" class="btn primary" data-hi="☀ पंचांग देखें" data-en="☀ View Panchang">☀ पंचांग देखें</button></div><div id="pResult" class="result hidden" aria-live="polite"></div></div>
 </div></section></main>
 <footer><div class="container footer-grid">
 <div><img src="assets/rashivibe-logo.webp" alt="RashiVibe" style="width:230px"><p data-hi="आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।" data-en="Traditional Vedic astrology with a modern experience.">आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।</p></div>
@@ -46,7 +46,7 @@
   document.addEventListener('DOMContentLoaded',()=>{
     applyLang();
     const lb=document.getElementById('langBtn');if(lb)lb.onclick=RVSetLang;
-    const mb=document.getElementById('menuBtn'),nl=document.getElementById('navlinks');if(mb&&nl)mb.onclick=()=>nl.classList.toggle('open');
+    const mb=document.getElementById('menuBtn'),nl=document.getElementById('navlinks');if(mb&&nl){mb.onclick=()=>{const open=nl.classList.toggle('open');mb.setAttribute('aria-expanded',String(open));};nl.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nl.classList.remove('open');mb.setAttribute('aria-expanded','false');}));}
     const clock=document.getElementById('liveClock');
     function tick(){
       if(!clock)return;
@@ -210,7 +210,10 @@ function solar(date,lat,lon){
 function ftime(h){if(h==null)return'—';let hr=Math.floor(h),mi=Math.round((h-hr)*60);if(mi===60){hr=(hr+1)%24;mi=0}let d=new Date();d.setHours(hr,mi,0,0);return new Intl.DateTimeFormat(RVLang()==='hi'?'hi-IN':'en-IN',{hour:'numeric',minute:'2-digit',hour12:true}).format(d)}
 function rahu(rise,set,wd){if(rise==null||set==null)return'—';let order=[8,2,7,5,6,4,3],n=order[wd]-1,seg=(set-rise)/8;return ftime(rise+n*seg)+' – '+ftime(rise+(n+1)*seg)}
 function renderP(){
- const date=pDate.value?new Date(pDate.value+'T12:00:00'):new Date(),lat=+pLat.value,lon=+pLon.value;if(!Number.isFinite(lat)||!Number.isFinite(lon)){alert(RVT('सही location चुनें।','Choose a valid location.'));return}
+ const d=+pD.value,m=+pM.value,y=+pY.value,test=new Date(y,m-1,d);
+ const valid=/^\d{4}$/.test(String(pY.value))&&y>=1900&&y<=2100&&m>=1&&m<=12&&d>=1&&d<=31&&test.getFullYear()===y&&test.getMonth()===m-1&&test.getDate()===d;
+ if(!valid){alert(RVT('सही तिथि DD / MM / YYYY में भरें।','Enter a valid date as DD / MM / YYYY.'));return}
+ const date=new Date(y,m-1,d,12,0,0),lat=+pLat.value,lon=+pLon.value;if(!Number.isFinite(lat)||!Number.isFinite(lon)){alert(RVT('सही location चुनें।','Choose a valid location.'));return}
  const c=RVAstro.chart(date,lat,lon),t=RVAstro.tithi(date),yo=RVAstro.yoga(date),ka=RVAstro.karana(date),s=solar(date,lat,lon),L=RVLang(),N=L==='hi'?RVAstro.NAK_HI:RVAstro.NAK_EN,T=L==='hi'?TITHI_HI:TITHI_EN,Y=L==='hi'?Y_HI:Y_EN;
  pResult.classList.remove('hidden');pResult.innerHTML=`<h2>${RVT('पंचांग विवरण','Panchang Details')}</h2><div class="grid four">
  <div class="card"><h3>${RVT('तिथि','Tithi')}</h3><strong>${t.paksha===0?RVT('शुक्ल','Shukla'):RVT('कृष्ण','Krishna')} ${T[t.index]}</strong></div>
@@ -218,7 +221,7 @@ function renderP(){
  <div class="grid four" style="margin-top:16px"><div class="card"><h3>${RVT('सूर्योदय','Sunrise')}</h3><strong>${ftime(s.rise)}</strong></div><div class="card"><h3>${RVT('सूर्यास्त','Sunset')}</h3><strong>${ftime(s.set)}</strong></div><div class="card"><h3>${RVT('राहुकाल','Rahu Kaal')}</h3><strong>${rahu(s.rise,s.set,date.getDay())}</strong></div><div class="card"><h3>${RVT('चंद्र राशि','Moon Sign')}</h3><strong>${(L==='hi'?RVAstro.Z_HI:RVAstro.Z_EN)[c.moonSign]}</strong></div></div>
  <p class="notice">${RVT('तिथि/नक्षत्र low-precision sidereal calculation और sunrise/sunset solar formula पर आधारित हैं।','Tithi/Nakshatra use low-precision sidereal calculations and sunrise/sunset use a solar formula.')}</p>`;
 }
-document.addEventListener('DOMContentLoaded',()=>{setupLocation('p');pDate.value=new Date().toISOString().slice(0,10);pBtn.onclick=renderP;setTimeout(renderP,50)});
+document.addEventListener('DOMContentLoaded',()=>{const now=new Date();pD.value=now.getDate();pM.value=now.getMonth()+1;pY.value=now.getFullYear();setupLocation('p');pBtn.onclick=renderP;setTimeout(renderP,50)});
 document.addEventListener('rv-language',()=>{if(!pResult.classList.contains('hidden'))renderP()});
 </script>
 

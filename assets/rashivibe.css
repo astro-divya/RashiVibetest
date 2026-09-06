@@ -166,3 +166,67 @@ header { background-color: rgba(15,20,24,.96); }
 @media(max-width:760px){.chart-pair{grid-template-columns:1fr}.report-actions{position:static}.report-section.prose p,.report-section.feature p{font-size:.96rem;line-height:1.8}}
 @media print{body{background:#fff!important;color:#111!important}.topbar,header,footer,.section-title,.form-card,.cta,.report-actions{display:none!important}main,.section,.container{width:100%!important;max-width:none!important;padding:0!important;margin:0!important}.result{display:block!important;border:0!important;box-shadow:none!important;background:#fff!important;padding:0!important}.report-section,.card{break-inside:avoid;background:#fff!important;color:#111!important;border:1px solid #ddd!important;box-shadow:none!important}.report-section p,.card p,.report-cover p{color:#222!important}.report-cover{color:#111!important}.planet-table th,.planet-table td{color:#111!important;border-color:#ddd!important}.c-bg{fill:#fff!important}.c-line{stroke:#777!important}.c-house,.c-sign,.c-planets{fill:#111!important}.notice{color:#222!important;background:#faf6e8!important;border-color:#ddd!important}}
 .pdf-clone{background:#fff!important;color:#111!important}.pdf-clone .kundli-report{background:#fff!important;color:#111!important}.pdf-clone .report-section,.pdf-clone .card{background:#fff!important;color:#111!important;border-color:#ddd!important;box-shadow:none!important}.pdf-clone .report-section p,.pdf-clone .report-cover p,.pdf-clone .notice{color:#222!important}.pdf-clone .planet-table th,.pdf-clone .planet-table td{color:#111!important;border-color:#ddd!important}.pdf-clone .c-bg{fill:#fff!important}.pdf-clone .c-line{stroke:#777!important}.pdf-clone .c-house,.pdf-clone .c-sign,.pdf-clone .c-planets{fill:#111!important}
+
+/* RashiVibe 2026 final polish: preserve the charcoal identity, slightly lighter. */
+:root{
+  --bg:#181d20;--bg2:#202629;--panel:#242a2d;--panel2:#2b3134;
+  --text:#fff8eb;--muted:#d2c6b7;--line:rgba(224,188,111,.26);
+  --shadow:0 18px 50px rgba(5,8,9,.27)
+}
+body{
+  background:
+    radial-gradient(circle at 14% 0%,rgba(217,134,47,.13),transparent 27%),
+    radial-gradient(circle at 91% 9%,rgba(122,38,56,.15),transparent 31%),
+    linear-gradient(180deg,#1b2022 0%,#202527 52%,#191e20 100%);
+  color:var(--text)
+}
+.topbar{background:#14191b;color:#e3d8c5}
+header{background:rgba(25,30,32,.94);border-bottom-color:rgba(224,188,111,.24)}
+.brand img,footer img[src*="rashivibe-logo"]{
+  mix-blend-mode:lighten;
+  filter:drop-shadow(0 6px 13px rgba(0,0,0,.16)) drop-shadow(0 0 11px rgba(215,181,109,.08))
+}
+.hero{
+  background:linear-gradient(110deg,rgba(255,255,255,.018),rgba(215,181,109,.025) 55%,rgba(122,38,56,.035))
+}
+.hero:before{
+  background:
+    radial-gradient(circle at 71% 36%,rgba(215,181,109,.18),transparent 22%),
+    radial-gradient(circle at 72% 35%,rgba(122,38,56,.12),transparent 37%)
+}
+.home-page .hero:after{
+  content:"";position:absolute;width:min(620px,62vw);aspect-ratio:1;right:-90px;top:50%;transform:translateY(-50%);
+  background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cg fill='none' stroke='%23d7b56d' stroke-width='2'%3E%3Ccircle cx='300' cy='300' r='260'/%3E%3Ccircle cx='300' cy='300' r='230'/%3E%3Cpath d='M300 72 512 440H88Z M300 528 92 168h416Z M300 118 475 421H125Z M300 482 132 191h336Z M300 158 440 400H160Z M300 442 168 213h264Z M300 198 405 380H195Z M300 402 202 232h196Z M300 237 370 358H230Z'/%3E%3Ccircle cx='300' cy='300' r='7' fill='%23d7b56d'/%3E%3C/g%3E%3C/svg%3E");
+  opacity:.075;pointer-events:none
+}
+.hero-grid{z-index:1}
+.hero-icon{
+  border-radius:50%;mix-blend-mode:lighten;
+  filter:drop-shadow(0 22px 31px rgba(0,0,0,.25)) drop-shadow(0 0 24px rgba(215,181,109,.10))
+}
+.lead{color:#ded3c3}
+.card,.form-card,.result,.report-section{
+  background:linear-gradient(155deg,rgba(255,255,255,.055),rgba(255,255,255,.018)),linear-gradient(135deg,rgba(215,181,109,.055),transparent 58%)
+}
+.zodiac-card{
+  color:var(--gold2);background:linear-gradient(155deg,#2b3032,#1d2325);border-color:rgba(224,188,111,.28)
+}
+.zodiac-card strong{
+  color:#f3d993;font-size:1.03rem;font-weight:900;text-shadow:0 2px 8px rgba(0,0,0,.55)
+}
+.tool-icon{background:linear-gradient(145deg,#3a3020,#202628)}
+input,select{background:#202628;color:#fff8eb}
+.suggestions{background:#242a2d}.suggestions button{color:#fff5e6}.suggestions button:hover{background:#31383b}
+.tabs a{background:#212729;color:#eadfce}
+footer{background:#14191b}
+.btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{
+  outline:3px solid rgba(241,211,145,.92);outline-offset:3px
+}
+@media(max-width:980px){
+  .navlinks{background:#202628}
+}
+@media(max-width:680px){
+  .home-page .hero:after{width:470px;right:-255px;opacity:.055}
+  .hero-icon{max-width:250px}
+  .zodiac-card strong{font-size:1rem}
+}
