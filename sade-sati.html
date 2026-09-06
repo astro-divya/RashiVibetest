@@ -14,7 +14,7 @@
 <header><div class="container nav">
 <a class="brand" href="index.html" aria-label="RashiVibe home"><img src="assets/rashivibe-logo.png" alt="RashiVibe"></a>
 <nav class="navlinks" id="navlinks"><a href="index.html" class="" data-hi="होम" data-en="Home">होम</a><a href="free-kundli.html" class="" data-hi="कुंडली" data-en="Kundli">कुंडली</a><a href="kundli-matching.html" class="" data-hi="कुंडली मिलान" data-en="Kundli Matching">कुंडली मिलान</a><a href="rashifal/index.html" class="" data-hi="राशिफल" data-en="Rashifal">राशिफल</a><a href="numerology.html" class="" data-hi="अंक ज्योतिष" data-en="Numerology">अंक ज्योतिष</a><a href="panchang.html" class="" data-hi="पंचांग" data-en="Panchang">पंचांग</a><a href="sade-sati.html" class="active" data-hi="साढ़े साती" data-en="Sade Sati">साढ़े साती</a><a href="muhurat.html" class="" data-hi="मुहूर्त" data-en="Muhurat">मुहूर्त</a></nav>
-<button class="lang-btn" id="langBtn" type="button" aria-label="Switch language">ENG</button><button class="menu-btn" id="menuBtn" type="button" aria-label="Open navigation" aria-controls="navlinks" aria-expanded="false">☰</button>
+<a id="rvProfilePill" class="rv-profile-pill" href="login.html" data-title-hi="लॉगिन / प्रोफाइल" data-title-en="Login / Profile"><span class="rv-profile-dot">●</span><span data-hi="लॉगिन" data-en="Login">लॉगिन</span></a><button class="lang-btn" id="langBtn" type="button" aria-label="Switch language">ENG</button><button class="menu-btn" id="menuBtn" type="button" aria-label="Open navigation" aria-controls="navlinks" aria-expanded="false">☰</button>
 </div></header>
 <main><section class="section"><div class="container"><div class="section-title"><span class="badge">Saturn Transit</span><h1 data-hi="साढ़े साती और ढैया" data-en="Sade Sati & Dhaiya">साढ़े साती और ढैया</h1><p data-hi="अपनी चंद्र राशि चुनकर वर्तमान शनि स्थिति के आधार पर चरण देखें।" data-en="Choose your Moon sign to check the current Saturn phase.">अपनी चंद्र राशि चुनकर वर्तमान शनि स्थिति के आधार पर चरण देखें।</p></div>
 <div class="form-card"><div class="field"><label data-hi="चंद्र राशि" data-en="Moon Sign">चंद्र राशि</label><select id="sadeSign"></select></div><div class="cta"><button id="sadeBtn" class="btn primary" data-hi="स्थिति देखें" data-en="Check Status">स्थिति देखें</button></div><div id="sadeResult" class="result hidden"></div></div>
@@ -179,4 +179,5 @@ function renderS(){const i=+sadeSign.value,st=RVAstro.sadeSati(i),L=RVLang(),Z=L
 document.addEventListener('DOMContentLoaded',()=>{fillS();sadeBtn.onclick=renderS;renderS()});document.addEventListener('rv-language',()=>{fillS();renderS()});
 </script>
 
+<script src="assets/language.js"></script>
 </body></html>
