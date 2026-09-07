@@ -10,6 +10,7 @@
 <script src="assets/account.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<style>#matchStatus.error{border-color:#a85b5b;background:rgba(130,40,40,.12)}#matchStatus{max-width:760px;margin-left:auto;margin-right:auto}</style>
 </head>
 <body>
 <div class="topbar"><div class="container"><span class="brandline" data-hi="ॐ • RashiVibe • Your Stars. Your Story." data-en="ॐ • RashiVibe • Your Stars. Your Story.">ॐ • RashiVibe • Your Stars. Your Story.</span><span id="liveClock"></span></div></div>
@@ -46,7 +47,7 @@
 <details class="advanced"><summary data-hi="Advanced: Latitude / Longitude / Timezone" data-en="Advanced: Latitude / Longitude / Timezone">Advanced: Latitude / Longitude / Timezone</summary>
 <div class="form-grid three" style="margin-top:12px"><div class="field"><label>Latitude</label><input id="gLat" type="number" step="any"></div><div class="field"><label>Longitude</label><input id="gLon" type="number" step="any"></div><div class="field"><label>Timezone</label><input id="gTz" value="Asia/Kolkata"></div></div></details>
 </div></div>
-<div class="cta"><button class="btn primary" id="matchBtn" data-hi="✨ कुंडली मिलान करें" data-en="✨ Match Kundlis">✨ कुंडली मिलान करें</button></div>
+<div class="cta"><button type="button" class="btn primary" id="matchBtn" data-hi="✨ कुंडली मिलान करें" data-en="✨ Match Kundlis">✨ कुंडली मिलान करें</button><div id="matchStatus" class="notice" style="margin-top:10px;display:none"></div></div>
 <div id="matchResult" class="result hidden"></div>
 </div></section></main>
 <footer><div class="container footer-grid">
@@ -204,9 +205,27 @@ return {Z_HI,Z_EN,NAK_HI,NAK_EN,LORD_HI,LORD_EN,DURATION,P_EN,P_HI,mod,jd,ayan,p
 <script>
 async function rvResolveTypedPlace(prefix){
  const place=document.getElementById(prefix+'Place'),lat=document.getElementById(prefix+'Lat'),lon=document.getElementById(prefix+'Lon'),tz=document.getElementById(prefix+'Tz');
- if(!place||!lat||!lon)return false;const a=+lat.value,b=+lon.value;if(Number.isFinite(a)&&Number.isFinite(b)&&(a||b))return true;
+ if(!place||!lat||!lon)return false;
+ const a=Number(lat.value),b=Number(lon.value);
+ if(Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a)<=90&&Math.abs(b)<=180&&(a!==0||b!==0))return true;
  const q=place.value.trim();if(q.length<2)return false;
- try{const r=await fetch('https://photon.komoot.io/api/?limit=1&q='+encodeURIComponent(q));if(!r.ok)return false;const d=await r.json(),f=d.features&&d.features[0];if(!f)return false;const pr=f.properties||{};place.value=[pr.name,pr.city,pr.state,pr.country].filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i).join(', ')||q;lat.value=f.geometry.coordinates[1].toFixed(6);lon.value=f.geometry.coordinates[0].toFixed(6);try{const tr=await fetch(`https://timeapi.io/api/timezone/coordinate?latitude=${f.geometry.coordinates[1]}&longitude=${f.geometry.coordinates[0]}`);if(tr.ok){const td=await tr.json();tz.value=td.timeZone||td.timezone||tz.value}}catch(e){}return true}catch(e){return false}
+ const setResult=async(name,la,lo,country='')=>{
+   place.value=name||q;lat.value=Number(la).toFixed(6);lon.value=Number(lo).toFixed(6);
+   // India is the main use case and does not need a second network request for timezone.
+   if(/india/i.test(country)||(/^[6-9]\d{9}$/.test(q)===false && (Number(lo)>68&&Number(lo)<98&&Number(la)>6&&Number(la)<38))) { if(tz)tz.value='Asia/Kolkata'; return true; }
+   try{const tr=await fetch(`https://timeapi.io/api/timezone/coordinate?latitude=${la}&longitude=${lo}`,{cache:'no-store'});if(tr.ok){const td=await tr.json();if(tz)tz.value=td.timeZone||td.timezone||tz.value;}}catch(e){}
+   return true;
+ };
+ try{
+   const r=await fetch('https://photon.komoot.io/api/?limit=1&q='+encodeURIComponent(q),{cache:'no-store'});
+   if(r.ok){const d=await r.json(),f=d.features&&d.features[0];if(f){const pr=f.properties||{},name=[pr.name,pr.city,pr.state,pr.country].filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i).join(', ');return await setResult(name,f.geometry.coordinates[1],f.geometry.coordinates[0],pr.country||'');}}
+ }catch(e){}
+ // Fallback if Photon is temporarily unavailable or blocked by browser/network.
+ try{
+   const r=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q='+encodeURIComponent(q),{headers:{'Accept-Language':RVLang()==='hi'?'hi,en':'en'},cache:'no-store'});
+   if(r.ok){const d=await r.json(),f=d&&d[0];if(f)return await setResult(f.display_name,Number(f.lat),Number(f.lon),f.display_name||'');}
+ }catch(e){}
+ return false;
 }
 function setupLocation(prefix){
  const input=document.getElementById(prefix+'Place'),box=document.getElementById(prefix+'Suggest');
@@ -243,8 +262,21 @@ function setupDateInputs(prefix){
 const GANA=['D','M','R','M','D','M','D','D','R','R','M','M','D','R','D','R','D','R','R','M','M','D','R','R','R','M','D'];
 const NADI=['A','M','N','N','M','A','A','M','N','N','M','A','A','M','N','N','M','A','A','M','N','N','M','A','A','M','N'];
 const YONI=['Horse','Elephant','Sheep','Serpent','Serpent','Dog','Cat','Sheep','Cat','Rat','Rat','Cow','Buffalo','Tiger','Buffalo','Tiger','Deer','Deer','Dog','Monkey','Mongoose','Monkey','Lion','Horse','Lion','Cow','Elephant'];
-const LORDS=[2,5,3,1,0,3,5,2,4,6,6,4]; // Aries..Pisces; indexes Sun,Moon,Mars,Mercury,Jupiter,Venus,Saturn
-const F={0:{1:1,2:1,4:1,3:-1,5:-1,6:-1},1:{0:1,3:1},2:{0:1,1:1,4:1,3:-1},3:{0:1,5:1,1:-1},4:{0:1,1:1,2:1,3:-1,5:-1},5:{3:1,6:1,0:-1,1:-1},6:{3:1,5:1,0:-1,1:-1,2:-1}};
+// Internal order used only for Graha Maitri: Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn.
+// Aries..Pisces sign lords in the same internal order.
+const LORDS=[2,5,3,1,0,3,5,2,4,6,6,4];
+const LORD_NAME_HI=['सूर्य','चंद्र','मंगल','बुध','गुरु','शुक्र','शनि'];
+const LORD_NAME_EN=['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn'];
+// Natural planetary friendships: 1 friend, 0 neutral, -1 enemy.
+const F={
+  0:{1:1,2:1,3:0,4:1,5:-1,6:-1},
+  1:{0:1,2:0,3:1,4:0,5:0,6:0},
+  2:{0:1,1:1,3:-1,4:1,5:0,6:0},
+  3:{0:1,1:-1,2:0,4:0,5:1,6:1},
+  4:{0:1,1:1,2:1,3:-1,5:-1,6:0},
+  5:{0:-1,1:-1,2:0,3:1,4:0,6:1},
+  6:{0:-1,1:-1,2:-1,3:1,4:0,5:1}
+};
 function varna(s){return [2,1,0,3,2,1,0,3,2,1,0,3][s]} // fire=Kshatriya, earth=Vaishya, air=Shudra, water=Brahmin
 function vashyaCode(c){const s=c.moonSign,d=RVAstro.mod(c.pos.Moon,30);if([0,1].includes(s)||(s===8&&d>=15)||(s===9&&d<15))return 'C';if([2,5,6,10].includes(s)||(s===8&&d<15))return 'M';if([3,11].includes(s)||(s===9&&d>=15))return 'J';if(s===4)return 'V';return 'K'}
 function scoreMatch(cB,cG){
@@ -279,7 +311,7 @@ const YONI_HI={Horse:'अश्व',Elephant:'गज',Sheep:'मेष',Serpent:
 const TARA_HI=['जन्म','सम्पत','विपत','क्षेम','प्रत्यरि','साधक','वध','मित्र','अतिमित्र'],TARA_EN=['Janma','Sampat','Vipat','Kshema','Pratyari','Sadhaka','Vadha','Mitra','Ati-Mitra'];
 function vashyaType(c){const s=c.moonSign,d=RVAstro.mod(c.pos.Moon,30);if([0,1].includes(s)||(s===8&&d>=15)||(s===9&&d<15))return RVT('चतुष्पद','Quadruped');if([2,5,6,10].includes(s)||(s===8&&d<15))return RVT('मानव','Human');if([3,11].includes(s)||(s===9&&d>=15))return RVT('जलचर','Water');if(s===4)return RVT('वनचर','Wild');return RVT('कीट','Insect')}
 function taraType(a,b){return (RVAstro.mod(b.moonNak.i-a.moonNak.i,27))%9}
-function kootaFacts(key,B,G,Z){const hi=RVLang()==='hi';if(key==='Varna')return `${hi?VARN_HI[varna(B.moonSign)]:VARN_EN[varna(B.moonSign)]} × ${hi?VARN_HI[varna(G.moonSign)]:VARN_EN[varna(G.moonSign)]}`;if(key==='Vashya')return `${vashyaType(B)} × ${vashyaType(G)}`;if(key==='Tara')return `${hi?TARA_HI[taraType(B,G)]:TARA_EN[taraType(B,G)]} × ${hi?TARA_HI[taraType(G,B)]:TARA_EN[taraType(G,B)]}`;if(key==='Yoni')return `${hi?(YONI_HI[YONI[B.moonNak.i]]||YONI[B.moonNak.i]):YONI[B.moonNak.i]} × ${hi?(YONI_HI[YONI[G.moonNak.i]]||YONI[G.moonNak.i]):YONI[G.moonNak.i]}`;if(key==='Graha Maitri'){const P=hi?RVAstro.P_HI:RVAstro.P_EN;return `${P[LORDS[B.moonSign]]} × ${P[LORDS[G.moonSign]]}`}if(key==='Gana')return `${hi?GANA_HI[GANA[B.moonNak.i]]:GANA_EN[GANA[B.moonNak.i]]} × ${hi?GANA_HI[GANA[G.moonNak.i]]:GANA_EN[GANA[G.moonNak.i]]}`;if(key==='Bhakoot')return `${Z[B.moonSign]} × ${Z[G.moonSign]}`;return `${hi?NADI_HI[NADI[B.moonNak.i]]:NADI_EN[NADI[B.moonNak.i]]} × ${hi?NADI_HI[NADI[G.moonNak.i]]:NADI_EN[NADI[G.moonNak.i]]}`}
+function kootaFacts(key,B,G,Z){const hi=RVLang()==='hi';if(key==='Varna')return `${hi?VARN_HI[varna(B.moonSign)]:VARN_EN[varna(B.moonSign)]} × ${hi?VARN_HI[varna(G.moonSign)]:VARN_EN[varna(G.moonSign)]}`;if(key==='Vashya')return `${vashyaType(B)} × ${vashyaType(G)}`;if(key==='Tara')return `${hi?TARA_HI[taraType(B,G)]:TARA_EN[taraType(B,G)]} × ${hi?TARA_HI[taraType(G,B)]:TARA_EN[taraType(G,B)]}`;if(key==='Yoni')return `${hi?(YONI_HI[YONI[B.moonNak.i]]||YONI[B.moonNak.i]):YONI[B.moonNak.i]} × ${hi?(YONI_HI[YONI[G.moonNak.i]]||YONI[G.moonNak.i]):YONI[G.moonNak.i]}`;if(key==='Graha Maitri'){const P=hi?LORD_NAME_HI:LORD_NAME_EN;return `${P[LORDS[B.moonSign]]} × ${P[LORDS[G.moonSign]]}`}if(key==='Gana')return `${hi?GANA_HI[GANA[B.moonNak.i]]:GANA_EN[GANA[B.moonNak.i]]} × ${hi?GANA_HI[GANA[G.moonNak.i]]:GANA_EN[GANA[G.moonNak.i]]}`;if(key==='Bhakoot')return `${Z[B.moonSign]} × ${Z[G.moonSign]}`;return `${hi?NADI_HI[NADI[B.moonNak.i]]:NADI_EN[NADI[B.moonNak.i]]} × ${hi?NADI_HI[NADI[G.moonNak.i]]:NADI_EN[NADI[G.moonNak.i]]}`}
 function kootaAdvice(key,pct){const hi=RVLang()==='hi',good=pct>=.7;if(hi){const base={Varna:'यह कूट जीवन-दृष्टि, जिम्मेदारी और अहं-संतुलन के अंतर को पढ़ता है।',Vashya:'यह आपसी प्रभाव, सहयोग और रोजमर्रा के तालमेल का संकेत देता है।',Tara:'यह दोनों जन्म नक्षत्रों के पारंपरिक ऊर्जा-संतुलन और परस्पर सहयोग को देखता है।',Yoni:'यह सहज आकर्षण, निजी सहजता और व्यक्तिगत सीमाओं का पारंपरिक संकेत है।','Graha Maitri':'यह चंद्र राशि स्वामियों की मित्रता से सोच और संवाद के तालमेल को पढ़ता है।',Gana:'यह स्वभाव, प्रतिक्रिया की गति और मतभेद संभालने की शैली की तुलना करता है।',Bhakoot:'यह भावनात्मक दिशा, साझा लक्ष्य, परिवार और आर्थिक तालमेल से जुड़ा है।',Nadi:'यह पारंपरिक रूप से जीवन-ऊर्जा और प्रकृति-सामंजस्य से जोड़ा जाता है।'}[key];return base+' '+(good?'इस जोड़ी में यह भाग सहयोग देता है। आपसी सम्मान और साफ बातचीत इसे मजबूत रखती है।':'यह ध्यान देने वाला भाग है, लेकिन अकेले इससे रिश्ता अच्छा या खराब तय नहीं होता। वास्तविक व्यवहार, सीमाएँ और साफ बातचीत अधिक महत्वपूर्ण हैं।')+' इसे पूरी जन्म-कुंडली और वर्तमान दशा के साथ पढ़ना उचित है।'}return (good?'This factor supports the pairing. ':'This factor needs attention, but is not a standalone verdict. ')+'Read it with the complete birth charts and current Dashas, and use real behaviour as the final test.'}
 function quality(total){return total>=28?RVT('मजबूत पारंपरिक मिलान','Strong traditional match'):total>=22?RVT('अच्छा मिलान; कुछ बिंदुओं पर बातचीत जरूरी','Good match; discuss a few areas'):total>=18?RVT('मध्यम मिलान; बाकी कुंडली को अधिक महत्व दें','Moderate; examine the full charts'):RVT('कम स्कोर; निर्णय केवल गुणों से न लें','Low score; do not decide from Guna alone')}
 function planetShort(p){const hi=RVLang()==='hi';const m=hi?{Sun:'सू',Moon:'चं',Mars:'मं',Mercury:'बु',Jupiter:'गु',Venus:'शु',Saturn:'श',Rahu:'रा',Ketu:'के'}:{Sun:'Su',Moon:'Mo',Mars:'Ma',Mercury:'Me',Jupiter:'Ju',Venus:'Ve',Saturn:'Sa',Rahu:'Ra',Ketu:'Ke'};return m[p]||p}
@@ -318,9 +350,16 @@ async function generateMatchPDF(){
 }
 function downloadMatchPDF(){rvMatchPdfGate(generateMatchPDF)}
 async function match(){
- const _mb=document.getElementById('matchBtn');if(_mb){_mb.disabled=true;_mb.textContent=RVT('स्थान और कुंडली जाँची जा रही है…','Checking places and charts…')}
- try{await Promise.all([rvResolveTypedPlace('b'),rvResolveTypedPlace('g')])}finally{if(_mb){_mb.disabled=false;_mb.textContent=RVT('✨ कुंडली मिलान करें','✨ Match Kundlis')}}
- let B,G;try{B=readC('b');G=readC('g')}catch(e){alert(RVT(e.message==='date'?'दोनों की सही जन्म तिथि भरें।':'दोनों के जन्म स्थान चुनें या latitude/longitude भरें।',e.message==='date'?'Enter valid birth dates for both.':'Select both birth places or enter latitude/longitude.'));return}
+ const _mb=document.getElementById('matchBtn'),status=document.getElementById('matchStatus');
+ const setStatus=(msg,bad=false)=>{if(!status)return;status.style.display=msg?'block':'none';status.textContent=msg||'';status.classList.toggle('error',!!bad)};
+ if(_mb){_mb.disabled=true;_mb.textContent=RVT('स्थान और कुंडली जाँची जा रही है…','Checking places and charts…')}
+ setStatus(RVT('दोनों जन्म स्थान और विवरण जाँचे जा रहे हैं…','Checking both birth places and details…'));
+ try{
+   const [bp,gp]=await Promise.all([rvResolveTypedPlace('b'),rvResolveTypedPlace('g')]);
+   if(!bp||!gp){setStatus(RVT('जन्म स्थान नहीं मिल पाया। शहर का नाम थोड़ा स्पष्ट लिखें, जैसे “Loni, Ghaziabad, Uttar Pradesh” या suggestion चुनें।','A birth place could not be resolved. Enter a clearer city name or select a suggestion.'),true);return}
+   let B,G;try{B=readC('b');G=readC('g')}catch(e){setStatus(RVT(e.message==='date'?'दोनों की सही जन्म तिथि भरें।':'दोनों जन्म स्थान के coordinates नहीं मिले।',e.message==='date'?'Enter valid birth dates for both.':'Coordinates are missing for one or both birth places.'),true);return}
+   setStatus(RVT('गणना पूरी हो गई। विस्तृत मिलान नीचे दिया गया है।','Calculation complete. Detailed matching is shown below.'));
+
  const bNameEl=document.getElementById('bName'),gNameEl=document.getElementById('gName');
  const sc=scoreMatch(B,G),L=RVLang(),Z=L==='hi'?RVAstro.Z_HI:RVAstro.Z_EN,N=L==='hi'?RVAstro.NAK_HI:RVAstro.NAK_EN,bn=((bNameEl&&bNameEl.value)||RVT('लड़का','Boy')).trim(),gn=((gNameEl&&gNameEl.value)||RVT('लड़की','Girl')).trim();
  const detail=sc.rows.map(r=>{const pct=r[2]/r[3],tone=pct>=.7?'metric-good':'metric-watch';return `<div class="report-section koota-card"><h3>${L==='hi'?r[1]:r[0]} <span class="${tone}">${r[2].toFixed(1)} / ${r[3]}</span></h3><p><strong>${RVT('वास्तविक संयोजन','Actual combination')}:</strong> ${kootaFacts(r[0],B,G,Z)}</p><p>${KOOTA_NOTE[r[0]][L==='hi'?0:1]}। ${kootaAdvice(r[0],pct)}</p><div class="grid two"><div class="card"><b>${RVT('सकारात्मक उपयोग','Positive use')}</b><p>${pct>=.5?RVT('एक-दूसरे की अलग शैली को पूरक ताकत की तरह उपयोग किया जा सकता है।','Different styles can be used as complementary strengths.'):RVT('धीरे निर्णय लेना और पहले से तय नियम इस हिस्से का दबाव घटा सकते हैं।','Slower decisions and agreed rules can reduce pressure from this factor.')}</p></div><div class="card"><b>${RVT('व्यावहारिक सावधानी','Practical caution')}</b><p>${RVT('अनुमान, दबाव या चुप्पी के बजाय बात को समय पर और स्पष्ट शब्दों में रखें।','Address issues early and clearly instead of using assumptions, dominance or silence.')}</p></div></div></div>`}).join('');
@@ -342,6 +381,8 @@ async function match(){
  <div class="report-section"><h3>${RVT('तालमेल बेहतर रखने के पारंपरिक उपाय','Traditional Remedies for Harmony')}</h3><p>${RVT('जहाँ गुण कम हैं वहाँ सबसे पहला उपाय व्यवहार में रखें—बात को दबाने के बजाय समय पर साफ करें, आर्थिक फैसले मिलकर लें और परिवार की सीमाएँ पहले तय करें। मंगलवार या शनिवार को हनुमान जी की उपासना, सोमवार को शिव-पार्वती का स्मरण और जरूरतमंद दंपति/परिवार की सहायता को पारंपरिक रूप से शुभ माना जाता है। मंगल प्रभाव होने पर गुस्से और जल्दबाजी पर नियंत्रण को विशेष महत्व दें।','Where scores are weaker, begin with behaviour: address issues early, make financial decisions together and agree on family boundaries. Traditional practices include prayer to Hanuman on Tuesday or Saturday, remembrance of Shiva-Parvati on Monday, and helping a family in need. If Mars influence is present, place extra emphasis on controlling haste and anger.')}</p></div>
  <div class="report-section"><h3>${RVT('अंतिम निष्कर्ष','Final Assessment')}</h3><p><strong>${quality(sc.total)}</strong></p><p>${RVT('गुण मिलान को शुरुआती संकेत की तरह उपयोग करें। अंतिम निर्णय में पूरी कुंडली, सही जन्म समय और वास्तविक व्यवहार को बराबर महत्व दें।','Use Guna matching as a screening tool. Give equal importance to the full charts, verified birth times and real-world behaviour.')}</p></div>
  <p class="notice">${RVT('ज्योतिषीय जानकारी पारंपरिक मार्गदर्शन के लिए है।','Astrological information is for traditional guidance.')}</p>`;
+ }catch(err){console.error('Kundli matching failed:',err);setStatus(RVT('मिलान बनाते समय तकनीकी समस्या आई। पेज रीफ्रेश करके दोबारा कोशिश करें।','A technical error occurred while generating the match. Refresh and try again.'),true);}
+ finally{if(_mb){_mb.disabled=false;_mb.textContent=RVT('✨ कुंडली मिलान करें','✨ Match Kundlis')}}
 }
 function readProfileForm(p){return {name:document.getElementById(p+'Name').value,place:document.getElementById(p+'Place').value,d:document.getElementById(p+'D').value,m:document.getElementById(p+'M').value,y:document.getElementById(p+'Y').value,h:document.getElementById(p+'H').value,min:document.getElementById(p+'Min').value,ap:document.getElementById(p+'AP').value,lat:document.getElementById(p+'Lat').value,lon:document.getElementById(p+'Lon').value,tz:document.getElementById(p+'Tz').value}}
 function fillProfileForm(p,o){if(!o)return;for(const k of ['name','place','d','m','y','h','min','ap','lat','lon','tz']){const id=p+(k==='name'?'Name':k==='place'?'Place':k==='min'?'Min':k==='ap'?'AP':k==='lat'?'Lat':k==='lon'?'Lon':k==='tz'?'Tz':k.toUpperCase());const el=document.getElementById(id);if(el&&o[k]!==undefined)el.value=o[k]}document.getElementById(p+'D')?.dispatchEvent(new Event('input'))}
