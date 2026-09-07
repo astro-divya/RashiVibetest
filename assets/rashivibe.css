@@ -360,3 +360,137 @@ header{background:rgba(26,32,39,.91)!important}.topbar{background:#171d23!import
 .panchang-special{border:1px solid rgba(215,181,109,.24);border-radius:18px;padding:16px;background:rgba(255,255,255,.025);margin-top:16px}.panchang-special h3{margin-top:0}
 .ratna-result .gem-hero{display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:center}.gem-stone{width:108px;height:108px;border-radius:50%;display:grid;place-items:center;font-size:3rem;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.55),rgba(215,181,109,.22) 35%,rgba(18,24,26,.95) 70%);border:1px solid rgba(241,211,145,.45);box-shadow:0 0 26px rgba(215,181,109,.2)}
 @media(max-width:760px){.birth-attrs{grid-template-columns:repeat(2,minmax(0,1fr))}.ratna-result .gem-hero{grid-template-columns:1fr;text-align:center}.gem-stone{margin:auto}}
+
+/* ============================================================
+   RashiVibe visual + PDF/login patch — 2026-09-07
+   Final overrides only. Keep this block at the end of the file.
+   ============================================================ */
+:root{
+  --bg:#272b3a;
+  --bg2:#2d3142;
+  --panel:#343846;
+  --panel2:#2f3441;
+}
+body{
+  background:
+    radial-gradient(circle at 14% 6%,rgba(112,82,137,.25),transparent 31%),
+    radial-gradient(circle at 83% 14%,rgba(87,103,149,.20),transparent 34%),
+    linear-gradient(180deg,#292d3d 0%,#252a38 50%,#2b2d39 100%)!important;
+}
+header{background:rgba(38,42,55,.91)!important}
+.topbar,footer{background:#222634!important}
+.card,.form-card,.result,.report-section{
+  background:linear-gradient(155deg,rgba(57,62,76,.97),rgba(44,49,62,.98))!important;
+}
+.zodiac-card,.dash-tool,.match-chart-card{
+  background:linear-gradient(150deg,rgba(57,62,75,.98),rgba(42,47,59,.98))!important;
+}
+
+/* Homepage hero: Sri Yantra shares the exact same center as the icon. */
+.home-page .hero:after{display:none!important}
+.home-page .hero-art{min-height:540px!important;overflow:visible!important}
+.home-page .rv-aura-wrap{
+  width:560px!important;
+  max-width:100%!important;
+  aspect-ratio:1!important;
+  position:relative!important;
+  display:grid!important;
+  place-items:center!important;
+  isolation:isolate!important;
+}
+.home-page .rv-sri-yantra{
+  position:absolute;
+  left:50%;top:50%;
+  width:545px;height:545px;
+  max-width:108%;max-height:108%;
+  transform:translate(-50%,-50%);
+  z-index:0;
+  opacity:.18;
+  filter:drop-shadow(0 0 10px rgba(242,205,122,.20));
+  pointer-events:none;
+  background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cg fill='none' stroke='%23e3bf72' stroke-width='2.4'%3E%3Ccircle cx='300' cy='300' r='260'/%3E%3Ccircle cx='300' cy='300' r='230'/%3E%3Cpath d='M300 72 512 440H88Z M300 528 92 168h416Z M300 118 475 421H125Z M300 482 132 191h336Z M300 158 440 400H160Z M300 442 168 213h264Z M300 198 405 380H195Z M300 402 202 232h196Z M300 237 370 358H230Z'/%3E%3Ccircle cx='300' cy='300' r='7' fill='%23e3bf72'/%3E%3C/g%3E%3C/svg%3E");
+}
+.home-page .rv-aura-wrap:before{z-index:1!important;opacity:.88!important}
+.home-page .rv-aura-wrap:after,.home-page .rv-aura-ring{z-index:2!important}
+.home-page .rv-aura-particles{z-index:3!important}
+.home-page .hero-icon{
+  z-index:4!important;
+  width:470px!important;
+  max-width:470px!important;
+  height:auto!important;
+  filter:drop-shadow(0 20px 28px rgba(0,0,0,.25)) drop-shadow(0 0 24px rgba(255,230,170,.88)) drop-shadow(0 0 58px rgba(245,198,91,.72)) drop-shadow(0 0 118px rgba(215,181,109,.46))!important;
+}
+.home-page .rv-aura-particles i{
+  width:5px;height:5px;
+  box-shadow:0 0 8px #ffe6a8,0 0 18px rgba(255,210,103,.95)!important;
+}
+.brand img{width:235px!important;height:64px!important}
+.footer-grid img[src*="rashivibe-logo"]{width:230px!important}
+@media(max-width:980px){
+  .home-page .hero-art{min-height:450px!important}
+  .home-page .rv-aura-wrap{width:455px!important}
+  .home-page .rv-sri-yantra{width:445px;height:445px;opacity:.17}
+  .home-page .hero-icon{width:390px!important;max-width:390px!important}
+}
+@media(max-width:680px){
+  .brand img{width:178px!important;height:52px!important}
+  .home-page .hero-art{min-height:370px!important}
+  .home-page .rv-aura-wrap{width:360px!important}
+  .home-page .rv-sri-yantra{width:350px;height:350px;opacity:.16}
+  .home-page .hero-icon{width:320px!important;max-width:88vw!important}
+}
+
+/* Centered PDF login/guest gate */
+.rv-pdf-gate{position:fixed;inset:0;z-index:5000;display:none;place-items:center;padding:20px;background:rgba(10,12,18,.68);backdrop-filter:blur(8px)}
+.rv-pdf-gate.show{display:grid;animation:rvGateFade .18s ease}
+.rv-pdf-gate-card{width:min(460px,100%);position:relative;padding:26px;border:1px solid rgba(239,204,128,.42);border-radius:24px;background:linear-gradient(155deg,#373b4a,#282c39);box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 35px rgba(215,181,109,.08);text-align:center}
+.rv-pdf-gate-logo{width:210px!important;height:auto!important;margin:0 auto 12px;object-fit:contain}
+.rv-pdf-gate-card h3{margin:6px 30px 8px;color:#f5dda2;font-size:1.45rem}
+.rv-pdf-gate-card p{margin:0 auto 18px;max-width:390px;color:#ddd2c2;line-height:1.65}
+.rv-pdf-gate-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rv-pdf-gate-actions .btn{width:100%}
+.rv-pdf-gate-later{margin-top:12px;border:0;background:transparent;color:#baaF9f;padding:7px 10px}
+.rv-pdf-gate-close{position:absolute;right:13px;top:10px;border:0;background:transparent;color:#f0d99d;font-size:1.3rem}
+@keyframes rvGateFade{from{opacity:0}to{opacity:1}}
+@media(max-width:520px){.rv-pdf-gate-card{padding:22px 17px}.rv-pdf-gate-actions{grid-template-columns:1fr}.rv-pdf-gate-logo{width:180px!important}}
+
+/* Cleaner PDF staging: fixed readable width, no clipped Kundli chart. */
+.rv-pdf-stage{position:fixed!important;left:-100000px!important;top:0!important;width:920px!important;background:#fff!important;color:#171717!important;padding:28px!important;z-index:-1!important}
+.rv-pdf-stage .kundli-report,.rv-pdf-stage .match-report{width:100%!important;max-width:none!important;background:#fff!important;color:#171717!important}
+.rv-pdf-stage .kundli-chart-card,.rv-pdf-stage .match-chart-card{width:100%!important;max-width:720px!important;margin:14px auto 22px!important;background:#fffaf0!important;color:#21170e!important;overflow:visible!important;break-inside:avoid!important}
+.rv-pdf-stage .north-chart{width:100%!important;max-width:680px!important;height:auto!important;overflow:visible!important}
+.rv-pdf-stage .report-section,.rv-pdf-stage .card{background:#fff!important;color:#171717!important;border-color:#ddd!important;box-shadow:none!important}
+.rv-pdf-stage .report-section p,.rv-pdf-stage .card p,.rv-pdf-stage .report-cover p,.rv-pdf-stage .notice{color:#222!important}
+.rv-pdf-stage .planet-table th,.rv-pdf-stage .planet-table td{color:#111!important;border-color:#ddd!important}
+
+
+/* === RashiVibe final visual override 2026-09-07: cropped brand assets + centered Sri Yantra === */
+header .nav{min-height:78px}
+header .brand{display:flex;align-items:center;flex:0 0 auto;overflow:visible}
+header .brand img{width:148px!important;height:auto!important;max-height:52px!important;object-fit:contain!important;display:block!important}
+header .navlinks{flex-wrap:nowrap!important;gap:4px!important;min-width:0}
+header .navlinks a{white-space:nowrap!important;padding:10px 9px!important;font-size:.92rem!important;line-height:1.1!important}
+.home-page .hero-art{display:grid!important;place-items:center!important;min-height:535px!important;overflow:visible!important}
+.home-page .rv-aura-wrap{width:510px!important;height:510px!important;max-width:min(510px,100%)!important;aspect-ratio:1!important;display:grid!important;place-items:center!important;position:relative!important;isolation:isolate!important}
+.home-page .rv-sri-yantra{left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:500px!important;height:500px!important;max-width:none!important;max-height:none!important;opacity:.24!important;filter:drop-shadow(0 0 12px rgba(242,205,122,.28))!important;background-position:center!important;background-size:contain!important;z-index:0!important}
+.home-page .hero-icon{position:relative!important;z-index:4!important;width:390px!important;max-width:390px!important;height:auto!important;margin:0!important;object-fit:contain!important;filter:drop-shadow(0 18px 26px rgba(0,0,0,.28)) drop-shadow(0 0 18px rgba(255,231,170,.92)) drop-shadow(0 0 48px rgba(245,198,91,.76)) drop-shadow(0 0 96px rgba(215,181,109,.48))!important}
+.home-page .rv-aura-wrap:before{width:95%!important;opacity:1!important;background:radial-gradient(circle,rgba(255,238,190,.34) 0 11%,rgba(248,203,104,.24) 26%,rgba(215,181,109,.15) 44%,rgba(151,91,255,.07) 60%,transparent 74%)!important}
+.home-page .rv-aura-particles i{opacity:.82}
+@media(max-width:1180px) and (min-width:981px){
+  header .brand img{width:132px!important}
+  header .navlinks a{padding:10px 7px!important;font-size:.86rem!important}
+}
+@media(max-width:980px){
+  header .brand img{width:132px!important;max-height:46px!important}
+  .home-page .hero-art{min-height:440px!important}
+  .home-page .rv-aura-wrap{width:420px!important;height:420px!important}
+  .home-page .rv-sri-yantra{width:414px!important;height:414px!important;opacity:.22!important}
+  .home-page .hero-icon{width:330px!important;max-width:330px!important}
+}
+@media(max-width:680px){
+  header .brand img{width:118px!important;max-height:42px!important}
+  .home-page .hero-art{min-height:345px!important}
+  .home-page .rv-aura-wrap{width:330px!important;height:330px!important}
+  .home-page .rv-sri-yantra{width:326px!important;height:326px!important;opacity:.21!important}
+  .home-page .hero-icon{width:270px!important;max-width:82vw!important}
+}
