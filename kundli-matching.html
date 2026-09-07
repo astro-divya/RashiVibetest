@@ -52,7 +52,7 @@
 <footer><div class="container footer-grid">
 <div><img src="assets/rashivibe-logo.png" alt="RashiVibe" style="width:230px"><p data-hi="आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।" data-en="Traditional Vedic astrology with a modern experience.">आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।</p></div>
 <div><h3 data-hi="महत्वपूर्ण" data-en="Important">महत्वपूर्ण</h3><div class="footer-links"><a href="about.html" data-hi="हमारे बारे में" data-en="About">हमारे बारे में</a><a href="privacy.html" data-hi="गोपनीयता" data-en="Privacy">गोपनीयता</a><a href="disclaimer.html" data-hi="अस्वीकरण" data-en="Disclaimer">अस्वीकरण</a><a href="terms.html" data-hi="नियम" data-en="Terms">नियम</a><a href="contact.html" data-hi="संपर्क" data-en="Contact">संपर्क</a></div></div>
-<div><h3>RashiVibe</h3><p>© 2026 RashiVibe</p><span class="badge">Sanatan × Gen-Z</span></div>
+<div><h3>RashiVibe</h3><p>© 2026 RashiVibe</p></div>
 </div></footer>
 
 <script>
@@ -330,7 +330,7 @@ function match(){
  <div class="report-section"><h3>${RVT('वर्तमान दशा संदर्भ','Current Dasha Context')}</h3><p>${RVT('दोनों की चल रही महादशा-अंतर्दशा संबंधों के समय और अनुभव को प्रभावित कर सकती है। अच्छे गुणों के बावजूद कठिन दशाओं में धैर्य चाहिए, जबकि मध्यम गुण समझदार और स्पष्ट संवाद से बेहतर निभ सकते हैं।','Current Mahadasha and Antardasha can change how relationship timing feels. A supportive score may still need patience in stressful periods, while an average score can improve through mature communication.')}</p></div>
  <div class="report-section"><h3>${RVT('निर्णय से पहले 7 व्यावहारिक प्रश्न','7 Practical Questions Before a Decision')}</h3><ol><li>${RVT('क्या दोनों काम/करियर और शहर बदलने के विषय में सहमत हैं?','Do both agree about careers and relocation?')}</li><li>${RVT('पैसा, बचत और कर्ज के बारे में पूरी स्पष्टता है?','Is there transparency about money, savings and debt?')}</li><li>${RVT('परिवार से जुड़ी सीमाएँ स्पष्ट हैं?','Are family boundaries clear?')}</li><li>${RVT('असहमति में सम्मान बना रहता है?','Does respect remain during disagreement?')}</li><li>${RVT('स्वास्थ्य और रोजमर्रा की दिनचर्या से जुड़ी अपेक्षाएँ समझी गई हैं?','Are health and daily-routine expectations understood?')}</li><li>${RVT('बच्चों और पालन-पोषण पर दोनों की सोच मेल खाती है?','Are views on children and parenting compatible?')}</li><li>${RVT('दोनों स्वतंत्र सहमति से निर्णय ले रहे हैं?','Are both deciding with free consent?')}</li></ol></div>
  <div class="report-section"><h3>${RVT('अंतिम निष्कर्ष','Final Assessment')}</h3><p><strong>${quality(sc.total)}</strong></p><p>${RVT('गुण मिलान को शुरुआती संकेत की तरह उपयोग करें। अंतिम निर्णय में पूरी कुंडली, सही जन्म समय और वास्तविक व्यवहार को बराबर महत्व दें।','Use Guna matching as a screening tool. Give equal importance to the full charts, verified birth times and real-world behaviour.')}</p></div>
- <p class="notice">${RVT('यह पारंपरिक सामंजस्य गणना है, निश्चित भविष्यवाणी नहीं। वास्तविक संबंध आपसी सम्मान, सुरक्षा, संवाद और व्यक्तिगत निर्णय पर आधारित होते हैं।','This is a traditional compatibility calculation, not a certainty. Real relationships depend on respect, safety, communication and personal choice.')}</p>`;
+ <p class="notice">${RVT('ज्योतिषीय जानकारी पारंपरिक मार्गदर्शन के लिए है।','Astrological information is for traditional guidance.')}</p>`;
 }
 function readProfileForm(p){return {name:document.getElementById(p+'Name').value,place:document.getElementById(p+'Place').value,d:document.getElementById(p+'D').value,m:document.getElementById(p+'M').value,y:document.getElementById(p+'Y').value,h:document.getElementById(p+'H').value,min:document.getElementById(p+'Min').value,ap:document.getElementById(p+'AP').value,lat:document.getElementById(p+'Lat').value,lon:document.getElementById(p+'Lon').value,tz:document.getElementById(p+'Tz').value}}
 function fillProfileForm(p,o){if(!o)return;for(const k of ['name','place','d','m','y','h','min','ap','lat','lon','tz']){const id=p+(k==='name'?'Name':k==='place'?'Place':k==='min'?'Min':k==='ap'?'AP':k==='lat'?'Lat':k==='lon'?'Lon':k==='tz'?'Tz':k.toUpperCase());const el=document.getElementById(id);if(el&&o[k]!==undefined)el.value=o[k]}document.getElementById(p+'D')?.dispatchEvent(new Event('input'))}
@@ -341,4 +341,4 @@ document.addEventListener('rv-language',()=>{if(!matchResult.classList.contains(
 </script>
 
 <script src="assets/language.js"></script>
-</body></html>
+<script src="assets/popup.js"></script></body></html>

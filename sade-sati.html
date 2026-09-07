@@ -22,7 +22,7 @@
 <footer><div class="container footer-grid">
 <div><img src="assets/rashivibe-logo.png" alt="RashiVibe" style="width:230px"><p data-hi="आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।" data-en="Traditional Vedic astrology with a modern experience.">आधुनिक अनुभव के साथ पारंपरिक वैदिक ज्योतिष।</p></div>
 <div><h3 data-hi="महत्वपूर्ण" data-en="Important">महत्वपूर्ण</h3><div class="footer-links"><a href="about.html" data-hi="हमारे बारे में" data-en="About">हमारे बारे में</a><a href="privacy.html" data-hi="गोपनीयता" data-en="Privacy">गोपनीयता</a><a href="disclaimer.html" data-hi="अस्वीकरण" data-en="Disclaimer">अस्वीकरण</a><a href="terms.html" data-hi="नियम" data-en="Terms">नियम</a><a href="contact.html" data-hi="संपर्क" data-en="Contact">संपर्क</a></div></div>
-<div><h3>RashiVibe</h3><p>© 2026 RashiVibe</p><span class="badge">Sanatan × Gen-Z</span></div>
+<div><h3>RashiVibe</h3><p>© 2026 RashiVibe</p></div>
 </div></footer>
 
 <script>
@@ -174,10 +174,10 @@ return {Z_HI,Z_EN,NAK_HI,NAK_EN,LORD_HI,LORD_EN,DURATION,P_EN,P_HI,mod,jd,ayan,p
 function fillS(){const L=RVLang(),Z=L==='hi'?RVAstro.Z_HI:RVAstro.Z_EN,old=sadeSign.value;sadeSign.innerHTML=Z.map((x,i)=>`<option value="${i}">${x}</option>`).join('');if(old!=='')sadeSign.value=old}
 function renderS(){const i=+sadeSign.value,st=RVAstro.sadeSati(i),L=RVLang(),Z=L==='hi'?RVAstro.Z_HI:RVAstro.Z_EN;
  const msg={phase1:[`साढ़े साती का पहला चरण`,`First phase of Sade Sati`],phase2:[`साढ़े साती का मध्य चरण`,`Middle phase of Sade Sati`],phase3:[`साढ़े साती का अंतिम चरण`,`Final phase of Sade Sati`],dhaiya:[`शनि ढैया का पारंपरिक संकेत`,`Traditional Dhaiya indication`],none:[`साढ़े साती/ढैया का प्रमुख चरण नहीं`,`No major Sade Sati/Dhaiya phase`]}[st.code];
- sadeResult.classList.remove('hidden');sadeResult.innerHTML=`<h2>${Z[i]}</h2><div class="kpi"><div class="card"><h3>${RVT('वर्तमान स्थिति','Current Status')}</h3><strong>${L==='hi'?msg[0]:msg[1]}</strong></div><div class="card"><h3>${RVT('शनि राशि','Saturn Sign')}</h3><strong>${Z[st.sat]}</strong></div><div class="card"><h3>${RVT('राशि दूरी','Sign Distance')}</h3><strong>${st.rel}</strong></div></div><div class="report-section"><h3>${RVT('कैसे समझें?','How to read this')}</h3><p>${RVT('साढ़े साती तब मानी जाती है जब शनि जन्म चंद्र राशि से 12वें, उसी या दूसरे स्थान में हो। ढैया का पारंपरिक संदर्भ चौथे और आठवें स्थान से जुड़ा है।','Sade Sati is traditionally considered when Saturn is 12th, on, or 2nd from the natal Moon sign. Dhaiya is associated with the 4th and 8th positions.')}</p></div><p class="notice">${RVT('यह गोचर-आधारित पारंपरिक संकेत है, डर या निश्चित नकारात्मक परिणाम का दावा नहीं।','This is a traditional transit indicator, not a claim of guaranteed negative outcomes.')}</p>`;
+ sadeResult.classList.remove('hidden');sadeResult.innerHTML=`<h2>${Z[i]}</h2><div class="kpi"><div class="card"><h3>${RVT('वर्तमान स्थिति','Current Status')}</h3><strong>${L==='hi'?msg[0]:msg[1]}</strong></div><div class="card"><h3>${RVT('शनि राशि','Saturn Sign')}</h3><strong>${Z[st.sat]}</strong></div><div class="card"><h3>${RVT('राशि दूरी','Sign Distance')}</h3><strong>${st.rel}</strong></div></div><div class="report-section"><h3>${RVT('कैसे समझें?','How to read this')}</h3><p>${RVT('साढ़े साती तब मानी जाती है जब शनि जन्म चंद्र राशि से 12वें, उसी या दूसरे स्थान में हो। ढैया का पारंपरिक संदर्भ चौथे और आठवें स्थान से जुड़ा है।','Sade Sati is traditionally considered when Saturn is 12th, on, or 2nd from the natal Moon sign. Dhaiya is associated with the 4th and 8th positions.')}</p></div><p class="notice">${RVT('ज्योतिषीय जानकारी पारंपरिक मार्गदर्शन के लिए है।','Astrological information is for traditional guidance.')}</p>`;
 }
 document.addEventListener('DOMContentLoaded',()=>{fillS();sadeBtn.onclick=renderS;renderS()});document.addEventListener('rv-language',()=>{fillS();renderS()});
 </script>
 
 <script src="assets/language.js"></script>
-</body></html>
+<script src="assets/popup.js"></script></body></html>
