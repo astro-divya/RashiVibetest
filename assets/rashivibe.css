@@ -330,3 +330,33 @@ header{background:rgba(26,32,39,.91)!important}.topbar{background:#171d23!import
 .rv-profile-dot{font-size:0!important}.rv-profile-dot:before{content:'👤';font-size:1rem}.rv-profile-pill{max-width:175px}
 .rv-popup{position:fixed;inset:auto 18px 18px auto;width:min(390px,calc(100vw - 36px));z-index:1000;padding:20px;border:1px solid rgba(230,195,119,.32);border-radius:22px;background:linear-gradient(155deg,rgba(47,54,63,.98),rgba(27,33,40,.99));box-shadow:0 24px 70px rgba(0,0,0,.42);display:none}.rv-popup.show{display:block;animation:rvPopIn .35s ease}.rv-popup-close{position:absolute;right:12px;top:10px;border:0;background:transparent;color:#e9d6aa;font-size:1.25rem}.rv-popup h3{margin:0 30px 8px 0;color:#f1d391}.rv-popup p{margin:0 0 14px;color:#d7cec2;line-height:1.65}.rv-popup-actions{display:flex;gap:9px;flex-wrap:wrap}@keyframes rvPopIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media(max-width:680px){.rv-popup{left:12px;right:12px;bottom:12px;width:auto}}
+
+
+/* 2026-09-07 Divine Aura v2: visibly larger icon + layered glow + particles */
+.home-page .hero-art{position:relative;display:grid;place-items:center;min-height:500px;overflow:visible!important;isolation:isolate}
+.home-page .rv-aura-wrap{position:relative;display:grid;place-items:center;width:min(100%,540px);aspect-ratio:1/1;overflow:visible!important}
+.home-page .hero-icon{position:relative;z-index:4;width:min(100%,460px)!important;max-width:460px!important;filter:drop-shadow(0 18px 26px rgba(0,0,0,.28)) drop-shadow(0 0 18px rgba(255,225,156,.72)) drop-shadow(0 0 42px rgba(241,194,91,.52)) drop-shadow(0 0 85px rgba(215,181,109,.34))!important;animation:rvDivineFloat 5.2s ease-in-out infinite,rvAuraPulseV2 3.2s ease-in-out infinite!important}
+.home-page .rv-aura-wrap:before,.home-page .rv-aura-wrap:after{content:"";position:absolute;border-radius:50%;pointer-events:none;z-index:1}
+.home-page .rv-aura-wrap:before{width:92%;aspect-ratio:1;background:radial-gradient(circle,rgba(255,236,186,.28) 0 10%,rgba(246,201,100,.22) 25%,rgba(215,181,109,.13) 43%,rgba(151,91,255,.055) 58%,transparent 72%);filter:blur(10px);animation:rvHaloBreathe 3.4s ease-in-out infinite}
+.home-page .rv-aura-wrap:after{width:72%;aspect-ratio:1;border:1px solid rgba(255,223,145,.34);box-shadow:0 0 28px rgba(255,215,122,.32),inset 0 0 28px rgba(255,215,122,.16);animation:rvHaloRing 6.5s ease-in-out infinite}
+.home-page .rv-aura-ring{position:absolute;border-radius:50%;pointer-events:none;z-index:2;border:1px solid rgba(255,225,155,.22);box-shadow:0 0 22px rgba(235,192,96,.2)}
+.home-page .ring-a{width:84%;aspect-ratio:1;animation:rvRingDrift 7s ease-in-out infinite}
+.home-page .ring-b{width:64%;aspect-ratio:1;animation:rvRingDrift 5.8s ease-in-out infinite reverse}
+.home-page .rv-aura-particles{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:visible}
+.home-page .rv-aura-particles i{--ang:calc(var(--i)*22.5deg);position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;background:#ffe5a2;box-shadow:0 0 7px #ffd36f,0 0 14px rgba(255,211,111,.75);opacity:0;transform:rotate(var(--ang)) translateX(118px) scale(.45);animation:rvParticleOut 4.8s linear infinite;animation-delay:calc(var(--i)*-.27s)}
+.home-page .rv-aura-particles i:nth-child(3n){width:3px;height:3px;animation-duration:5.8s}.home-page .rv-aura-particles i:nth-child(4n){width:5px;height:5px;animation-duration:6.4s}
+@keyframes rvAuraPulseV2{0%,100%{filter:drop-shadow(0 18px 26px rgba(0,0,0,.28)) drop-shadow(0 0 16px rgba(255,225,156,.62)) drop-shadow(0 0 36px rgba(241,194,91,.42)) drop-shadow(0 0 76px rgba(215,181,109,.25))}50%{filter:drop-shadow(0 18px 28px rgba(0,0,0,.3)) drop-shadow(0 0 24px rgba(255,235,185,.92)) drop-shadow(0 0 58px rgba(245,197,89,.68)) drop-shadow(0 0 112px rgba(215,181,109,.42))}}
+@keyframes rvHaloBreathe{0%,100%{transform:scale(.92);opacity:.58}50%{transform:scale(1.06);opacity:1}}
+@keyframes rvHaloRing{0%,100%{transform:scale(.94);opacity:.4}50%{transform:scale(1.05);opacity:.82}}
+@keyframes rvRingDrift{0%,100%{transform:scale(.96);opacity:.28}50%{transform:scale(1.04);opacity:.62}}
+@keyframes rvParticleOut{0%{opacity:0;transform:rotate(var(--ang)) translateX(105px) scale(.25)}14%{opacity:.9}70%{opacity:.48}100%{opacity:0;transform:rotate(var(--ang)) translateX(245px) scale(1.05)}}
+@media(max-width:980px){.home-page .hero-art{min-height:410px}.home-page .rv-aura-wrap{width:min(100%,430px)}.home-page .hero-icon{max-width:380px!important}.home-page .rv-aura-particles i{transform:rotate(var(--ang)) translateX(95px) scale(.45)}}
+@media(max-width:680px){.home-page .hero-art{min-height:350px!important}.home-page .rv-aura-wrap{width:min(100%,360px)}.home-page .hero-icon{width:92%!important;max-width:320px!important}.home-page .rv-aura-particles i{animation-duration:5.4s}}
+@media(prefers-reduced-motion:reduce){.home-page .hero-icon,.home-page .rv-aura-wrap:before,.home-page .rv-aura-wrap:after,.home-page .rv-aura-ring,.home-page .rv-aura-particles i{animation:none!important}.home-page .rv-aura-particles i{display:none}}
+
+.kundli-chart-card{max-width:640px;margin:16px auto 24px;padding:16px;border:1px solid rgba(215,181,109,.28);border-radius:20px;background:#fffaf0;color:#21170e;box-shadow:0 15px 40px rgba(0,0,0,.18)}
+.kundli-chart-card h3{text-align:center;color:#7a4f12;margin:0 0 10px}.kundli-chart-card .north-chart{width:100%;height:auto;display:block}
+.birth-attrs{grid-template-columns:repeat(4,minmax(0,1fr))}
+.panchang-special{border:1px solid rgba(215,181,109,.24);border-radius:18px;padding:16px;background:rgba(255,255,255,.025);margin-top:16px}.panchang-special h3{margin-top:0}
+.ratna-result .gem-hero{display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:center}.gem-stone{width:108px;height:108px;border-radius:50%;display:grid;place-items:center;font-size:3rem;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.55),rgba(215,181,109,.22) 35%,rgba(18,24,26,.95) 70%);border:1px solid rgba(241,211,145,.45);box-shadow:0 0 26px rgba(215,181,109,.2)}
+@media(max-width:760px){.birth-attrs{grid-template-columns:repeat(2,minmax(0,1fr))}.ratna-result .gem-hero{grid-template-columns:1fr;text-align:center}.gem-stone{margin:auto}}
