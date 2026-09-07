@@ -202,6 +202,12 @@ return {Z_HI,Z_EN,NAK_HI,NAK_EN,LORD_HI,LORD_EN,DURATION,P_EN,P_HI,mod,jd,ayan,p
 </script>
 
 <script>
+async function rvResolveTypedPlace(prefix){
+ const place=document.getElementById(prefix+'Place'),lat=document.getElementById(prefix+'Lat'),lon=document.getElementById(prefix+'Lon'),tz=document.getElementById(prefix+'Tz');
+ if(!place||!lat||!lon)return false;const a=+lat.value,b=+lon.value;if(Number.isFinite(a)&&Number.isFinite(b)&&(a||b))return true;
+ const q=place.value.trim();if(q.length<2)return false;
+ try{const r=await fetch('https://photon.komoot.io/api/?limit=1&q='+encodeURIComponent(q));if(!r.ok)return false;const d=await r.json(),f=d.features&&d.features[0];if(!f)return false;const pr=f.properties||{};place.value=[pr.name,pr.city,pr.state,pr.country].filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i).join(', ')||q;lat.value=f.geometry.coordinates[1].toFixed(6);lon.value=f.geometry.coordinates[0].toFixed(6);try{const tr=await fetch(`https://timeapi.io/api/timezone/coordinate?latitude=${f.geometry.coordinates[1]}&longitude=${f.geometry.coordinates[0]}`);if(tr.ok){const td=await tr.json();tz.value=td.timeZone||td.timezone||tz.value}}catch(e){}return true}catch(e){return false}
+}
 function setupLocation(prefix){
  const input=document.getElementById(prefix+'Place'),box=document.getElementById(prefix+'Suggest');
  if(!input||!box)return;let timer;
@@ -298,20 +304,22 @@ function northChartSVG(c,Z,name){
 }
 function personSummary(label,name,c,Z,N){const y=RVAstro.yogas(c),d=RVAstro.vimshottari(c,c.birth),L=RVLang()==='hi'?RVAstro.LORD_HI:RVAstro.LORD_EN;return `<div class="report-section"><h3>${label}: ${name}</h3><div class="grid three"><div class="card"><b>${RVT('जन्म राशि','Birth Moon sign')}</b><br>${Z[c.moonSign]}</div><div class="card"><b>${RVT('नक्षत्र','Nakshatra')}</b><br>${N[c.moonNak.i]} · ${RVT('पद','Pada')} ${c.moonNak.pada}</div><div class="card"><b>${RVT('लग्न','Ascendant')}</b><br>${Z[c.ascSign]}</div></div><p>${RVT('सप्तम भाव','7th house')}: ${Z[(c.ascSign+6)%12]} · ${RVT('मंगल भाव','Mars house')}: ${y.houses.Mars} · ${RVT('शुक्र भाव','Venus house')}: ${y.houses.Venus} · ${RVT('गुरु भाव','Jupiter house')}: ${y.houses.Jupiter}</p><p>${RVT('वर्तमान महादशा / अंतर्दशा','Current Mahadasha / Antardasha')}: <strong>${d.md?L[d.md.idx]:'—'} / ${d.ad?L[d.ad.idx]:'—'}</strong></p></div>`}
 function chartPair(bn,gn,B,G,Z){return `<div class="report-section"><h3>${RVT('दोनों की जन्म कुंडली','Both Birth Charts')}</h3><p>${RVT('दोनों चार्ट अलग-अलग जन्म समय और स्थान से गणना किए गए हैं।','Both charts are calculated independently from each birth time and place.')}</p><div class="match-chart-grid"><div class="match-chart-card"><h3>${bn}</h3>${northChartSVG(B,Z,bn)}</div><div class="match-chart-card"><h3>${gn}</h3>${northChartSVG(G,Z,gn)}</div></div></div>`}
-async function downloadMatchPDF(){
- const report=document.getElementById('matchResult');if(!report||report.classList.contains('hidden'))return;
- const btn=document.getElementById('matchPdfBtn');if(btn){btn.disabled=true;btn.textContent=RVT('PDF तैयार हो रही है…','Preparing PDF…')}
- try{
-  if(!window.html2canvas||!window.jspdf)throw new Error('PDF library unavailable');
-  const canvas=await html2canvas(report,{scale:1.6,useCORS:true,backgroundColor:'#fffdf8',logging:false,onclone:doc=>{doc.body.classList.add('pdf-clone');doc.querySelectorAll('.north-chart').forEach(svg=>{svg.style.background='#fffaf0';svg.style.border='1px solid #8d6b2f';svg.querySelectorAll('text').forEach(t=>{if(!t.getAttribute('fill'))t.setAttribute('fill','#241c13')});});}});
-  const {jsPDF}=window.jspdf,pdf=new jsPDF('p','mm','a4'),pageW=210,pageH=297,margin=7,imgW=pageW-margin*2,imgH=canvas.height*imgW/canvas.width,img=canvas.toDataURL('image/jpeg',.92);
-  let remaining=imgH,y=margin;pdf.addImage(img,'JPEG',margin,y,imgW,imgH);remaining-=pageH-margin*2;
-  while(remaining>0){pdf.addPage();y=margin-(imgH-remaining);pdf.addImage(img,'JPEG',margin,y,imgW,imgH);remaining-=pageH-margin*2}
-  const bNameEl=document.getElementById('bName'),gNameEl=document.getElementById('gName');const n1=((bNameEl&&bNameEl.value)||'Profile1').trim(),n2=((gNameEl&&gNameEl.value)||'Profile2').trim(),nm=(n1+'_'+n2+'_Kundli_Milan').replace(/[^a-z0-9_\-]+/gi,'_');pdf.save(nm+'.pdf');
- }catch(e){alert(RVT('PDF library load नहीं हुई। Print / Save as PDF विकल्प अभी भी काम करेगा।','PDF library could not load. Print / Save as PDF will still work.'))}
- finally{if(btn){btn.disabled=false;btn.textContent=RVT('📄 PDF डाउनलोड करें','📄 Download PDF')}}
+function rvMatchPdfLoggedIn(){try{return !!(window.RVAccount&&RVAccount.getSession&&RVAccount.getSession()?.verified)}catch(e){return false}}
+function rvMatchPdfGate(next){
+ if(rvMatchPdfLoggedIn()){next();return}
+ let gate=document.getElementById('rvPdfGate');if(!gate){gate=document.createElement('div');gate.id='rvPdfGate';gate.className='rv-pdf-gate';gate.innerHTML=`<div class="rv-pdf-gate-card" role="dialog" aria-modal="true"><button class="rv-pdf-gate-close" type="button">×</button><img class="rv-pdf-gate-logo" src="assets/rashivibe-logo.png" alt="RashiVibe"><h3>${RVT('अपनी मिलान रिपोर्ट सुरक्षित रखें','Save your matching report')}</h3><p>${RVT('Login करने पर प्रोफ़ाइल और रिपोर्ट सुरक्षित रहेगी। चाहें तो अतिथि के रूप में भी PDF डाउनलोड कर सकते हैं।','Log in to keep the profiles and report saved. You can also download the PDF as a guest.')}</p><div class="rv-pdf-gate-actions"><a class="btn primary" href="login.html?returnTo=kundli-matching.html">${RVT('Login / OTP से जारी रखें','Continue with Login / OTP')}</a><button class="btn ghost rv-pdf-guest" type="button">${RVT('अतिथि के रूप में PDF डाउनलोड करें','Download PDF as Guest')}</button></div><button class="rv-pdf-gate-later" type="button">${RVT('अभी नहीं','Not now')}</button></div>`;document.body.appendChild(gate);gate.querySelector('.rv-pdf-gate-close').onclick=()=>gate.classList.remove('show');gate.querySelector('.rv-pdf-gate-later').onclick=()=>gate.classList.remove('show');gate.addEventListener('click',e=>{if(e.target===gate)gate.classList.remove('show')})}gate.querySelector('.rv-pdf-guest').onclick=()=>{gate.classList.remove('show');next()};gate.classList.add('show')
 }
-function match(){
+async function rvMatchAddBlock(pdf,node,state){const canvas=await html2canvas(node,{scale:1.5,useCORS:true,backgroundColor:'#ffffff',logging:false});const img=canvas.toDataURL('image/jpeg',.94),imgW=state.contentW,imgH=canvas.height*imgW/canvas.width;if(imgH<=state.contentH){if(state.y+imgH>state.bottom){pdf.addPage();state.y=state.top}pdf.addImage(img,'JPEG',state.left,state.y,imgW,imgH);state.y+=imgH+3;return}let cropY=0,pxPerMm=canvas.width/imgW,chunkPx=Math.floor(state.contentH*pxPerMm);while(cropY<canvas.height){const h=Math.min(chunkPx,canvas.height-cropY),part=document.createElement('canvas');part.width=canvas.width;part.height=h;part.getContext('2d').drawImage(canvas,0,cropY,canvas.width,h,0,0,canvas.width,h);if(state.y!==state.top){pdf.addPage();state.y=state.top}const ph=h*imgW/canvas.width;pdf.addImage(part.toDataURL('image/jpeg',.94),'JPEG',state.left,state.y,imgW,ph);state.y+=ph+3;cropY+=h;if(cropY<canvas.height){pdf.addPage();state.y=state.top}}}
+async function generateMatchPDF(){
+ const report=document.getElementById('matchResult');if(!report||report.classList.contains('hidden'))return;const btn=document.getElementById('matchPdfBtn');if(btn){btn.disabled=true;btn.textContent=RVT('PDF तैयार हो रही है…','Preparing PDF…')}let stage;
+ try{if(!window.html2canvas||!window.jspdf)throw new Error('PDF library unavailable');stage=document.createElement('div');stage.className='rv-pdf-stage pdf-clone';stage.innerHTML=report.outerHTML;document.body.appendChild(stage);const root=stage.firstElementChild;root.querySelectorAll('.report-toolbar,.profile-savebar').forEach(x=>x.remove());root.querySelectorAll('.north-chart').forEach(svg=>{svg.style.background='#fffaf0';svg.style.overflow='visible';svg.querySelectorAll('text').forEach(t=>t.setAttribute('fill','#241c13'))});const {jsPDF}=window.jspdf,pdf=new jsPDF('p','mm','a4'),state={left:9,top:9,bottom:288,contentW:192,contentH:279,y:9};for(const child of [...root.children])await rvMatchAddBlock(pdf,child,state);const n1=(document.getElementById('bName')?.value||'Profile1').trim(),n2=(document.getElementById('gName')?.value||'Profile2').trim(),nm=(n1+'_'+n2+'_Kundli_Milan').replace(/[^a-z0-9_\-]+/gi,'_');pdf.save(nm+'.pdf')}
+ catch(e){console.error(e);alert(RVT('PDF बनाने में समस्या आई। Print / Save as PDF विकल्प इस्तेमाल करें।','There was a problem creating the PDF. Please use Print / Save as PDF.'))}
+ finally{if(stage)stage.remove();if(btn){btn.disabled=false;btn.textContent=RVT('📄 PDF डाउनलोड करें','📄 Download PDF')}}
+}
+function downloadMatchPDF(){rvMatchPdfGate(generateMatchPDF)}
+async function match(){
+ const _mb=document.getElementById('matchBtn');if(_mb){_mb.disabled=true;_mb.textContent=RVT('स्थान और कुंडली जाँची जा रही है…','Checking places and charts…')}
+ try{await Promise.all([rvResolveTypedPlace('b'),rvResolveTypedPlace('g')])}finally{if(_mb){_mb.disabled=false;_mb.textContent=RVT('✨ कुंडली मिलान करें','✨ Match Kundlis')}}
  let B,G;try{B=readC('b');G=readC('g')}catch(e){alert(RVT(e.message==='date'?'दोनों की सही जन्म तिथि भरें।':'दोनों के जन्म स्थान चुनें या latitude/longitude भरें।',e.message==='date'?'Enter valid birth dates for both.':'Select both birth places or enter latitude/longitude.'));return}
  const bNameEl=document.getElementById('bName'),gNameEl=document.getElementById('gName');
  const sc=scoreMatch(B,G),L=RVLang(),Z=L==='hi'?RVAstro.Z_HI:RVAstro.Z_EN,N=L==='hi'?RVAstro.NAK_HI:RVAstro.NAK_EN,bn=((bNameEl&&bNameEl.value)||RVT('लड़का','Boy')).trim(),gn=((gNameEl&&gNameEl.value)||RVT('लड़की','Girl')).trim();
