@@ -90,117 +90,10 @@
 })();
 </script>
 
-<script>
-const RVAstro=(()=>{
-const Z_HI=['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
-const Z_EN=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
-const NAK_HI=['अश्विनी','भरणी','कृत्तिका','रोहिणी','मृगशिरा','आर्द्रा','पुनर्वसु','पुष्य','आश्लेषा','मघा','पूर्व फाल्गुनी','उत्तर फाल्गुनी','हस्त','चित्रा','स्वाती','विशाखा','अनुराधा','ज्येष्ठा','मूल','पूर्वाषाढ़ा','उत्तराषाढ़ा','श्रवण','धनिष्ठा','शतभिषा','पूर्व भाद्रपद','उत्तर भाद्रपद','रेवती'];
-const NAK_EN=['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
-const LORD_HI=['केतु','शुक्र','सूर्य','चंद्र','मंगल','राहु','गुरु','शनि','बुध'];
-const LORD_EN=['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
-const DURATION=[7,20,6,10,7,18,16,19,17];
-const P_EN=['Sun','Moon','Mercury','Venus','Mars','Jupiter','Saturn','Rahu','Ketu'];
-const P_HI=['सूर्य','चंद्र','बुध','शुक्र','मंगल','गुरु','शनि','राहु','केतु'];
-const mod=(x,n=360)=>((x%n)+n)%n, rad=x=>x*Math.PI/180, deg=x=>x*180/Math.PI;
-const jd=d=>d.getTime()/86400000+2440587.5;
-const ayan=j=>23.85675+0.013968*((j-2451545.0)/365.2425);
-function solveE(M,e){let E=rad(M)+e*Math.sin(rad(M))*(1+e*Math.cos(rad(M)));for(let i=0;i<6;i++)E=E-(E-e*Math.sin(E)-rad(M))/(1-e*Math.cos(E));return E}
-function sunData(d){
- let w=282.9404+4.70935E-5*d,e=.016709-1.151E-9*d,M=mod(356.0470+.9856002585*d),E=solveE(M,e);
- let x=Math.cos(E)-e,y=Math.sin(E)*Math.sqrt(1-e*e),r=Math.sqrt(x*x+y*y),v=deg(Math.atan2(y,x)),lon=mod(v+w);
- return {lon,r,x:r*Math.cos(rad(lon)),y:r*Math.sin(rad(lon))};
-}
-const ELEMENTS={
- Mercury:d=>[48.3313+3.24587E-5*d,7.0047+5E-8*d,29.1241+1.01444E-5*d,.387098,.205635+5.59E-10*d,168.6562+4.0923344368*d],
- Venus:d=>[76.6799+2.46590E-5*d,3.3946+2.75E-8*d,54.8910+1.38374E-5*d,.723330,.006773-1.302E-9*d,48.0052+1.6021302244*d],
- Mars:d=>[49.5574+2.11081E-5*d,1.8497-1.78E-8*d,286.5016+2.92961E-5*d,1.523688,.093405+2.516E-9*d,18.6021+.5240207766*d],
- Jupiter:d=>[100.4542+2.76854E-5*d,1.3030-1.557E-7*d,273.8777+1.64505E-5*d,5.20256,.048498+4.469E-9*d,19.8950+.0830853001*d],
- Saturn:d=>[113.6634+2.38980E-5*d,2.4886-1.081E-7*d,339.3939+2.97661E-5*d,9.55475,.055546-9.499E-9*d,316.9670+.0334442282*d]
-};
-function planetHelio(name,d){
- let [N,i,w,a,e,M]=ELEMENTS[name](d);N=rad(N);i=rad(i);w=rad(w);M=mod(M);
- let E=solveE(M,e),xv=a*(Math.cos(E)-e),yv=a*Math.sqrt(1-e*e)*Math.sin(E),v=Math.atan2(yv,xv),r=Math.sqrt(xv*xv+yv*yv);
- let xh=r*(Math.cos(N)*Math.cos(v+w)-Math.sin(N)*Math.sin(v+w)*Math.cos(i));
- let yh=r*(Math.sin(N)*Math.cos(v+w)+Math.cos(N)*Math.sin(v+w)*Math.cos(i));
- let zh=r*(Math.sin(v+w)*Math.sin(i));
- return {x:xh,y:yh,z:zh,lon:mod(deg(Math.atan2(yh,xh)))};
-}
-function moonTropical(j){
- let n=j-2451545;
- let L=mod(218.316+13.176396*n),M=mod(134.963+13.064993*n),D=mod(297.850+12.190749*n),F=mod(93.272+13.229350*n),Ms=mod(357.529+.9856003*n);
- return mod(L+6.289*Math.sin(rad(M))+1.274*Math.sin(rad(2*D-M))+.658*Math.sin(rad(2*D))+.214*Math.sin(rad(2*M))-.186*Math.sin(rad(Ms))-.114*Math.sin(rad(2*F)));
-}
-function positions(date){
- let j=jd(date),d=j-2451543.5,s=sunData(d),out={};
- out.Sun=mod(s.lon-ayan(j));out.Moon=mod(moonTropical(j)-ayan(j));
- for(const p of ['Mercury','Venus','Mars','Jupiter','Saturn']){
-   let h=planetHelio(p,d),x=h.x+s.x,y=h.y+s.y;
-   out[p]=mod(deg(Math.atan2(y,x))-ayan(j));
- }
- let rahu=mod(125.1228-.0529538083*d-ayan(j));out.Rahu=rahu;out.Ketu=mod(rahu+180);
- return out;
-}
-function gmst(j){let T=(j-2451545)/36525;return mod(280.46061837+360.98564736629*(j-2451545)+.000387933*T*T-T*T*T/38710000)}
-function asc(date,lat,lon){
- let j=jd(date),theta=rad(mod(gmst(j)+lon)),eps=rad(23.439291),phi=rad(lat);
- let lam=deg(Math.atan2(-Math.cos(theta),Math.sin(theta)*Math.cos(eps)+Math.tan(phi)*Math.sin(eps)));
- return mod(lam+180-ayan(j));
-}
-function nak(lon){let u=mod(lon)/(360/27),i=Math.floor(u),frac=u-i;return {i,frac,pada:Math.floor(frac*4)+1,lordIndex:i%9}}
-function signIndex(lon){return Math.floor(mod(lon)/30)}
-function navamsa(lon){
- let s=signIndex(lon),part=Math.floor((mod(lon)%30)/(30/9)),start;
- if([0,3,6,9].includes(s))start=s;
- else if([1,4,7,10].includes(s))start=mod(s+8,12);
- else start=mod(s+4,12);
- return mod(start+part,12);
-}
-function toDate(y,m,d,h,min,ap,tz){
- let hh=+h;if(ap==='PM'&&hh<12)hh+=12;if(ap==='AM'&&hh===12)hh=0;
- let local=new Date(+y,+m-1,+d,hh,+min,0);
- let offset=local.getTimezoneOffset();
- if(tz==='Asia/Kolkata')offset=-330;
- else if(Number.isFinite(+tz))offset=-(+tz*60);
- return new Date(Date.UTC(+y,+m-1,+d,hh,+min)-(-offset)*60000);
-}
-function chart(date,lat,lon){
- let pos=positions(date),a=asc(date,+lat,+lon),mn=nak(pos.Moon);
- return {date,pos,asc:a,ascSign:signIndex(a),moonSign:signIndex(pos.Moon),sunSign:signIndex(pos.Sun),moonNak:mn,nav:Object.fromEntries(Object.entries(pos).map(([p,l])=>[p,navamsa(l)])),ascNav:navamsa(a)};
-}
-function vimshottari(c,birth,at=new Date()){
- let n=c.moonNak,startLord=n.lordIndex,elapsed=n.frac*DURATION[startLord],start=new Date(birth.getTime()-elapsed*365.2425*86400000),rows=[],cur=start;
- for(let k=0;k<18;k++){let idx=(startLord+k)%9,end=new Date(cur.getTime()+DURATION[idx]*365.2425*86400000);rows.push({idx,start:new Date(cur),end});cur=end}
- let md=rows.find(x=>at>=x.start&&at<x.end)||rows[0];
- if(!md)return {md:null,ad:null};
- let mdYears=DURATION[md.idx],mdMs=mdYears*365.2425*86400000,adStart=md.start,ad=null;
- for(let k=0;k<9;k++){
-  let ai=(md.idx+k)%9,dur=mdMs*(DURATION[ai]/120),end=new Date(adStart.getTime()+dur);
-  if(at>=adStart&&at<end){ad={idx:ai,start:new Date(adStart),end};break}
-  adStart=end;
- }
- return {md,ad};
-}
-function tithi(date){let p=positions(date),diff=mod(p.Moon-p.Sun),n=Math.floor(diff/12)+1;return {n,index:(n-1)%15,paksha:n<=15?0:1}}
-function yoga(date){let p=positions(date);return Math.floor(mod(p.Sun+p.Moon)/(360/27))}
-function karana(date){let p=positions(date);return Math.floor(mod(p.Moon-p.Sun)/6)}
-function houseFrom(lon,ascSign){return mod(signIndex(lon)-ascSign,12)+1}
-function yogas(c){
- let h={};for(const [p,l] of Object.entries(c.pos))h[p]=houseFrom(l,c.ascSign);
- const ys=[];
- if(signIndex(c.pos.Sun)===signIndex(c.pos.Mercury))ys.push(['Budha-Aditya','बुध-आदित्य']);
- if([1,4,7,10].includes(mod(signIndex(c.pos.Jupiter)-c.moonSign,12)+1))ys.push(['Gaja Kesari','गज केसरी']);
- if(signIndex(c.pos.Moon)===signIndex(c.pos.Mars))ys.push(['Chandra-Mangal','चंद्र-मंगल']);
- const manglik=[1,2,4,7,8,12].includes(h.Mars);
- return {ys,manglik,houses:h};
-}
-function sadeSati(moonSign,date=new Date()){
- let sat=signIndex(positions(date).Saturn),rel=mod(sat-moonSign,12);
- let code=rel===11?'phase1':rel===0?'phase2':rel===1?'phase3':(rel===3||rel===7?'dhaiya':'none');
- return {sat,rel,code};
-}
-return {Z_HI,Z_EN,NAK_HI,NAK_EN,LORD_HI,LORD_EN,DURATION,P_EN,P_HI,mod,jd,ayan,positions,asc,nak,signIndex,navamsa,toDate,chart,vimshottari,tithi,yoga,karana,houseFrom,yogas,sadeSati};
-})();
-</script>
+<script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
+<script src="assets/rv-vedic-engine.js"></script>
+<script>const RVAstro=window.RVVedicEngine;</script>
+<script>window.addEventListener('error',function(e){if(String(e&&e.message||'').includes('Astronomy Engine failed to load')){console.error(e.message);}});</script>
 
 <script>
 async function rvResolveTypedPlace(prefix){
@@ -312,7 +205,7 @@ const TARA_HI=['जन्म','सम्पत','विपत','क्षेम'
 function vashyaType(c){const s=c.moonSign,d=RVAstro.mod(c.pos.Moon,30);if([0,1].includes(s)||(s===8&&d>=15)||(s===9&&d<15))return RVT('चतुष्पद','Quadruped');if([2,5,6,10].includes(s)||(s===8&&d<15))return RVT('मानव','Human');if([3,11].includes(s)||(s===9&&d>=15))return RVT('जलचर','Water');if(s===4)return RVT('वनचर','Wild');return RVT('कीट','Insect')}
 function taraType(a,b){return (RVAstro.mod(b.moonNak.i-a.moonNak.i,27))%9}
 function kootaFacts(key,B,G,Z){const hi=RVLang()==='hi';if(key==='Varna')return `${hi?VARN_HI[varna(B.moonSign)]:VARN_EN[varna(B.moonSign)]} × ${hi?VARN_HI[varna(G.moonSign)]:VARN_EN[varna(G.moonSign)]}`;if(key==='Vashya')return `${vashyaType(B)} × ${vashyaType(G)}`;if(key==='Tara')return `${hi?TARA_HI[taraType(B,G)]:TARA_EN[taraType(B,G)]} × ${hi?TARA_HI[taraType(G,B)]:TARA_EN[taraType(G,B)]}`;if(key==='Yoni')return `${hi?(YONI_HI[YONI[B.moonNak.i]]||YONI[B.moonNak.i]):YONI[B.moonNak.i]} × ${hi?(YONI_HI[YONI[G.moonNak.i]]||YONI[G.moonNak.i]):YONI[G.moonNak.i]}`;if(key==='Graha Maitri'){const P=hi?LORD_NAME_HI:LORD_NAME_EN;return `${P[LORDS[B.moonSign]]} × ${P[LORDS[G.moonSign]]}`}if(key==='Gana')return `${hi?GANA_HI[GANA[B.moonNak.i]]:GANA_EN[GANA[B.moonNak.i]]} × ${hi?GANA_HI[GANA[G.moonNak.i]]:GANA_EN[GANA[G.moonNak.i]]}`;if(key==='Bhakoot')return `${Z[B.moonSign]} × ${Z[G.moonSign]}`;return `${hi?NADI_HI[NADI[B.moonNak.i]]:NADI_EN[NADI[B.moonNak.i]]} × ${hi?NADI_HI[NADI[G.moonNak.i]]:NADI_EN[NADI[G.moonNak.i]]}`}
-function kootaAdvice(key,pct){const hi=RVLang()==='hi',good=pct>=.7;if(hi){const base={Varna:'यह कूट जीवन-दृष्टि, जिम्मेदारी और अहं-संतुलन के अंतर को पढ़ता है।',Vashya:'यह आपसी प्रभाव, सहयोग और रोजमर्रा के तालमेल का संकेत देता है।',Tara:'यह दोनों जन्म नक्षत्रों के पारंपरिक ऊर्जा-संतुलन और परस्पर सहयोग को देखता है।',Yoni:'यह सहज आकर्षण, निजी सहजता और व्यक्तिगत सीमाओं का पारंपरिक संकेत है।','Graha Maitri':'यह चंद्र राशि स्वामियों की मित्रता से सोच और संवाद के तालमेल को पढ़ता है।',Gana:'यह स्वभाव, प्रतिक्रिया की गति और मतभेद संभालने की शैली की तुलना करता है।',Bhakoot:'यह भावनात्मक दिशा, साझा लक्ष्य, परिवार और आर्थिक तालमेल से जुड़ा है।',Nadi:'यह पारंपरिक रूप से जीवन-ऊर्जा और प्रकृति-सामंजस्य से जोड़ा जाता है।'}[key];return base+' '+(good?'इस जोड़ी में यह भाग सहयोग देता है। आपसी सम्मान और साफ बातचीत इसे मजबूत रखती है।':'यह ध्यान देने वाला भाग है, लेकिन अकेले इससे रिश्ता अच्छा या खराब तय नहीं होता। वास्तविक व्यवहार, सीमाएँ और साफ बातचीत अधिक महत्वपूर्ण हैं।')+' इसे पूरी जन्म-कुंडली और वर्तमान दशा के साथ पढ़ना उचित है।'}return (good?'This factor supports the pairing. ':'This factor needs attention, but is not a standalone verdict. ')+'Read it with the complete birth charts and current Dashas, and use real behaviour as the final test.'}
+function kootaAdvice(key,pct){const hi=RVLang()==='hi',good=pct>=.7;if(hi){const base={Varna:'यह बताता है कि जिम्मेदारी और सोच के मामले में आप दोनों कितने सहज हैं।',Vashya:'यह रोजमर्रा में एक-दूसरे के साथ चलने और सहयोग करने के तरीके का संकेत देता है।',Tara:'यह बताता है कि एक-दूसरे का साथ मानसिक रूप से कितना सहज महसूस हो सकता है।',Yoni:'यह नजदीकी, सहजता और निजी सीमाओं के तालमेल से जुड़ा संकेत है।','Graha Maitri':'यह सोचने और बात समझने के तरीके में आप दोनों का मेल बताता है।',Gana:'यह बताता है कि स्वभाव और मतभेद संभालने का तरीका कितना मिलता है।',Bhakoot:'यह परिवार, भविष्य की सोच और पैसे से जुड़ी प्राथमिकताओं के मेल को देखता है।',Nadi:'यह पारंपरिक मिलान का एक महत्वपूर्ण हिस्सा है, जिसे बाकी पूरी कुंडली के साथ देखा जाता है।'}[key];return base+' '+(good?'इस जोड़ी में यह भाग सहयोग देता है। आपसी सम्मान और साफ बातचीत इसे मजबूत रखती है।':'यह ध्यान देने वाला भाग है, लेकिन अकेले इससे रिश्ता अच्छा या खराब तय नहीं होता। वास्तविक व्यवहार, सीमाएँ और साफ बातचीत अधिक महत्वपूर्ण हैं।')+' इसे अकेले अंतिम फैसला न मानें; बाकी मिलान को भी साथ देखें।'}return (good?'This factor supports the pairing. ':'This factor needs attention, but is not a standalone verdict. ')+'Read it with the complete birth charts and current Dashas, and use real behaviour as the final test.'}
 function quality(total){return total>=28?RVT('मजबूत पारंपरिक मिलान','Strong traditional match'):total>=22?RVT('अच्छा मिलान; कुछ बिंदुओं पर बातचीत जरूरी','Good match; discuss a few areas'):total>=18?RVT('मध्यम मिलान; बाकी कुंडली को अधिक महत्व दें','Moderate; examine the full charts'):RVT('कम स्कोर; निर्णय केवल गुणों से न लें','Low score; do not decide from Guna alone')}
 function planetShort(p){const hi=RVLang()==='hi';const m=hi?{Sun:'सू',Moon:'चं',Mars:'मं',Mercury:'बु',Jupiter:'गु',Venus:'शु',Saturn:'श',Rahu:'रा',Ketu:'के'}:{Sun:'Su',Moon:'Mo',Mars:'Ma',Mercury:'Me',Jupiter:'Ju',Venus:'Ve',Saturn:'Sa',Rahu:'Ra',Ketu:'Ke'};return m[p]||p}
 function northChartSVG(c,Z,name){
@@ -368,19 +261,19 @@ async function match(){
  const matchResult=document.getElementById('matchResult');if(!matchResult)return;
  matchResult.classList.remove('hidden');matchResult.classList.add('match-report');matchResult.innerHTML=`
  <div class="report-toolbar"><button id="matchPdfBtn" class="btn primary" type="button" onclick="downloadMatchPDF()">${RVT('📄 PDF डाउनलोड करें','📄 Download PDF')}</button><button class="btn ghost" type="button" onclick="window.print()">${RVT('🖨️ प्रिंट / Save as PDF','🖨️ Print / Save as PDF')}</button></div>
- <div class="match-hero"><div class="score-ring">${sc.total.toFixed(1)}<small>/36</small></div><h2>${bn} × ${gn}</h2><h3>${quality(sc.total)}</h3><p>${RVT('यह गुण-स्कोर शुरुआत है; नीचे दोनों की पूरी जन्म-कुंडली, सप्तम भाव, मंगल और वर्तमान दशा का विस्तृत मिलान दिया गया है।','This score is a starting point; the detailed reading also compares both birth charts, the 7th house, Mars and current Dashas.')}</p></div>
- <div class="report-section"><h3>${RVT('त्वरित निष्कर्ष','Executive Summary')}</h3><p>${RVT(bn+' की जन्म राशि '+Z[B.moonSign]+' और नक्षत्र '+N[B.moonNak.i]+' है; '+gn+' की जन्म राशि '+Z[G.moonSign]+' और नक्षत्र '+N[G.moonNak.i]+' है। कुल '+sc.total.toFixed(1)+' गुण भावनात्मक, मानसिक और पारिवारिक तालमेल का पारंपरिक संकेत देते हैं। इसे अपने-आप हाँ/नहीं का अंतिम फैसला नहीं मानना चाहिए।',bn+' has Moon sign '+Z[B.moonSign]+' and Nakshatra '+N[B.moonNak.i]+'; '+gn+' has Moon sign '+Z[G.moonSign]+' and Nakshatra '+N[G.moonNak.i]+'. The '+sc.total.toFixed(1)+' score is a traditional indication, not an automatic yes/no decision.')}</p>${critical.length?`<p><strong>${RVT('विशेष ध्यान','Focus areas')}:</strong> ${critical.join(', ')}</p>`:`<p class="metric-good">${RVT('आठों कूटों में कोई बड़ा low-score flag नहीं मिला।','No major low-score flag appeared across the eight Kootas.')}</p>`}</div>
+ <div class="match-hero"><div class="score-ring">${sc.total.toFixed(1)}<small>/36</small></div><h2>${bn} × ${gn}</h2><h3>${quality(sc.total)}</h3><p>${RVT('यह स्कोर सिर्फ शुरुआत है। नीचे आपसी समझ, स्वभाव, परिवार, मंगल और चल रहे समय को भी साथ देखकर समझाया गया है।','This score is a starting point; the detailed reading also compares both birth charts, the 7th house, Mars and current Dashas.')}</p></div>
+ <div class="report-section"><h3>${RVT('सीधा निष्कर्ष','Executive Summary')}</h3><p>${RVT(bn+' की जन्म राशि '+Z[B.moonSign]+' और नक्षत्र '+N[B.moonNak.i]+' है; '+gn+' की जन्म राशि '+Z[G.moonSign]+' और नक्षत्र '+N[G.moonNak.i]+' है। कुल '+sc.total.toFixed(1)+' गुण भावनात्मक, मानसिक और पारिवारिक तालमेल का पारंपरिक संकेत देते हैं। इसे अपने-आप हाँ/नहीं का अंतिम फैसला नहीं मानना चाहिए।',bn+' has Moon sign '+Z[B.moonSign]+' and Nakshatra '+N[B.moonNak.i]+'; '+gn+' has Moon sign '+Z[G.moonSign]+' and Nakshatra '+N[G.moonNak.i]+'. The '+sc.total.toFixed(1)+' score is a traditional indication, not an automatic yes/no decision.')}</p>${critical.length?`<p><strong>${RVT('विशेष ध्यान','Focus areas')}:</strong> ${critical.join(', ')}</p>`:`<p class="metric-good">${RVT('आठों कूटों में कोई बड़ा low-score flag नहीं मिला।','No major low-score flag appeared across the eight Kootas.')}</p>`}</div>
  ${chartPair(bn,gn,B,G,Z)}${personSummary(RVT('पहली कुंडली','First chart'),bn,B,Z,N)}${personSummary(RVT('दूसरी कुंडली','Second chart'),gn,G,Z,N)}
- <div class="report-section"><h3>${RVT('अष्टकूट का पूरा विवरण','Complete Ashtakoota Breakdown')}</h3><p>${RVT('हर कूट का अलग अर्थ है; केवल कुल गुण देखने से महत्वपूर्ण बातें छूट सकती हैं।','Each Koota measures a different theme; the total alone can hide important detail.')}</p></div>${detail}
- <div class="report-section"><h3>${RVT('नाड़ी, भकूट और गण की समीक्षा','Nadi, Bhakoot and Gana Review')}</h3><p>${RVT('इन तीन कूटों को पारंपरिक मिलान में विशेष महत्व मिलता है। शून्य गुण आने पर भी समान राशि-स्वामी, नक्षत्र-पाद, सप्तम भाव और ग्रह समर्थन जैसी दोष-निवारण स्थितियाँ अलग से देखी जाती हैं; पर्याप्त आधार के बिना यहाँ किसी दोष-निवारण की घोषणा नहीं की गई है।','These three Kootas carry special traditional weight. A zero score may require separate cancellation checks; this browser report does not claim a cancellation without sufficient evidence.')}</p></div>
+ <div class="report-section"><h3>${RVT('36 गुण का पूरा विवरण','Complete Ashtakoota Breakdown')}</h3><p>${RVT('हर कूट का अलग अर्थ है; केवल कुल गुण देखने से महत्वपूर्ण बातें छूट सकती हैं।','Each Koota measures a different theme; the total alone can hide important detail.')}</p></div>${detail}
+ <div class="report-section"><h3>${RVT('नाड़ी, भकूट और गण में क्या ध्यान रखें?','Nadi, Bhakoot and Gana Review')}</h3><p>${RVT('इन तीन कूटों को पारंपरिक मिलान में विशेष महत्व मिलता है। शून्य गुण आने पर भी समान राशि-स्वामी, नक्षत्र-पाद, सप्तम भाव और ग्रह समर्थन जैसी दोष-निवारण स्थितियाँ अलग से देखी जाती हैं; पर्याप्त आधार के बिना यहाँ किसी दोष-निवारण की घोषणा नहीं की गई है।','These three Kootas carry special traditional weight. A zero score may require separate cancellation checks; this browser report does not claim a cancellation without sufficient evidence.')}</p></div>
  <div class="report-section"><h3>${RVT('मंगल दोष तुलना','Manglik Comparison')}</h3><p>${bn}: <strong>${mangB?RVT('मंगल प्रभाव मिला','Mars influence found'):RVT('मुख्य मंगल दोष नहीं','No primary Manglik flag')}</strong> · ${gn}: <strong>${mangG?RVT('मंगल प्रभाव मिला','Mars influence found'):RVT('मुख्य मंगल दोष नहीं','No primary Manglik flag')}</strong>.</p><p>${mangB===mangG?RVT('दोनों कुंडलियों में मंगल की स्थिति समान श्रेणी में है, इसलिए पारंपरिक दृष्टि से संतुलन बेहतर माना जाता है।','Both charts fall in the same Mars category, which is traditionally considered more balanced.'):RVT('मंगल की श्रेणी अलग है; ग्रहबल, दृष्टि और दोष-निवारण की गहरी समीक्षा जरूरी है।','Mars categories differ; strength, aspects and cancellations need deeper review.')}</p></div>
  <div class="report-section"><h3>${RVT('विवाह भाव और साझेदारी','Marriage House & Partnership')}</h3><p>${RVT(bn+' का सप्तम भाव '+Z[(B.ascSign+6)%12]+' और '+gn+' का सप्तम भाव '+Z[(G.ascSign+6)%12]+' है। इन संकेतों के साथ शुक्र, गुरु और शनि की स्थिति को मिलाकर संबंध की अपेक्षाएँ, सहजता और प्रतिबद्धता पढ़ी जाती है।',bn+"'s 7th-house sign is "+Z[(B.ascSign+6)%12]+", while "+gn+"'s is "+Z[(G.ascSign+6)%12]+'. These are read together with Venus, Jupiter and Saturn for partnership expectations, ease and commitment.')}</p></div>
  <div class="report-section"><h3>${RVT('संवाद और भावनात्मक जरूरतें','Communication and Emotional Needs')}</h3><p>${RVT('चंद्र राशि और ग्रह मैत्री यह संकेत देते हैं कि तनाव में दोनों कैसे प्रतिक्रिया दे सकते हैं। अच्छे गुणों के बावजूद अनुमान लगाने से बचें; मतभेद के समय थोड़ा ठहरकर तथ्य और स्पष्ट शब्दों का उपयोग करें। कम गुण हों तो नियमित बातचीत और सीमाएँ पहले तय करना अधिक उपयोगी रहता है।','Moon signs and Graha Maitri indicate how both may react under stress. Even with a strong score, avoid assumptions; use pauses, facts and clear words during disagreements. With a lower score, regular check-ins and agreed boundaries help.')}</p></div>
  <div class="report-section"><h3>${RVT('परिवार, धन और जीवनशैली','Family, Money and Lifestyle')}</h3><p>${RVT('भकूट और चंद्र संकेत साझा प्राथमिकताओं की ओर इशारा करते हैं, लेकिन वास्तविक तालमेल के लिए खर्च, बचत, रहने की जगह, काम की योजनाएँ और पारिवारिक जिम्मेदारियों पर पहले साफ बातचीत जरूरी है। इन्हें केवल गुणों से तय नहीं किया जा सकता।','Bhakoot and Moon patterns suggest shared priorities, but real compatibility still requires clear discussion about spending, savings, location, careers and family responsibilities.')}</p></div>
- <div class="report-section"><h3>${RVT('वर्तमान दशा संदर्भ','Current Dasha Context')}</h3><p>${RVT('दोनों की चल रही महादशा-अंतर्दशा संबंधों के समय और अनुभव को प्रभावित कर सकती है। अच्छे गुणों के बावजूद कठिन दशाओं में धैर्य चाहिए, जबकि मध्यम गुण समझदार और स्पष्ट संवाद से बेहतर निभ सकते हैं।','Current Mahadasha and Antardasha can change how relationship timing feels. A supportive score may still need patience in stressful periods, while an average score can improve through mature communication.')}</p></div>
+ <div class="report-section"><h3>${RVT('अभी चल रहे समय का असर','Current Dasha Context')}</h3><p>${RVT('दोनों की चल रही महादशा-अंतर्दशा संबंधों के समय और अनुभव को प्रभावित कर सकती है। अच्छे गुणों के बावजूद कठिन दशाओं में धैर्य चाहिए, जबकि मध्यम गुण समझदार और स्पष्ट संवाद से बेहतर निभ सकते हैं।','Current Mahadasha and Antardasha can change how relationship timing feels. A supportive score may still need patience in stressful periods, while an average score can improve through mature communication.')}</p></div>
  <div class="report-section"><h3>${RVT('निर्णय से पहले 7 व्यावहारिक प्रश्न','7 Practical Questions Before a Decision')}</h3><ol><li>${RVT('क्या दोनों काम/करियर और शहर बदलने के विषय में सहमत हैं?','Do both agree about careers and relocation?')}</li><li>${RVT('पैसा, बचत और कर्ज के बारे में पूरी स्पष्टता है?','Is there transparency about money, savings and debt?')}</li><li>${RVT('परिवार से जुड़ी सीमाएँ स्पष्ट हैं?','Are family boundaries clear?')}</li><li>${RVT('असहमति में सम्मान बना रहता है?','Does respect remain during disagreement?')}</li><li>${RVT('स्वास्थ्य और रोजमर्रा की दिनचर्या से जुड़ी अपेक्षाएँ समझी गई हैं?','Are health and daily-routine expectations understood?')}</li><li>${RVT('बच्चों और पालन-पोषण पर दोनों की सोच मेल खाती है?','Are views on children and parenting compatible?')}</li><li>${RVT('दोनों स्वतंत्र सहमति से निर्णय ले रहे हैं?','Are both deciding with free consent?')}</li></ol></div>
  <div class="report-section"><h3>${RVT('तालमेल बेहतर रखने के पारंपरिक उपाय','Traditional Remedies for Harmony')}</h3><p>${RVT('जहाँ गुण कम हैं वहाँ सबसे पहला उपाय व्यवहार में रखें—बात को दबाने के बजाय समय पर साफ करें, आर्थिक फैसले मिलकर लें और परिवार की सीमाएँ पहले तय करें। मंगलवार या शनिवार को हनुमान जी की उपासना, सोमवार को शिव-पार्वती का स्मरण और जरूरतमंद दंपति/परिवार की सहायता को पारंपरिक रूप से शुभ माना जाता है। मंगल प्रभाव होने पर गुस्से और जल्दबाजी पर नियंत्रण को विशेष महत्व दें।','Where scores are weaker, begin with behaviour: address issues early, make financial decisions together and agree on family boundaries. Traditional practices include prayer to Hanuman on Tuesday or Saturday, remembrance of Shiva-Parvati on Monday, and helping a family in need. If Mars influence is present, place extra emphasis on controlling haste and anger.')}</p></div>
- <div class="report-section"><h3>${RVT('अंतिम निष्कर्ष','Final Assessment')}</h3><p><strong>${quality(sc.total)}</strong></p><p>${RVT('गुण मिलान को शुरुआती संकेत की तरह उपयोग करें। अंतिम निर्णय में पूरी कुंडली, सही जन्म समय और वास्तविक व्यवहार को बराबर महत्व दें।','Use Guna matching as a screening tool. Give equal importance to the full charts, verified birth times and real-world behaviour.')}</p></div>
+ <div class="report-section"><h3>${RVT('अंतिम निष्कर्ष','Final Assessment')}</h3><p><strong>${quality(sc.total)}</strong></p><p>${RVT('गुण मिलान को पहली तस्वीर की तरह देखें। रिश्ते का असली आधार आपसी समझ, भरोसा, परिवार की स्थिति और वास्तविक व्यवहार रहेगा।','Use Guna matching as a screening tool. Give equal importance to the full charts, verified birth times and real-world behaviour.')}</p></div>
  <p class="notice">${RVT('ज्योतिषीय जानकारी पारंपरिक मार्गदर्शन के लिए है।','Astrological information is for traditional guidance.')}</p>`;
  }catch(err){console.error('Kundli matching failed:',err);const msg=(err&&err.message)?String(err.message):'';setStatus(RVT('मिलान बनाते समय समस्या आई'+(msg?' — '+msg:'')+'। जन्म विवरण जाँचकर दोबारा कोशिश करें।','There was a problem generating the match'+(msg?' — '+msg:'')+'. Check the birth details and try again.'),true);}
  finally{if(_mb){_mb.disabled=false;_mb.textContent=RVT('✨ कुंडली मिलान करें','✨ Match Kundlis')}}
