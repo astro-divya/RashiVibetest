@@ -93,43 +93,117 @@ function validBirth(prefix){
 </script>
 
 <script>
-const TITHI_HI=['प्रतिपदा','द्वितीया','तृतीया','चतुर्थी','पंचमी','षष्ठी','सप्तमी','अष्टमी','नवमी','दशमी','एकादशी','द्वादशी','त्रयोदशी','चतुर्दशी','पूर्णिमा/अमावस्या'];
-const TITHI_EN=['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shashthi','Saptami','Ashtami','Navami','Dashami','Ekadashi','Dwadashi','Trayodashi','Chaturdashi','Purnima/Amavasya'];
+const TITHI_HI=['प्रतिपदा','द्वितीया','तृतीया','चतुर्थी','पंचमी','षष्ठी','सप्तमी','अष्टमी','नवमी','दशमी','एकादशी','द्वादशी','त्रयोदशी','चतुर्दशी'];
+const TITHI_EN=['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shashthi','Saptami','Ashtami','Navami','Dashami','Ekadashi','Dwadashi','Trayodashi','Chaturdashi'];
 const Y_HI=['विष्कम्भ','प्रीति','आयुष्मान','सौभाग्य','शोभन','अतिगण्ड','सुकर्मा','धृति','शूल','गण्ड','वृद्धि','ध्रुव','व्याघात','हर्षण','वज्र','सिद्धि','व्यतीपात','वरीयान','परिघ','शिव','सिद्ध','साध्य','शुभ','शुक्ल','ब्रह्म','इन्द्र','वैधृति'];
 const Y_EN=['Vishkambha','Priti','Ayushman','Saubhagya','Shobhana','Atiganda','Sukarma','Dhriti','Shoola','Ganda','Vriddhi','Dhruva','Vyaghata','Harshana','Vajra','Siddhi','Vyatipata','Variyana','Parigha','Shiva','Siddha','Sadhya','Shubha','Shukla','Brahma','Indra','Vaidhriti'];
-function solar(date,lat,lon){
- const R=Math.PI/180,N=Math.floor((Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())-Date.UTC(date.getFullYear(),0,0))/86400000);
- function calc(rise){const lh=lon/15,t=N+((rise?6:18)-lh)/24,M=.9856*t-3.289,L=(M+1.916*Math.sin(M*R)+.020*Math.sin(2*M*R)+282.634+360)%360,RA=(Math.atan(.91764*Math.tan(L*R))/R+360)%360+(Math.floor(L/90)*90-Math.floor(((Math.atan(.91764*Math.tan(L*R))/R+360)%360)/90)*90),rah=RA/15,sd=.39782*Math.sin(L*R),cd=Math.cos(Math.asin(sd)),ch=(Math.cos(90.833*R)-sd*Math.sin(lat*R))/(cd*Math.cos(lat*R));if(Math.abs(ch)>1)return null;let H=(rise?360-Math.acos(ch)/R:Math.acos(ch)/R)/15,T=H+rah-.06571*t-6.622,u=(T-lh)%24;return u<0?u+24:u}
- return {rise:calc(1),set:calc(0)}
-}
-function ftime(h){if(h==null)return'—';let hr=Math.floor(h),mi=Math.round((h-hr)*60);if(mi===60){hr=(hr+1)%24;mi=0}let d=new Date();d.setHours(hr,mi,0,0);return new Intl.DateTimeFormat(RVLang()==='hi'?'hi-IN':'en-IN',{hour:'numeric',minute:'2-digit',hour12:true}).format(d)}
-function rahu(rise,set,wd){if(rise==null||set==null)return'—';let order=[8,2,7,5,6,4,3],n=order[wd]-1,seg=(set-rise)/8;return ftime(rise+n*seg)+' – '+ftime(rise+(n+1)*seg)}
+const KARANA_HI=['बव','बालव','कौलव','तैतिल','गरज','वणिज','विष्टि (भद्रा)'];
+const KARANA_EN=['Bava','Balava','Kaulava','Taitila','Garaja','Vanija','Vishti (Bhadra)'];
 
-function span8(rise,set,idx){if(rise==null||set==null)return'—';const seg=(set-rise)/8,n=idx-1;return ftime(rise+n*seg)+' – '+ftime(rise+(n+1)*seg)}
-function yama(rise,set,wd){return span8(rise,set,[5,4,3,2,1,7,6][wd])}
-function gulika(rise,set,wd){return span8(rise,set,[7,6,5,4,3,2,1][wd])}
-function abhijit(rise,set){if(rise==null||set==null)return'—';const noon=(rise+set)/2,d=(set-rise)/15;return ftime(noon-d/2)+' – '+ftime(noon+d/2)}
-function dishOf(wd,L){const hi=['पश्चिम','पूर्व','उत्तर','उत्तर','दक्षिण','पश्चिम','पूर्व'],en=['West','East','North','North','South','West','East'];return (L==='hi'?hi:en)[wd]}
 function escP(x){return String(x||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function festivalFor(t,L){const n=t.index+1,sh=t.paksha===0;let a=[];if(n===11)a.push(RVT('एकादशी व्रत','Ekadashi fast'));if(n===13)a.push(RVT('प्रदोष व्रत','Pradosh fast'));if(n===15)a.push(sh?RVT('पूर्णिमा','Purnima'):RVT('अमावस्या','Amavasya'));if(n===4)a.push(sh?RVT('विनायक चतुर्थी','Vinayaka Chaturthi'):RVT('संकष्टी चतुर्थी','Sankashti Chaturthi'));if(n===14&&!sh)a.push(RVT('मासिक शिवरात्रि','Masik Shivratri'));return a}
-function renderP(){
- const d=+pD.value,m=+pM.value,y=+pY.value,test=new Date(y,m-1,d);
- const valid=/^\d{4}$/.test(String(pY.value))&&y>=1900&&y<=2100&&m>=1&&m<=12&&d>=1&&d<=31&&test.getFullYear()===y&&test.getMonth()===m-1&&test.getDate()===d;
- if(!valid){alert(RVT('सही तिथि DD / MM / YYYY में भरें।','Enter a valid date as DD / MM / YYYY.'));return}
- const date=new Date(y,m-1,d,12,0,0),lat=+pLat.value,lon=+pLon.value;if(!Number.isFinite(lat)||!Number.isFinite(lon)){alert(RVT('सही location चुनें।','Choose a valid location.'));return}
- const c=RVAstro.chart(date,lat,lon),t=RVAstro.tithi(date),yo=RVAstro.yoga(date),ka=RVAstro.karana(date),s=solar(date,lat,lon),L=RVLang(),N=L==='hi'?RVAstro.NAK_HI:RVAstro.NAK_EN,T=L==='hi'?TITHI_HI:TITHI_EN,Y=L==='hi'?Y_HI:Y_EN,Z=L==='hi'?RVAstro.Z_HI:RVAstro.Z_EN,wd=date.getDay(),dayName=new Intl.DateTimeFormat(L==='hi'?'hi-IN':'en-IN',{weekday:'long'}).format(date),fest=festivalFor(t,L),dish=dishOf(wd,L),place=(pPlace.value||`${lat}, ${lon}`).trim();
- pResult.classList.remove('hidden');pResult.innerHTML=`<h2>${RVT('आज का पंचांग','Panchang Details')}</h2><p><strong>${escP(place)}</strong> · ${String(d).padStart(2,'0')}-${String(m).padStart(2,'0')}-${y} · ${dayName}</p>
- <div class="grid four"><div class="card"><h3>${RVT('तिथि','Tithi')}</h3><strong>${t.paksha===0?RVT('शुक्ल','Shukla'):RVT('कृष्ण','Krishna')} ${T[t.index]}</strong></div><div class="card"><h3>${RVT('नक्षत्र','Nakshatra')}</h3><strong>${N[c.moonNak.i]}</strong></div><div class="card"><h3>${RVT('योग','Yoga')}</h3><strong>${Y[yo]}</strong></div><div class="card"><h3>${RVT('करण','Karana')}</h3><strong>${ka+1}</strong></div></div>
- <div class="grid four" style="margin-top:16px"><div class="card"><h3>${RVT('सूर्योदय','Sunrise')}</h3><strong>${ftime(s.rise)}</strong></div><div class="card"><h3>${RVT('सूर्यास्त','Sunset')}</h3><strong>${ftime(s.set)}</strong></div><div class="card"><h3>${RVT('राहुकाल','Rahu Kaal')}</h3><strong>${rahu(s.rise,s.set,wd)}</strong></div><div class="card"><h3>${RVT('अभिजीत मुहूर्त','Abhijit Muhurat')}</h3><strong>${abhijit(s.rise,s.set)}</strong></div></div>
- <div class="grid four" style="margin-top:16px"><div class="card"><h3>${RVT('यमगण्ड','Yamaganda')}</h3><strong>${yama(s.rise,s.set,wd)}</strong></div><div class="card"><h3>${RVT('गुलिक काल','Gulika Kaal')}</h3><strong>${gulika(s.rise,s.set,wd)}</strong></div><div class="card"><h3>${RVT('चंद्र राशि','Moon Sign')}</h3><strong>${Z[c.moonSign]}</strong></div><div class="card"><h3>${RVT('सूर्य राशि','Sun Sign')}</h3><strong>${Z[RVAstro.signIndex(c.pos.Sun)]}</strong></div></div>
- <div class="panchang-special"><h3>🧭 ${RVT('दिशाशूल','Dishashool')}: ${dish}</h3><p>${RVT(`आज ${dish} दिशा में लंबी या महत्वपूर्ण यात्रा शुरू करने में पारंपरिक रूप से सावधानी रखने की सलाह दी जाती है। यदि यात्रा जरूरी हो तो इष्टदेव का स्मरण कर शांत मन से यात्रा आरंभ करें।`,`Traditional Panchang advises extra care when beginning an important journey toward the ${dish} direction today. If travel is unavoidable, begin calmly after your usual prayer or remembrance.`)}</p></div>
- <div class="panchang-special"><h3>🚩 ${RVT('आज के व्रत और त्योहार','Today\'s Vrat & Festivals')}</h3>${fest.length?`<p><strong>${fest.join(' • ')}</strong></p><p>${RVT('आज की तिथि से जुड़े इन व्रतों/पर्वों का पालन परिवार और परंपरा के अनुसार किया जा सकता है। पूजा का समय तिथि और स्थानीय सूर्योदय के अनुसार रखें।','These observances are associated with today\'s lunar date. Follow your family tradition and local timing based on the Tithi and sunrise.')}</p>`:`<p>${RVT('आज इस तिथि पर कोई प्रमुख सार्वत्रिक व्रत/त्योहार नहीं मिला। स्थानीय परंपरा के अनुसार क्षेत्रीय पर्व अलग हो सकते हैं।','No major universal Vrat/festival was identified for this lunar date. Regional observances may still vary by local tradition.')}</p>`}</div>
- <div class="panchang-special"><h3>${RVT('आज का विशेष','Today\'s Note')}</h3><p>${RVT(`आज ${dayName} है और चंद्रमा ${Z[c.moonSign]} राशि व ${N[c.moonNak.i]} नक्षत्र में है। महत्वपूर्ण काम के लिए राहुकाल से बचकर उपलब्ध शुभ समय का उपयोग करना पारंपरिक रूप से बेहतर माना जाता है।`,`Today is ${dayName}; the Moon is in ${Z[c.moonSign]} and ${N[c.moonNak.i]}. Traditionally, important work is preferred outside Rahu Kaal when a suitable time is available.`)}</p></div>
- <p class="notice">${RVT('पंचांग समय स्थान और तिथि के अनुसार बदलते हैं; यह पारंपरिक मार्गदर्शन है।','Panchang timings vary by date and location; this is traditional guidance.')}</p>`;
+function tzName(){return (pTz.value||'Asia/Kolkata').trim()||'Asia/Kolkata'}
+function dtParts(date,tz){
+ const parts=new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(date);
+ const o={};for(const p of parts)if(p.type!=='literal')o[p.type]=+p.value;return o;
 }
-document.addEventListener('DOMContentLoaded',()=>{const now=new Date();pD.value=now.getDate();pM.value=now.getMonth()+1;pY.value=now.getFullYear();['pD','pM','pY'].forEach(id=>document.getElementById(id).addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,+e.target.maxLength)));setupLocation('p');pBtn.onclick=renderP;setTimeout(renderP,50)});
+function tzOffsetMs(date,tz){const p=dtParts(date,tz);return Date.UTC(p.year,p.month-1,p.day,p.hour,p.minute,p.second)-date.getTime()}
+function zonedToUtc(y,m,d,h=0,mi=0,tz=tzName()){
+ let ms=Date.UTC(y,m-1,d,h,mi,0);let guess=new Date(ms);
+ for(let i=0;i<3;i++)guess=new Date(ms-tzOffsetMs(guess,tz));
+ return guess;
+}
+function fmtTime(date,tz=tzName()){
+ if(!date)return'—';
+ return new Intl.DateTimeFormat(RVLang()==='hi'?'hi-IN':'en-IN',{timeZone:tz,hour:'numeric',minute:'2-digit',hour12:true}).format(date);
+}
+function localYMD(date,tz=tzName()){const p=dtParts(date,tz);return [p.year,p.month,p.day]}
+function sameLocalDate(date,y,m,d,tz=tzName()){if(!date)return false;const a=localYMD(date,tz);return a[0]===y&&a[1]===m&&a[2]===d}
+function fmtEvent(date,y,m,d,tz=tzName()){
+ if(!date)return'—';
+ const prefix=sameLocalDate(date,y,m,d,tz)?'':RVT('कल ','Tomorrow ');
+ return prefix+fmtTime(date,tz);
+}
+function addMs(date,ms){return new Date(date.getTime()+ms)}
+
+function astroRiseSet(y,m,d,lat,lon,tz,bodyName='Sun'){
+ if(!window.Astronomy)throw new Error('Astronomy Engine unavailable');
+ const A=window.Astronomy,observer=new A.Observer(lat,lon,0),body=A.Body[bodyName]||bodyName;
+ const start=zonedToUtc(y,m,d,0,0,tz);
+ const rise=A.SearchRiseSet(body,observer,+1,start,1.5);
+ const set=A.SearchRiseSet(body,observer,-1,start,1.5);
+ return {rise:rise?rise.date:null,set:set?set.date:null};
+}
+function rangeText(a,b,tz=tzName()){return a&&b?fmtTime(a,tz)+' – '+fmtTime(b,tz):'—'}
+function daySegment(rise,set,index){if(!rise||!set)return null;const seg=(set-rise)/8;return [addMs(rise,(index-1)*seg),addMs(rise,index*seg)]}
+function rahu(rise,set,wd){const idx=[8,2,7,5,6,4,3][wd],r=daySegment(rise,set,idx);return r?rangeText(...r):'—'}
+function yama(rise,set,wd){const idx=[5,4,3,2,1,7,6][wd],r=daySegment(rise,set,idx);return r?rangeText(...r):'—'}
+function gulika(rise,set,wd){const idx=[7,6,5,4,3,2,1][wd],r=daySegment(rise,set,idx);return r?rangeText(...r):'—'}
+function abhijit(rise,set){if(!rise||!set)return'—';const noon=new Date((rise.getTime()+set.getTime())/2),half=(set-rise)/30;return rangeText(addMs(noon,-half),addMs(noon,half))}
+
+function tithiLabel(t,L){
+ if(t.n===15)return L==='hi'?'शुक्ल पूर्णिमा':'Shukla Purnima';
+ if(t.n===30)return L==='hi'?'कृष्ण अमावस्या':'Krishna Amavasya';
+ const idx=(t.n-1)%15,prefix=t.n<=15?(L==='hi'?'शुक्ल':'Shukla'):(L==='hi'?'कृष्ण':'Krishna');
+ return prefix+' '+(L==='hi'?TITHI_HI:TITHI_EN)[idx];
+}
+function karanaName(k,L){
+ if(k===0)return L==='hi'?'किंस्तुघ्न':'Kimstughna';
+ if(k>=57)return (L==='hi'?['शकुनि','चतुष्पद','नाग']:['Shakuni','Chatushpada','Naga'])[k-57]||'—';
+ return (L==='hi'?KARANA_HI:KARANA_EN)[(k-1)%7];
+}
+function nakIndex(date){return RVAstro.nak(RVAstro.positions(date).Moon).i}
+function yogaIndex(date){return RVAstro.yoga(date)}
+function tithiNo(date){return RVAstro.tithi(date).n}
+function karanaIndex(date){return RVAstro.karana(date)}
+function findChange(start,keyFn,maxHours=36){
+ const k0=keyFn(start),step=10*60*1000,end=start.getTime()+maxHours*3600000;let prev=start.getTime();
+ for(let t=prev+step;t<=end;t+=step){
+  if(keyFn(new Date(t))!==k0){let lo=prev,hi=t;for(let i=0;i<28;i++){const mid=(lo+hi)/2;if(keyFn(new Date(mid))===k0)lo=mid;else hi=mid}return new Date(hi)}
+  prev=t;
+ }
+ return null;
+}
+function dishOf(wd,L){const hi=['पश्चिम','पूर्व','उत्तर','उत्तर','दक्षिण','पश्चिम','पूर्व'],en=['West','East','North','North','South','West','East'];return (L==='hi'?hi:en)[wd]}
+function festivalFor(t){const n=t.n,sh=n<=15,within=(n-1)%15+1,a=[];if(within===11)a.push(RVT('एकादशी व्रत','Ekadashi fast'));if(within===13)a.push(RVT('प्रदोष व्रत','Pradosh fast'));if(n===15)a.push(RVT('पूर्णिमा','Purnima'));if(n===30)a.push(RVT('अमावस्या','Amavasya'));if(within===4)a.push(sh?RVT('विनायक चतुर्थी','Vinayaka Chaturthi'):RVT('संकष्टी चतुर्थी','Sankashti Chaturthi'));if(within===14&&!sh)a.push(RVT('मासिक शिवरात्रि','Masik Shivratri'));return a}
+
+function renderP(){
+ try{
+  const d=+pD.value,m=+pM.value,y=+pY.value,test=new Date(Date.UTC(y,m-1,d));
+  const valid=/^\d{4}$/.test(String(pY.value))&&y>=1900&&y<=2100&&m>=1&&m<=12&&d>=1&&d<=31&&test.getUTCFullYear()===y&&test.getUTCMonth()===m-1&&test.getUTCDate()===d;
+  if(!valid){alert(RVT('सही तिथि DD / MM / YYYY में भरें।','Enter a valid date as DD / MM / YYYY.'));return}
+  const lat=+pLat.value,lon=+pLon.value,tz=tzName();if(!Number.isFinite(lat)||!Number.isFinite(lon)){alert(RVT('सही स्थान चुनें।','Choose a valid location.'));return}
+  if(!RVAstro||!RVAstro.engineReady()){throw new Error('Astronomy Engine not loaded')}
+
+  const sun=astroRiseSet(y,m,d,lat,lon,tz,'Sun');
+  if(!sun.rise||!sun.set)throw new Error('Sunrise/sunset unavailable for this date/location');
+  const moon=astroRiseSet(y,m,d,lat,lon,tz,'Moon');
+  const ref=addMs(sun.rise,60000); // Panchang state just after local sunrise.
+  const c=RVAstro.chart(ref,lat,lon),t=RVAstro.tithi(ref),yo=RVAstro.yoga(ref),ka=RVAstro.karana(ref),L=RVLang();
+  const N=L==='hi'?RVAstro.NAK_HI:RVAstro.NAK_EN,Y=L==='hi'?Y_HI:Y_EN,Z=L==='hi'?RVAstro.Z_HI:RVAstro.Z_EN;
+  const wd=new Date(Date.UTC(y,m-1,d)).getUTCDay(),dayName=new Intl.DateTimeFormat(L==='hi'?'hi-IN':'en-IN',{timeZone:tz,weekday:'long'}).format(zonedToUtc(y,m,d,12,0,tz));
+  const tEnd=findChange(ref,tithiNo),nEnd=findChange(ref,nakIndex),yEnd=findChange(ref,yogaIndex),kEnd=findChange(ref,karanaIndex,18);
+  const fest=festivalFor(t),dish=dishOf(wd,L),place=(pPlace.value||`${lat}, ${lon}`).trim();
+  const moonRise=sameLocalDate(moon.rise,y,m,d,tz)?fmtTime(moon.rise,tz):'—',moonSet=sameLocalDate(moon.set,y,m,d,tz)?fmtTime(moon.set,tz):'—';
+  const tNext=tEnd?RVAstro.tithi(addMs(tEnd,60000)):null,nNext=nEnd?nakIndex(addMs(nEnd,60000)):null,yNext=yEnd?yogaIndex(addMs(yEnd,60000)):null,kNext=kEnd?karanaIndex(addMs(kEnd,60000)):null;
+
+  pResult.classList.remove('hidden');pResult.innerHTML=`<h2>${RVT('आज का पंचांग','Panchang Details')}</h2><p><strong>${escP(place)}</strong> · ${String(d).padStart(2,'0')}-${String(m).padStart(2,'0')}-${y} · ${dayName}</p>
+  <div class="grid four">
+   <div class="card"><h3>${RVT('तिथि','Tithi')}</h3><strong>${tithiLabel(t,L)}</strong><p>${RVT('समाप्ति','Ends')}: ${fmtEvent(tEnd,y,m,d,tz)}${tNext?`<br><span class="muted">${RVT('इसके बाद','Then')}: ${tithiLabel(tNext,L)}</span>`:''}</p></div>
+   <div class="card"><h3>${RVT('नक्षत्र','Nakshatra')}</h3><strong>${N[c.moonNak.i]}</strong><p>${RVT('समाप्ति','Ends')}: ${fmtEvent(nEnd,y,m,d,tz)}${nNext!=null?`<br><span class="muted">${RVT('इसके बाद','Then')}: ${N[nNext]}</span>`:''}</p></div>
+   <div class="card"><h3>${RVT('योग','Yoga')}</h3><strong>${Y[yo]}</strong><p>${RVT('समाप्ति','Ends')}: ${fmtEvent(yEnd,y,m,d,tz)}${yNext!=null?`<br><span class="muted">${RVT('इसके बाद','Then')}: ${Y[yNext]}</span>`:''}</p></div>
+   <div class="card"><h3>${RVT('करण','Karana')}</h3><strong>${karanaName(ka,L)}</strong><p>${RVT('समाप्ति','Ends')}: ${fmtEvent(kEnd,y,m,d,tz)}${kNext!=null?`<br><span class="muted">${RVT('इसके बाद','Then')}: ${karanaName(kNext,L)}</span>`:''}</p></div>
+  </div>
+  <div class="grid four" style="margin-top:16px"><div class="card"><h3>${RVT('सूर्योदय','Sunrise')}</h3><strong>${fmtTime(sun.rise,tz)}</strong></div><div class="card"><h3>${RVT('सूर्यास्त','Sunset')}</h3><strong>${fmtTime(sun.set,tz)}</strong></div><div class="card"><h3>${RVT('राहुकाल','Rahu Kaal')}</h3><strong>${rahu(sun.rise,sun.set,wd)}</strong></div><div class="card"><h3>${RVT('अभिजीत मुहूर्त','Abhijit Muhurat')}</h3><strong>${abhijit(sun.rise,sun.set)}</strong></div></div>
+  <div class="grid four" style="margin-top:16px"><div class="card"><h3>${RVT('यमगण्ड','Yamaganda')}</h3><strong>${yama(sun.rise,sun.set,wd)}</strong></div><div class="card"><h3>${RVT('गुलिक काल','Gulika Kaal')}</h3><strong>${gulika(sun.rise,sun.set,wd)}</strong></div><div class="card"><h3>${RVT('चंद्रोदय / चंद्रास्त','Moonrise / Moonset')}</h3><strong>${moonRise} / ${moonSet}</strong></div><div class="card"><h3>${RVT('चंद्र राशि / सूर्य राशि','Moon / Sun Sign')}</h3><strong>${Z[c.moonSign]} / ${Z[c.sunSign]}</strong></div></div>
+  <div class="panchang-special"><h3>🧭 ${RVT('दिशाशूल','Dishashool')}: ${dish}</h3><p>${RVT(`आज ${dish} दिशा में लंबी या जरूरी यात्रा शुरू करते समय थोड़ा ध्यान रखें। यात्रा जरूरी हो तो अपने इष्टदेव का स्मरण करके निकलें।`,`Take a little extra care when starting a long or important journey toward the ${dish} today. If travel is necessary, begin after your usual prayer or remembrance.`)}</p></div>
+  <div class="panchang-special"><h3>🚩 ${RVT('आज के प्रमुख तिथि-आधारित व्रत','Major Tithi-based observances')}</h3>${fest.length?`<p><strong>${fest.join(' • ')}</strong></p><p>${RVT('व्रत या पर्व का अंतिम निर्णय स्थानीय परंपरा, तिथि-समाप्ति और सूर्योदय के नियमों के अनुसार करें।','The final observance date can depend on local tradition, Tithi ending time, and sunrise rules.')}</p>`:`<p>${RVT('आज की तिथि के आधार पर कोई प्रमुख सार्वत्रिक व्रत नहीं मिला। स्थानीय या क्षेत्रीय पर्व अलग हो सकते हैं।','No major universal Tithi-based observance was identified. Local or regional observances can differ.')}</p>`}</div>
+  <div class="panchang-special"><h3>${RVT('आज का सार','Today at a glance')}</h3><p>${RVT(`सूर्योदय के समय ${tithiLabel(t,L)} चल रही है और चंद्रमा ${Z[c.moonSign]} राशि में ${N[c.moonNak.i]} नक्षत्र में है। जरूरी काम तय करते समय राहुकाल और उपलब्ध शुभ समय को साथ में देख सकते हैं।`,`At sunrise, ${tithiLabel(t,L)} is running and the Moon is in ${Z[c.moonSign]}, ${N[c.moonNak.i]}. For important work, you can consider Rahu Kaal along with available favorable periods.`)}</p></div>
+  <p class="notice">${RVT('गणना चुनी गई तिथि, स्थान और स्थानीय समय के अनुसार की गई है।','Calculations use the selected date, location, and local time zone.')}</p>`;
+ }catch(err){console.error('Panchang calculation error:',err);pResult.classList.remove('hidden');pResult.innerHTML=`<div class="notice"><strong>${RVT('पंचांग की गणना पूरी नहीं हो सकी।','Panchang calculation could not be completed.')}</strong><br>${RVT('स्थान, टाइमज़ोन और इंटरनेट कनेक्शन जांचकर दोबारा कोशिश करें।','Check the location, time zone, and internet connection, then try again.')}</div>`}
+}
+document.addEventListener('DOMContentLoaded',()=>{const now=new Date();pD.value=now.getDate();pM.value=now.getMonth()+1;pY.value=now.getFullYear();['pD','pM','pY'].forEach(id=>document.getElementById(id).addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,+e.target.maxLength)));setupLocation('p');pBtn.onclick=renderP;setTimeout(renderP,80)});
 document.addEventListener('rv-language',()=>{if(!pResult.classList.contains('hidden'))renderP()});
-</script>
+</script></script>
 
 <script>
 function rvReversePlace(prefix){const lat=document.getElementById(prefix+'Lat'),lon=document.getElementById(prefix+'Lon'),place=document.getElementById(prefix+'Place');if(!lat||!lon||!place)return;let t;async function go(){const a=+lat.value,b=+lon.value;if(!Number.isFinite(a)||!Number.isFinite(b))return;try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${a}&lon=${b}&zoom=12&addressdetails=1`,{headers:{'Accept-Language':RVLang()==='hi'?'hi,en':'en'}});if(!r.ok)return;const d=await r.json(),ad=d.address||{},name=[ad.suburb||ad.village||ad.town||ad.city||ad.county,ad.state,ad.country].filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i).join(', ');if(name)place.value=name}catch(e){}}[lat,lon].forEach(el=>el.addEventListener('change',()=>{clearTimeout(t);t=setTimeout(go,350)}))}
